@@ -29,7 +29,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { format } from 'date-fns'
+import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { useShallow } from 'zustand/shallow'
 import { Pagination } from '@/components/custom/Pagination'
@@ -142,8 +142,8 @@ export function AttendanceTable({
           return (
             <div className='capitalize'>
               {format(
-                row.getValue('created_at'),
-                "MMMM dd, yyyy hh:mm aaaaa'm'"
+                subHours(row.getValue('created_at'), 8),
+                'MMMM d, yyyy, h:mm:ss a'
               )}
             </div>
           )
@@ -157,8 +157,8 @@ export function AttendanceTable({
             <div className='capitalize'>
               {row.getValue('updated_at')
                 ? format(
-                    row.getValue('updated_at'),
-                    "MMMM dd, yyyy hh:mm aaaaa'm'"
+                    subHours(row.getValue('created_at'), 8),
+                    'MMMM d, yyyy, h:mm:ss a'
                   )
                 : 'N/A'}
             </div>

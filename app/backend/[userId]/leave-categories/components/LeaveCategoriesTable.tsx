@@ -30,7 +30,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { format } from 'date-fns'
+import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { useLeaveCategoriesDialog } from '@/services/leave_categories/states/leave-categories-dialog'
 import { useShallow } from 'zustand/shallow'
@@ -105,8 +105,8 @@ export function LeaveCateogriesTable({
           return (
             <div className='capitalize'>
               {format(
-                row.getValue('created_at'),
-                "MMMM dd, yyyy hh:mm aaaaa'm'"
+                subHours(row.getValue('created_at'), 8),
+                'MMMM d, yyyy, h:mm:ss a'
               )}
             </div>
           )

@@ -28,7 +28,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { format } from 'date-fns'
+import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
@@ -73,8 +73,8 @@ export function BiometricsTable({
           return (
             <div className='capitalize'>
               {format(
-                row.getValue('timestamp'),
-                "MMMM dd, yyyy hh:mm aaaaa'm'"
+                subHours(row.getValue('timestamp'), 8),
+                'MMMM d, yyyy, h:mm:ss a'
               )}
             </div>
           )
@@ -98,8 +98,8 @@ export function BiometricsTable({
           return (
             <div className='capitalize'>
               {format(
-                row.getValue('created_at'),
-                "MMMM dd, yyyy hh:mm aaaaa'm'"
+                subHours(row.getValue('created_at'), 8),
+                'MMMM d, yyyy, h:mm:ss a'
               )}
             </div>
           )
@@ -113,8 +113,8 @@ export function BiometricsTable({
             <div className='capitalize'>
               {row.getValue('updated_at')
                 ? format(
-                    row.getValue('updated_at'),
-                    "MMMM dd, yyyy hh:mm aaaaa'm'"
+                    subHours(row.getValue('updated_at_at'), 8),
+                    'MMMM d, yyyy, h:mm:ss a'
                   )
                 : 'N/A'}
             </div>
