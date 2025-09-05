@@ -150,6 +150,7 @@ export function FileLeaveDialog({ category }: FileLeaveDialog): JSX.Element {
           name='dateRange'
           control={control}
           date={dateRange as DateRange}
+          mode='range'
         />
 
         <Textarea

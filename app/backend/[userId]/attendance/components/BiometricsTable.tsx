@@ -28,6 +28,8 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { useForm } from 'react-hook-form'
+import { CalendarPicker } from '@/components/custom/CalendarPicker'
 import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/custom/Pagination'
@@ -52,6 +54,11 @@ export function BiometricsTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { control, watch } = useForm<{ date: Date }>()
+
+  const dateFilter = watch('date')
+
+  console.log(dateFilter)
 
   const columns: ColumnDef<BiometricsDB>[] = React.useMemo(
     () => [
@@ -147,6 +154,14 @@ export function BiometricsTable({
   return (
     <div className='w-full'>
       <div className='flex items-center py-4'>
+        <CalendarPicker
+          title='Start and End Date'
+          name='dateRange'
+          control={control}
+          isDisabled={false}
+          date={dateFilter}
+          mode='range'
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>

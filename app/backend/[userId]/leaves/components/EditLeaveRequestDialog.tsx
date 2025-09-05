@@ -159,6 +159,7 @@ export function EditFileLeaveDialog({
           name='dateRange'
           control={control}
           date={dateRange as DateRange}
+          mode='range'
         />
 
         <Textarea
