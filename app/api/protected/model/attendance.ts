@@ -56,7 +56,7 @@ export async function processCSVData(rawData: string) {
         const formattedTimestamp = parseTimestamp(timestampRaw)
         const date = new Date(formattedTimestamp)
         if (isNaN(date.getTime())) throw new Error('Invalid date')
-        timestamp = date.toISOString().replace('Z', '-08:00') // PST offset
+        timestamp = date.toISOString()
         if (!earliestTimestamp || date < earliestTimestamp) {
           earliestTimestamp = date
         }

@@ -55,10 +55,10 @@ export const getAttendance = async (params: string) => {
   }
 }
 
-export const getAttendanceSummary = async (userId: string) => {
+export const getAttendanceSummary = async (userId: string, params: string) => {
   try {
     const response = await axiosService.get(
-      `/api/protected/attendance/${userId}`
+      `/api/protected/attendance/${userId}${params}`
     )
 
     return response.data.data

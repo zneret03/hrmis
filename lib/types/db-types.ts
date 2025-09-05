@@ -88,6 +88,35 @@ export type Database = {
           }
         ]
       }
+      attendance_summary: {
+        Row: {
+          id: string
+          timestamp: string
+          total_hours: number
+          status: string
+          archived_at: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string | null
+          timestamp?: string | null
+          total_hours?: number | null
+          status?: string | null
+          archived_at?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          timestamp?: string | null
+          total_hours?: number | null
+          status?: string | null
+          archived_at?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
       awards: {
         Row: {
           archived_at: string | null

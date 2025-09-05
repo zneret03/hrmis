@@ -11,10 +11,15 @@ export const paginatedData = async <TData>(
   page?: number,
   perPage?: number,
   sortBy?: string,
+  specificTable?: {
+    column: string
+    tableId: string
+  },
   sortOrder = 'asc'
 ): Promise<{
   data: TData[] | null
   error: PostgrestError | null
+
   totalPages: number
   currentPage: number
   count: number | null
@@ -23,6 +28,10 @@ export const paginatedData = async <TData>(
     .from(tableName)
     .select(columns, { count: 'exact' })
     .is('archived_at', null)
+
+  if (specificTable?.column) {
+    query = query.eq(specificTable.column, specificTable.tableId)
+  }
 
   if (search && search.column && search.query !== 'undefined') {
     query = query.ilike(search.column, `%${search.query}%`)
