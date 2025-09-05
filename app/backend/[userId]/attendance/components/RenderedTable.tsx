@@ -35,6 +35,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
@@ -111,6 +112,13 @@ export function RenderedTable({ data }: RenderedTableData) {
         }
       },
       {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: function ({ row }) {
+          return <Badge variant='outline'>{row.original.status}</Badge>
+        }
+      },
+      {
         accessorKey: 'created_at',
         header: 'Created At',
         cell: function ({ row }) {
@@ -166,6 +174,7 @@ export function RenderedTable({ data }: RenderedTableData) {
   const monthKeys: string[] = Object.keys(months)
   const yearsList = getPreviousYears()
   const todayYear = new Date().getFullYear()
+  const todayMonth = (new Date().getMonth() + 1).toString()
 
   return (
     <div className='w-full'>
@@ -176,7 +185,7 @@ export function RenderedTable({ data }: RenderedTableData) {
           disabled={!monthParams}
         >
           <SelectTrigger className='w-[10rem]'>
-            <SelectValue placeholder='Select month' />
+            <SelectValue placeholder='Select year' />
           </SelectTrigger>
           <SelectContent>
             {yearsList.map((item, index) => (
@@ -187,7 +196,11 @@ export function RenderedTable({ data }: RenderedTableData) {
           </SelectContent>
         </Select>
         <Select
-          value={currentMonth || (monthParams as string)}
+          value={
+            currentMonth ||
+            (monthParams as string) ||
+            todayMonth.padStart(2, '0')
+          }
           onValueChange={(e) => onFilterMonth(e)}
         >
           <SelectTrigger className='w-[10rem]'>

@@ -53,7 +53,7 @@ export async function GET(
 
     const { data: summary, error: errorSummary } = await supabase
       .from('attendance_summary')
-      .select('timestamp, total_hours, created_at, updated_at')
+      .select('timestamp, total_hours, status, created_at, updated_at')
       .order('created_at', { ascending: true })
       .eq('employee_id', id)
       .gte('timestamp', `${year}-${month}-01T00:00:00Z`)

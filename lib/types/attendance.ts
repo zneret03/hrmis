@@ -11,5 +11,5 @@ export interface AttendanceDB extends Omit<Attendance, 'archived_at'> {
 
 export type AttendanceSummaryDB = Pick<
   AttendanceSummary,
-  'timestamp' | 'total_hours' | 'created_at' | 'updated_at'
+  'timestamp' | 'total_hours' | 'created_at' | 'updated_at' | 'status'
 >
