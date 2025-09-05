@@ -5,6 +5,8 @@ import {
   generalErrorResponse,
   successResponse
 } from '@/app/api/helpers/response'
+import { paginatedData } from '@/app/api/helpers/paginated-data'
+import { BiometricsDB } from '@/lib/types/biometrics'
 
 export async function GET(
   req: NextRequest,
@@ -14,14 +16,32 @@ export async function GET(
     const supabase = await createClient()
     const { id } = await params
 
+    const url = req.nextUrl.searchParams
+
+    const page = Number(url.get('page') || 1)
+    const perPage = Number(url.get('perPage') || 10)
+    const sortBy = url.get('sortBy') || 'created_at'
+
     if (!id) {
       return badRequestResponse()
     }
 
-    const { data: biometrics, error: errorBiometrics } = await supabase
-      .from('biometrics')
-      .select('id, employee_id, timestamp, type, created_at, updated_at')
-      .eq('employee_id', id)
+    const {
+      data: biometrics,
+      error: errorBiometrics,
+      count,
+      totalPages,
+      currentPage
+    } = await paginatedData<BiometricsDB>(
+      'biometrics',
+      supabase,
+      'id, employee_id, timestamp, type, created_at, updated_at',
+      { column: '', query: '' },
+      page,
+      perPage,
+      sortBy,
+      { column: 'employee_id', tableId: id }
+    )
 
     if (errorBiometrics) {
       return generalErrorResponse({ error: errorBiometrics })
@@ -73,7 +93,12 @@ export async function GET(
         users: userData,
         attendanceSummary: summary,
         userCredits,
-        biometrics,
+        biometrics: {
+          data: biometrics,
+          count,
+          totalPages,
+          currentPage
+        },
         attendance
       }
     })

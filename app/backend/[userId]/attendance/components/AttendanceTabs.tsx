@@ -1,19 +1,37 @@
-import { JSX } from 'react'
+import { JSX, ReactNode } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-export function AttendanceTabs(): JSX.Element {
+interface AttendanceTabs {
+  defaultValue: string
+  listTabs: {
+    value: string
+    title: string
+  }[]
+  content: {
+    value: string
+    tabContent: ReactNode | string
+  }[]
+}
+
+export function AttendanceTabs({
+  defaultValue,
+  listTabs,
+  content
+}: AttendanceTabs): JSX.Element {
   return (
-    <Tabs defaultValue='biometrics' className='w-[400px]'>
+    <Tabs defaultValue={defaultValue} className='w-full'>
       <TabsList>
-        <TabsTrigger value='biometrics'>Biometrics</TabsTrigger>
-        <TabsTrigger value='rendered_hours'>Hours Rendered</TabsTrigger>
+        {listTabs.map(({ value, title }) => (
+          <TabsTrigger key={value} value={value}>
+            {title}
+          </TabsTrigger>
+        ))}
       </TabsList>
-      <TabsContent value='biometrics'>
-        Make changes to your account here.
-      </TabsContent>
-      <TabsContent value='rendered_hours'>
-        Change your password here.
-      </TabsContent>
+      {content.map(({ value, tabContent }) => (
+        <TabsContent key={value} value={value}>
+          {tabContent}
+        </TabsContent>
+      ))}
     </Tabs>
   )
 }
