@@ -12,14 +12,18 @@ export default async function AttendnaceSummary({
   searchParams
 }: {
   params: Promise<{ attendanceId: string }>
-  searchParams: Promise<{ page: string }>
+  searchParams: Promise<{ page: string; month: string; year: string }>
 }): Promise<JSX.Element> {
   const { attendanceId } = await params
-  const { page } = await searchParams
+  const { page, month, year } = await searchParams
+
+  const today = new Date()
+  const todayMonth = (today.getMonth() + 1).toString()
+  const formatted = todayMonth.padStart(2, '0')
 
   const response = await getAttendanceSummary(
     attendanceId,
-    `?page=${page || 1}&perPage=10&sortBy=created_at`
+    `?page=${page || 1}&perPage=31&sortBy=created_at&month=${month || formatted}&year=${year || today.getFullYear()}`
   )
 
   const listTabs = [
