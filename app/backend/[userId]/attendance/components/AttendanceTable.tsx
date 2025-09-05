@@ -34,7 +34,7 @@ import { Button } from '@/components/ui/button'
 import { useShallow } from 'zustand/shallow'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, permanentRedirect } from 'next/navigation'
 import { debounce } from 'lodash'
 import { useUploadAttendanceDialog } from '@/services/attendance/state/attendance-dialog'
 import { AttendanceDB } from '@/lib/types/attendance'
@@ -80,6 +80,10 @@ export function AttendanceTable({
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.target
     onDebounce(value)
+  }
+
+  const goAttendanceSummary = (id: string): void => {
+    permanentRedirect(`${pathname}/${id}`)
   }
 
   const columns: ColumnDef<AttendanceDB>[] = React.useMemo(
@@ -253,6 +257,12 @@ export function AttendanceTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  onClick={() =>
+                    goAttendanceSummary(
+                      row.original.users?.employee_id as string
+                    )
+                  }
+                  className='cursor-pointer'
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

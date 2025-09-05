@@ -38,6 +38,7 @@ CREATE INDEX idx_biometrics_type ON public.biometrics(type);
 
 CREATE TABLE public.attendance_summary (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    employee_id TEXT REFERENCES users(employee_id) ON DELETE CASCADE,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
     total_hours INTEGER NOT NULL,
@@ -45,10 +46,11 @@ CREATE TABLE public.attendance_summary (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,
     archived_at TIMESTAMP WITH TIME ZONE,
-    CONSTRAINT idx_unique_attendance_summary UNIQUE (user_id, timestamp)
+    CONSTRAINT idx_unique_attendance_summary UNIQUE (employee_id, user_id, timestamp)
 );
 
-CREATE INDEX idx_attendance_summary_employee_id ON public.attendance_summary(user_id);
+CREATE INDEX idx_attendance_summary_employee_id ON public.attendance_summary(employee_id);
+CREATE INDEX idx_attendance_summary_user_id ON public.attendance_summary(user_id);
 CREATE INDEX idx_attendance_summary_timestamp ON public.attendance_summary(timestamp);
 CREATE INDEX idx_attendance_summary_total_hourse ON public.attendance_summary(total_hours);
 
@@ -678,14 +680,14 @@ DECLARE
     earliest_login TIMESTAMP WITH TIME ZONE;
     latest_logout TIMESTAMP WITH TIME ZONE;
     total_hours_calculated INTEGER;
+    employee_id_val TEXT;
     user_id_val UUID;
 BEGIN
-    -- Get the user_id from the users table based on employee_id
-    SELECT id INTO user_id_val
+    SELECT employee_id, id INTO employee_id_val, user_id_val
     FROM users
     WHERE employee_id = NEW.employee_id;
 
-    IF user_id_val IS NOT NULL THEN
+    IF employee_id_val IS NOT NULL AND user_id_val IS NOT NULL THEN
         -- Check all timestamps for the same employee_id and day
         IF NEW.type IN (1, 15) THEN
             -- Find the earliest login and latest logout on the same day
@@ -707,32 +709,32 @@ BEGIN
 
                 -- Determine status based on total hours
                 IF total_hours_calculated > 8 THEN
-                    INSERT INTO attendance_summary (user_id, timestamp, total_hours, status)
-                    VALUES (user_id_val, DATE_TRUNC('day', NEW.timestamp), total_hours_calculated, 'completed')
-                    ON CONFLICT (user_id, timestamp) DO UPDATE
+                    INSERT INTO attendance_summary (employee_id, user_id, timestamp, total_hours, status)
+                    VALUES (employee_id_val, user_id_val, DATE_TRUNC('day', NEW.timestamp), total_hours_calculated, 'completed')
+                    ON CONFLICT (employee_id, user_id, timestamp) DO UPDATE
                     SET total_hours = total_hours_calculated,
                         status = 'completed',
                         updated_at = CURRENT_TIMESTAMP;
                 ELSIF total_hours_calculated <= 4 THEN
-                    INSERT INTO attendance_summary (user_id, timestamp, total_hours, status)
-                    VALUES (user_id_val, DATE_TRUNC('day', NEW.timestamp), total_hours_calculated, 'half-day')
-                    ON CONFLICT (user_id, timestamp) DO UPDATE
+                    INSERT INTO attendance_summary (employee_id, user_id, timestamp, total_hours, status)
+                    VALUES (employee_id_val, user_id_val, DATE_TRUNC('day', NEW.timestamp), total_hours_calculated, 'half-day')
+                    ON CONFLICT (employee_id, user_id, timestamp) DO UPDATE
                     SET total_hours = total_hours_calculated,
                         status = 'half-day',
                         updated_at = CURRENT_TIMESTAMP;
                 ELSE
-                    INSERT INTO attendance_summary (user_id, timestamp, total_hours, status)
-                    VALUES (user_id_val, DATE_TRUNC('day', NEW.timestamp), total_hours_calculated, 'completed')
-                    ON CONFLICT (user_id, timestamp) DO UPDATE
+                    INSERT INTO attendance_summary (employee_id, user_id, timestamp, total_hours, status)
+                    VALUES (employee_id_val, user_id_val, DATE_TRUNC('day', NEW.timestamp), total_hours_calculated, 'completed')
+                    ON CONFLICT (employee_id, user_id, timestamp) DO UPDATE
                     SET total_hours = total_hours_calculated,
                         status = 'completed',
                         updated_at = CURRENT_TIMESTAMP;
                 END IF;
             ELSE
                 -- No valid span (e.g., only one timestamp or all same time), mark as incomplete
-                INSERT INTO attendance_summary (user_id, timestamp, total_hours, status)
-                VALUES (user_id_val, DATE_TRUNC('day', NEW.timestamp), 0, 'incomplete')
-                ON CONFLICT (user_id, timestamp) DO UPDATE
+                INSERT INTO attendance_summary (employee_id, user_id, timestamp, total_hours, status)
+                VALUES (employee_id_val, user_id_val, DATE_TRUNC('day', NEW.timestamp), 0, 'incomplete')
+                ON CONFLICT (employee_id, user_id, timestamp) DO UPDATE
                 SET total_hours = 0,
                     status = 'incomplete',
                     updated_at = CURRENT_TIMESTAMP;
