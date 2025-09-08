@@ -28,6 +28,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { Control } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { CalendarPicker } from '@/components/custom/CalendarPicker'
 import { format, subHours } from 'date-fns'
@@ -36,6 +37,7 @@ import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
 import { BiometricsDB } from '@/lib/types/biometrics'
 import { biometricsStatus } from './helpers/constants'
+import { LeaveApplicationsFormData } from '@/lib/types/leave_application'
 
 interface BiometricsTableData extends PaginationType {
   data: BiometricsDB[]
@@ -57,8 +59,6 @@ export function BiometricsTable({
   const { control, watch } = useForm<{ date: Date }>()
 
   const dateFilter = watch('date')
-
-  console.log(dateFilter)
 
   const columns: ColumnDef<BiometricsDB>[] = React.useMemo(
     () => [
@@ -157,7 +157,9 @@ export function BiometricsTable({
         <CalendarPicker
           title='Start and End Date'
           name='dateRange'
-          control={control}
+          control={
+            control as Control<LeaveApplicationsFormData | { date: Date }>
+          }
           isDisabled={false}
           date={dateFilter}
           mode='range'

@@ -21,7 +21,7 @@ interface CalendarPicker {
   control: Control<LeaveApplicationsFormData | { date: Date }>
   date: DateRange | Date
   mode: 'single' | 'range'
-  isDisabled: boolean
+  isDisabled?: boolean
 }
 
 export function CalendarPicker({

@@ -47,7 +47,7 @@ import { useShallow } from 'zustand/shallow'
 import { avatarName } from '@/helpers/avatarName'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, permanentRedirect } from 'next/navigation'
 import { debounce } from 'lodash'
 import { LeaveCreditsForm } from '@/lib/types/leave_credits'
 import { Progress } from '@/components/ui/progress'
@@ -77,6 +77,7 @@ export function UsersTable({
 
   const pathname = usePathname()
   const router = useRouter()
+  const userDetails = pathname.split('/users')
 
   const onDebounce = React.useMemo(
     () =>
@@ -94,6 +95,10 @@ export function UsersTable({
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.target
     onDebounce(value)
+  }
+
+  const onHandleUserDetails = (id: string): void => {
+    permanentRedirect(`${userDetails[0]}/attendance/${id}`)
   }
 
   const state = useAuth()
@@ -336,6 +341,12 @@ export function UsersTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className='cursor-pointer'
+                  onClick={() =>
+                    onHandleUserDetails(
+                      row.original.users.employee_id as string
+                    )
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
