@@ -28,12 +28,16 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { format } from 'date-fns'
+import { Control } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import { CalendarPicker } from '@/components/custom/CalendarPicker'
+import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
 import { BiometricsDB } from '@/lib/types/biometrics'
 import { biometricsStatus } from './helpers/constants'
+import { LeaveApplicationsFormData } from '@/lib/types/leave_application'
 
 interface BiometricsTableData extends PaginationType {
   data: BiometricsDB[]
@@ -52,6 +56,9 @@ export function BiometricsTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { control, watch } = useForm<{ date: Date }>()
+
+  const dateFilter = watch('date')
 
   const columns: ColumnDef<BiometricsDB>[] = React.useMemo(
     () => [
@@ -73,8 +80,8 @@ export function BiometricsTable({
           return (
             <div className='capitalize'>
               {format(
-                row.getValue('timestamp'),
-                "MMMM dd, yyyy hh:mm aaaaa'm'"
+                subHours(row.getValue('timestamp'), 8),
+                'MMMM d, yyyy, h:mm:ss a'
               )}
             </div>
           )
@@ -98,8 +105,8 @@ export function BiometricsTable({
           return (
             <div className='capitalize'>
               {format(
-                row.getValue('created_at'),
-                "MMMM dd, yyyy hh:mm aaaaa'm'"
+                subHours(row.getValue('created_at'), 8),
+                'MMMM d, yyyy, h:mm:ss a'
               )}
             </div>
           )
@@ -113,8 +120,8 @@ export function BiometricsTable({
             <div className='capitalize'>
               {row.getValue('updated_at')
                 ? format(
-                    row.getValue('updated_at'),
-                    "MMMM dd, yyyy hh:mm aaaaa'm'"
+                    subHours(row.getValue('updated_at_at'), 8),
+                    'MMMM d, yyyy, h:mm:ss a'
                   )
                 : 'N/A'}
             </div>
@@ -147,6 +154,16 @@ export function BiometricsTable({
   return (
     <div className='w-full'>
       <div className='flex items-center py-4'>
+        <CalendarPicker
+          title='Start and End Date'
+          name='dateRange'
+          control={
+            control as Control<LeaveApplicationsFormData | { date: Date }>
+          }
+          isDisabled={false}
+          date={dateFilter}
+          mode='range'
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>

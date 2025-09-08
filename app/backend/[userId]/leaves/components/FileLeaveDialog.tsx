@@ -24,7 +24,7 @@ import { CustomButton } from '@/components/custom/CustomButton'
 import { useLeaveApplicationDialog } from '@/services/leave_applications/states/leave-application-dialog'
 import { useShallow } from 'zustand/react/shallow'
 import { useRouter } from 'next/navigation'
-import { Controller } from 'react-hook-form'
+import { Control, Controller } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '@/services/auth/states/auth-state'
 import { CalendarPicker } from '@/components/custom/CalendarPicker'
@@ -148,8 +148,11 @@ export function FileLeaveDialog({ category }: FileLeaveDialog): JSX.Element {
         <CalendarPicker
           title='Start and End Date'
           name='dateRange'
-          control={control}
+          control={
+            control as Control<LeaveApplicationsFormData | { date: Date }>
+          }
           date={dateRange as DateRange}
+          mode='range'
         />
 
         <Textarea

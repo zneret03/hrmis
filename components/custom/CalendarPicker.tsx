@@ -18,19 +18,27 @@ import { DateRange } from 'react-day-picker'
 interface CalendarPicker {
   title: string
   name: keyof LeaveApplicationsFormData
-  control: Control<LeaveApplicationsFormData>
-  date: DateRange
+  control: Control<LeaveApplicationsFormData | { date: Date }>
+  date: DateRange | Date
+  mode: 'single' | 'range'
+  isDisabled?: boolean
 }
 
 export function CalendarPicker({
   title,
   name,
   control,
-  date
+  date,
+  mode = 'single',
+  isDisabled = true
 }: CalendarPicker): React.JSX.Element {
   const [open, setOpen] = React.useState(false)
 
-  const placeholder = `${new Date(date?.from as Date).toLocaleDateString()} - ${new Date(date?.to as Date).toLocaleDateString()}`
+  const newDate = date as DateRange
+  const placeholder =
+    mode === 'range'
+      ? `${new Date(newDate?.from as Date).toLocaleDateString()} - ${new Date(newDate?.to as Date).toLocaleDateString()}`
+      : new Date(date as Date).toString()
 
   return (
     <div className='flex flex-col gap-3'>
@@ -55,22 +63,33 @@ export function CalendarPicker({
           <Controller
             name={name as keyof LeaveApplicationsFormData}
             control={control}
-            render={({ field: { onChange, value } }) => (
-              <Calendar
-                mode='range'
-                selected={value as DateRange}
-                captionLayout='dropdown'
-                timeZone='UTC'
-                disabled={[{ before: new Date() }, { dayOfWeek: [0, 6] }]}
-                onSelect={(date) => {
-                  onChange(date)
+            render={({ field: { onChange, value } }) => {
+              const values =
+                mode === 'range' ? (value as DateRange) : (value as undefined)
 
-                  if (date?.to !== date?.from) {
-                    setOpen(false)
+              return (
+                <Calendar
+                  mode='range'
+                  selected={values}
+                  captionLayout='dropdown'
+                  timeZone='UTC'
+                  disabled={
+                    isDisabled
+                      ? [{ before: new Date() }, { dayOfWeek: [0, 6] }]
+                      : false
                   }
-                }}
-              />
-            )}
+                  onSelect={(date) => {
+                    onChange(date)
+
+                    if (mode === 'range') {
+                      if (date?.to !== date?.from) {
+                        setOpen(false)
+                      }
+                    }
+                  }}
+                />
+              )
+            }}
           />
         </PopoverContent>
       </Popover>

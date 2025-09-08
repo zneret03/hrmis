@@ -13,6 +13,13 @@ import {
   useReactTable,
   VisibilityState
 } from '@tanstack/react-table'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 import { ChevronDown } from 'lucide-react'
 import {
   DropdownMenu,
@@ -28,15 +35,21 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { AttendanceSummaryDB } from '@/lib/types/attendance'
+import { months } from '@/helpers/months'
+import { getPreviousYears } from '@/helpers/getPreviousYears'
 
 interface RenderedTableData {
   data: AttendanceSummaryDB[]
 }
 
 export function RenderedTable({ data }: RenderedTableData) {
+  const [currentMonth, setCurrentMonth] = React.useState<string>('')
+  const [currentYear, setCurrentYear] = React.useState<string>('')
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -44,6 +57,36 @@ export function RenderedTable({ data }: RenderedTableData) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const monthParams = searchParams.get('month')
+  const yearParams = searchParams.get('year')
+
+  const onFilterMonth = (month: string): void => {
+    if (month === '0') {
+      router.replace(pathname)
+      setCurrentMonth('')
+      return
+    }
+
+    if (!yearParams) {
+      router.replace(`${pathname}?month=${month}`)
+      setCurrentMonth(month)
+      return
+    }
+
+    router.replace(`${pathname}?month=${month}&year=${yearParams}`)
+    setCurrentMonth(month)
+  }
+
+  const onFilterYear = (year: string): void => {
+    router.replace(
+      `${pathname}?month=${searchParams.get('month')}&year=${year}`
+    )
+    setCurrentYear(year)
+  }
 
   const columns: ColumnDef<AttendanceSummaryDB>[] = React.useMemo(
     () => [
@@ -66,6 +109,13 @@ export function RenderedTable({ data }: RenderedTableData) {
         header: 'Total Hours',
         cell: function ({ row }) {
           return <div className='capitalize'>{row.original.total_hours}hr</div>
+        }
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: function ({ row }) {
+          return <Badge variant='outline'>{row.original.status}</Badge>
         }
       },
       {
@@ -121,12 +171,52 @@ export function RenderedTable({ data }: RenderedTableData) {
     }
   })
 
+  const monthKeys: string[] = Object.keys(months)
+  const yearsList = getPreviousYears()
+  const todayYear = new Date().getFullYear()
+  const todayMonth = (new Date().getMonth() + 1).toString()
+
   return (
     <div className='w-full'>
-      <div className='flex items-center py-4'>
+      <div className='flex items-center justify-end gap-2 py-4'>
+        <Select
+          value={currentYear || todayYear.toString()}
+          onValueChange={(e) => onFilterYear(e)}
+          disabled={!monthParams}
+        >
+          <SelectTrigger className='w-[10rem]'>
+            <SelectValue placeholder='Select year' />
+          </SelectTrigger>
+          <SelectContent>
+            {yearsList.map((item, index) => (
+              <SelectItem key={index} value={item.toString()}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          value={
+            currentMonth ||
+            (monthParams as string) ||
+            todayMonth.padStart(2, '0')
+          }
+          onValueChange={(e) => onFilterMonth(e)}
+        >
+          <SelectTrigger className='w-[10rem]'>
+            <SelectValue placeholder='Select month' />
+          </SelectTrigger>
+          <SelectContent>
+            {monthKeys.map((item) => (
+              <SelectItem key={item} value={months[item]}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='outline' className='ml-auto'>
+            <Button variant='outline'>
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>

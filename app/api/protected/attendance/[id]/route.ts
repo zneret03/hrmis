@@ -21,6 +21,10 @@ export async function GET(
     const page = Number(url.get('page') || 1)
     const perPage = Number(url.get('perPage') || 10)
     const sortBy = url.get('sortBy') || 'created_at'
+    const month = url.get('month')
+    const year = url.get('year')
+
+    const endDate = new Date(Number(year), Number(month), 0).getDate()
 
     if (!id) {
       return badRequestResponse()
@@ -49,9 +53,11 @@ export async function GET(
 
     const { data: summary, error: errorSummary } = await supabase
       .from('attendance_summary')
-      .select('timestamp, total_hours, created_at, updated_at')
+      .select('timestamp, total_hours, status, created_at, updated_at')
       .order('created_at', { ascending: true })
       .eq('employee_id', id)
+      .gte('timestamp', `${year}-${month}-01T00:00:00Z`)
+      .lte('timestamp', `${year}-${month}-${endDate}T23:59:59Z`)
 
     if (errorSummary) {
       return generalErrorResponse({ error: errorSummary })

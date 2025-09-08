@@ -45,27 +45,27 @@ export function UserDetails({
       <section className='w-full p-8'>
         <div className='flex xl:flex-row lg:flex-col md:flex-col gap-6'>
           <section className='flex items-center gap-4'>
-            <Avatar className='w-30 h-30'>
+            <Avatar className='xl:w-30 xl:h-30 lg:w-20 lg:h-20 md:w-15 md:h-15'>
               <AvatarImage
                 className='object-cover'
                 src={avatar || ''}
                 alt={email}
               />
-              <AvatarFallback className='rounded-lg fill-blue-500 bg-blue-400 text-white font-semibold capitalize'>
+              <AvatarFallback className='xl:text-4xl lg:text-xl md:text-lg sm:text-xl rounded-lg fill-blue-500 bg-blue-400 text-white font-semibold capitalize'>
                 {avatarName(email)}
               </AvatarFallback>
             </Avatar>
 
             <div className='space-y-1'>
-              <div className='font-semibold text-3xl flex items-center gap-2'>
+              <div className='font-semibold xl:text-3xl lg:text-2xl md:text-xl sm:text-lg flex items-center gap-2'>
                 {email}
                 <Badge>{role}</Badge>
               </div>
-              <div className='text-xl text-gray-500'>
+              <div className='xl:text-xl lg:text-lg md:text-md sm:text-sm text-gray-500'>
                 {username} #{employee_id}
               </div>
 
-              <Button className='mt-2'>
+              <Button className='mt-2 xl:text-md lg:text-md md:text-sm sm:text-xs'>
                 <FileSpreadsheet /> View PDS
               </Button>
             </div>
