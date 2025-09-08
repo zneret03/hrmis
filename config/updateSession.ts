@@ -59,7 +59,8 @@ export async function updateSession(request: NextRequest) {
     'leave-categories',
     'leaves',
     'user_credits',
-    'attendance'
+    'attendance',
+    'personal_management'
   ]
   const employeeRestrictedRoutes = ['/backend', '/staff']
   const staffRestrictedRoutes = ['/backend', '/employee']
