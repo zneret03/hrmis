@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { PdfForm } from './components/PdfForm'
+import PdfForm from './components/PdfForm'
 import { UserDetails } from '@/app/backend/[userId]/components/UserDetails'
 import { getAttendanceSummary } from '@/services/attendance/attendance.services'
 import { fetchUserWitHCredits } from '@/services/leave_credits/leave_credits.services'
@@ -25,7 +25,7 @@ export default async function PersonalManagement({
 
   return (
     <Container
-      title='Personal Management'
+      title='Personal Data Management'
       description='You can update your PDS here'
     >
       <UserDetails
