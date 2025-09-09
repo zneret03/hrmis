@@ -40,7 +40,17 @@ export default async function PersonalManagement({
         }}
       />
 
-      <PdfForm />
+      <section className='flex gap-2'>
+        <div className='flex-1'>
+          <h1 className='text-2xl font-bold'>Personal Data Sheet</h1>
+          <span className='text-gray-500'>You can update your PDS here</span>
+          <PdfForm />
+        </div>
+        <div className='flex-1'>
+          <h1 className='text-2xl font-bold'>File leave</h1>
+          <span className='text-gray-500'>You can file your leaves here</span>
+        </div>
+      </section>
     </Container>
   )
 }
