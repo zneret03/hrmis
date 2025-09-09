@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
     return successResponse({
       message: 'Successfully fetch attendance',
       data: {
-        attendance: data,
+        attendance: data || null,
         count,
         totalPages,
         currentPage
