@@ -3,7 +3,7 @@ import { FileSpreadsheet, CalendarDays, Plane } from 'lucide-react'
 import { avatarName } from '@/helpers/avatarName'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { CardSummary } from '../../components/CardSummary'
+import { CardSummary } from '../components/CardSummary'
 import { Users } from '@/lib/types/users'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 
@@ -14,12 +14,14 @@ interface UserDetails {
     daysAbsent: number
   }
   credits: number
+  isAdmin: boolean
 }
 
 export function UserDetails({
   users,
   attendance,
-  credits
+  credits,
+  isAdmin = false
 }: UserDetails): JSX.Element {
   const { daysPresent, daysAbsent } = attendance
   const { avatar, email, username, employee_id, role } = users
@@ -40,6 +42,7 @@ export function UserDetails({
       count: credits
     }
   ]
+
   return (
     <main className='space-y-6'>
       <section className='w-full p-8'>
@@ -65,9 +68,11 @@ export function UserDetails({
                 {username} #{employee_id}
               </div>
 
-              <Button className='mt-2 xl:text-md lg:text-md md:text-sm sm:text-xs'>
-                <FileSpreadsheet /> View PDS
-              </Button>
+              {isAdmin && (
+                <Button className='mt-2 xl:text-md lg:text-md md:text-sm sm:text-xs'>
+                  <FileSpreadsheet /> View PDS
+                </Button>
+              )}
             </div>
           </section>
 

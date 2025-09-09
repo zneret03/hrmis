@@ -45,7 +45,7 @@ export function LoginForm({
         }
 
         if (data?.role === 'employee') {
-          router.push(`/employee/${data?.id}/dashboard`)
+          router.push(`/employee/${data?.id}/personal_management`)
 
           return
         }

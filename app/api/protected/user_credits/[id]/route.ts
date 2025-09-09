@@ -20,6 +20,7 @@ export async function GET(
         'id, credits, users!inner(id, email, username, role, employee_id), created_at, updated_at, archived_at'
       )
       .eq('user_id', userId)
+      .single()
 
     if (error) {
       return badRequestResponse({ error: error.message })

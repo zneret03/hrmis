@@ -1,6 +1,6 @@
 import { JSX } from 'react'
 import { Container } from '@/components/custom/Container'
-import { UserDetails } from '../components/UserDetails'
+import { UserDetails } from '../../components/UserDetails'
 import { AttendanceTabs } from '../components/AttendanceTabs'
 import { BiometricsTable } from '../components/BiometricsTable'
 import { RenderedTable } from '../components/RenderedTable'
@@ -75,6 +75,7 @@ export default async function AttendnaceSummary({
           },
           credits: response.userCredits.credits
         }}
+        isAdmin
       />
       <AttendanceTabs
         defaultValue='biometrics'
