@@ -9,6 +9,7 @@ type LeaveApplicationDialogType =
   | 'approve'
   | 'disapprove'
   | 'delete'
+  | 'cancel'
   | null
 
 export type LeaveApplicationsData = Omit<

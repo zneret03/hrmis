@@ -1,3 +1,5 @@
+'use client'
+
 import { JSX } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -5,14 +7,16 @@ import { PlaneIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { LeaveApplicationsForm } from '@/lib/types/leave_application'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
+import { useLeaveApplicationDialog } from '@/services/leave_applications/states/leave-application-dialog'
+import { useShallow } from 'zustand/shallow'
 
-export function LeaveCard({
-  leave_categories,
-  start_date,
-  end_date,
-  remarks,
-  status
-}: LeaveApplicationsForm): JSX.Element {
+export function LeaveCard(args: LeaveApplicationsForm): JSX.Element {
+  const { leave_categories, start_date, end_date, remarks, status } = args
+
+  const { toggleOpen } = useLeaveApplicationDialog(
+    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog }))
+  )
+
   return (
     <Card className='bg-green-500 text-white'>
       <CardContent className='space-y-2 py-0'>
@@ -36,7 +40,10 @@ export function LeaveCard({
         </div>
 
         <div className='mt-4 text-right'>
-          <Button className='bg-transparent hover:bg-transparent cursor-pointer underline shadow-none'>
+          <Button
+            className='bg-transparent hover:bg-transparent cursor-pointer underline shadow-none'
+            onClick={() => toggleOpen?.(true, 'cancel', { ...args })}
+          >
             Cancel
           </Button>
         </div>

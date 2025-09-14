@@ -6,11 +6,13 @@ import { UserDetails } from '@/app/backend/[userId]/components/UserDetails'
 import { fetchUserWitHCredits } from '@/services/leave_credits/leave_credits.services'
 import { Container } from '@/components/custom/Container'
 import { LeaveCard } from './components/LeaveCard'
+import { Button } from '@/components/ui/button'
 
 import { getAttendanceSummary } from '@/services/attendance/attendance.services'
 import { getLeaveCategories } from '@/services/leave_categories/leave-categories.services'
 import { getLeaveApplications } from '@/services/leave_applications/leave-applications.services'
 import { LeaveApplicationsForm } from '@/lib/types/leave_application'
+import { CancelLeaveDialog } from './components/CancelLeave'
 
 export default async function PersonalManagement({
   params
@@ -30,8 +32,9 @@ export default async function PersonalManagement({
     `?page=1&perPage=31&sortBy=created_at&month=${formatted}&year=${today.getFullYear()}`
   )
 
-  const { leave_applications: leaveApplications } =
-    await getLeaveApplications(`?page=1&perPage=5`)
+  const { leave_applications: leaveApplications } = await getLeaveApplications(
+    `?page=1&perPage=5&limt=5&sortBy=status`
+  )
 
   const category = await getLeaveCategories('')
 
@@ -63,10 +66,14 @@ export default async function PersonalManagement({
           {leaveApplications.map((item: LeaveApplicationsForm) => (
             <LeaveCard key={item.id} {...item} />
           ))}
+          <Button variant='outline' className='w-full cursor-pointer'>
+            Show more
+          </Button>
         </div>
       </section>
 
       <FileLeaveDialog category={category.leave_categories} />
+      <CancelLeaveDialog />
     </Container>
   )
 }
