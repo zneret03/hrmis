@@ -20,15 +20,16 @@ export async function GET(req: NextRequest) {
     const search = url.get('search') || ''
 
     const { data, error, count, totalPages, currentPage } =
-      await paginatedData<LeaveCreditsForm>(
-        'leave_credits',
+      await paginatedData<LeaveCreditsForm>({
+        tableName: 'leave_credits',
         supabase,
-        'id, credits, users!inner(id, avatar, email, username, role, employee_id, created_at, updated_at, archived_at), created_at, updated_at, archived_at',
-        { column: 'users.email', query: search },
+        columns:
+          'id, credits, users!inner(id, avatar, email, username, role, employee_id, created_at, updated_at, archived_at), created_at, updated_at, archived_at',
+        search: { column: 'users.email', query: search },
         page,
         perPage,
         sortBy
-      )
+      })
 
     if (error) {
       return badRequestResponse({ error: error.message })

@@ -1,25 +1,38 @@
 import { PostgrestError, SupabaseClient } from '@supabase/supabase-js'
 
-export const paginatedData = async <TData>(
-  tableName: string,
-  supabase: SupabaseClient,
-  columns: string,
-  search: {
+interface PaginatedData {
+  tableName: string
+  supabase: SupabaseClient
+  columns: string
+  search?: {
     column: string
     query: string
-  },
-  page?: number,
-  perPage?: number,
-  sortBy?: string,
+  }
+  sortOrder?: 'asc' | 'desc'
+  page?: number
+  perPage?: number
+  sortBy?: string
   specificTable?: {
     column: string
     tableId: string
-  },
-  sortOrder = 'asc'
-): Promise<{
+  }
+  limit?: number
+}
+
+export const paginatedData = async <TData>({
+  tableName,
+  supabase,
+  columns,
+  search,
+  page,
+  perPage,
+  sortBy,
+  specificTable,
+  sortOrder = 'asc',
+  limit
+}: PaginatedData): Promise<{
   data: TData[] | null
   error: PostgrestError | null
-
   totalPages: number
   currentPage: number
   count: number | null
@@ -28,6 +41,10 @@ export const paginatedData = async <TData>(
     .from(tableName)
     .select(columns, { count: 'exact' })
     .is('archived_at', null)
+
+  if (limit) {
+    query = query.limit(limit)
+  }
 
   if (specificTable?.column) {
     query = query.eq(specificTable.column, specificTable.tableId)

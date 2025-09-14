@@ -70,8 +70,8 @@ export default async function AttendnaceSummary({
         {...{
           users: response.users,
           attendance: {
-            daysPresent: response.attendance.days_present,
-            daysAbsent: response.attendance.days_absent
+            daysPresent: response?.attendance?.days_present,
+            daysAbsent: response?.attendance?.days_absent
           },
           credits: response.userCredits.credits
         }}

@@ -1,9 +1,16 @@
 import { JSX } from 'react'
 import PdfForm from './components/PdfForm'
+import { FileLeaveDialog } from '@/app/auth/components/FileLeaveDialog'
+import { AttendanceLeaves } from './components/AttendanveLeave'
 import { UserDetails } from '@/app/backend/[userId]/components/UserDetails'
-import { getAttendanceSummary } from '@/services/attendance/attendance.services'
 import { fetchUserWitHCredits } from '@/services/leave_credits/leave_credits.services'
 import { Container } from '@/components/custom/Container'
+import { LeaveCard } from './components/LeaveCard'
+
+import { getAttendanceSummary } from '@/services/attendance/attendance.services'
+import { getLeaveCategories } from '@/services/leave_categories/leave-categories.services'
+import { getLeaveApplications } from '@/services/leave_applications/leave-applications.services'
+import { LeaveApplicationsForm } from '@/lib/types/leave_application'
 
 export default async function PersonalManagement({
   params
@@ -22,6 +29,11 @@ export default async function PersonalManagement({
     employeeId,
     `?page=1&perPage=31&sortBy=created_at&month=${formatted}&year=${today.getFullYear()}`
   )
+
+  const { leave_applications: leaveApplications } =
+    await getLeaveApplications(`?page=1&perPage=5`)
+
+  const category = await getLeaveCategories('')
 
   return (
     <Container
@@ -46,11 +58,15 @@ export default async function PersonalManagement({
           <span className='text-gray-500'>You can update your PDS here</span>
           <PdfForm />
         </div>
-        <div className='flex-1'>
-          <h1 className='text-2xl font-bold'>File leave</h1>
-          <span className='text-gray-500'>You can file your leaves here</span>
+        <div className='flex-1 space-y-4'>
+          <AttendanceLeaves />
+          {leaveApplications.map((item: LeaveApplicationsForm) => (
+            <LeaveCard key={item.id} {...item} />
+          ))}
         </div>
       </section>
+
+      <FileLeaveDialog category={category.leave_categories} />
     </Container>
   )
 }

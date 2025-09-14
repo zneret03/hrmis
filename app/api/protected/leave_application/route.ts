@@ -23,15 +23,16 @@ export async function GET(req: NextRequest) {
     const search = url.get('search') || ''
 
     const { data, error, count, totalPages, currentPage } =
-      await paginatedData<LeaveApplications>(
-        'leave_applications',
+      await paginatedData<LeaveApplications>({
+        tableName: 'leave_applications',
         supabase,
-        'id, users!inner(email, username, id), leave_categories(name, id), start_date, end_date, status, remarks, created_at, updated_at, archived_at',
-        { column: 'users.email', query: search },
+        columns:
+          'id, users!inner(email, username, id), leave_categories(name, id), start_date, end_date, status, remarks, created_at, updated_at, archived_at',
+        search: { column: 'users.email', query: search },
         page,
         perPage,
         sortBy
-      )
+      })
 
     if (error) {
       return badRequestResponse({ error: error.message })

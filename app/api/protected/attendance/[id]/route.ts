@@ -36,16 +36,16 @@ export async function GET(
       count,
       totalPages,
       currentPage
-    } = await paginatedData<BiometricsDB>(
-      'biometrics',
+    } = await paginatedData<BiometricsDB>({
+      tableName: 'biometrics',
       supabase,
-      'id, employee_id, timestamp, type, created_at, updated_at',
-      { column: '', query: '' },
+      columns: 'id, employee_id, timestamp, type, created_at, updated_at',
+      search: { column: '', query: '' },
       page,
       perPage,
       sortBy,
-      { column: 'employee_id', tableId: id }
-    )
+      specificTable: { column: 'employee_id', tableId: id }
+    })
 
     if (errorBiometrics) {
       return generalErrorResponse({ error: errorBiometrics })
@@ -89,8 +89,29 @@ export async function GET(
       .eq('employee_id', id)
       .single()
 
+    if (errorAttendance && errorAttendance.code === 'PGRST116') {
+      return successResponse({
+        message: 'Successfully fetch data',
+        data: {
+          users: userData,
+          attendanceSummary: summary,
+          userCredits,
+          biometrics: {
+            data: biometrics,
+            count,
+            totalPages,
+            currentPage
+          },
+          attendance: {
+            days_absent: 0,
+            days_present: 0
+          }
+        }
+      })
+    }
+
     if (errorAttendance) {
-      return generalErrorResponse({ error: errorAttendance })
+      return generalErrorResponse({ error: errorAttendance.message })
     }
 
     return successResponse({
