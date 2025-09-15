@@ -13,6 +13,7 @@ import { getLeaveCategories } from '@/services/leave_categories/leave-categories
 import { getLeaveApplications } from '@/services/leave_applications/leave-applications.services'
 import { LeaveApplicationsForm } from '@/lib/types/leave_application'
 import { CancelLeaveDialog } from './components/CancelLeave'
+import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder'
 
 export default async function PersonalManagement({
   params
@@ -66,9 +67,18 @@ export default async function PersonalManagement({
           {leaveApplications.map((item: LeaveApplicationsForm) => (
             <LeaveCard key={item.id} {...item} />
           ))}
-          <Button variant='outline' className='w-full cursor-pointer'>
-            Show more
-          </Button>
+
+          {leaveApplications.length > 5 && (
+            <Button variant='outline' className='w-full cursor-pointer'>
+              Show more
+            </Button>
+          )}
+
+          {leaveApplications.length <= 0 && (
+            <div className='text-center'>
+              <EmptyPlaceholder />
+            </div>
+          )}
         </div>
       </section>
 

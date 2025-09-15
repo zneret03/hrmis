@@ -15,7 +15,7 @@ interface PaginatedData {
   specificTable?: {
     column: string
     tableId: string
-  }
+  } | null
   limit?: number
 }
 

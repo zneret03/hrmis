@@ -39,14 +39,16 @@ export function LeaveCard(args: LeaveApplicationsForm): JSX.Element {
           - <span>{format(end_date as string, 'MMMM dd, yyyy')}</span>
         </div>
 
-        <div className='mt-4 text-right'>
-          <Button
-            className='bg-transparent hover:bg-transparent cursor-pointer underline shadow-none'
-            onClick={() => toggleOpen?.(true, 'cancel', { ...args })}
-          >
-            Cancel
-          </Button>
-        </div>
+        {status !== 'cancelled' && (
+          <div className='mt-4 text-right'>
+            <Button
+              className='bg-transparent hover:bg-transparent cursor-pointer underline shadow-none'
+              onClick={() => toggleOpen?.(true, 'cancel', { ...args })}
+            >
+              Cancel
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
