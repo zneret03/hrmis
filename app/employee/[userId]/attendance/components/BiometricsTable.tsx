@@ -36,7 +36,7 @@ import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
 import { BiometricsDB } from '@/lib/types/biometrics'
-import { biometricsStatus } from './helpers/constants'
+import { biometricsStatus } from '@/app/backend/[userId]/attendance/components/helpers/constants'
 // import { LeaveApplicationsFormData } from '@/lib/types/leave_application'
 
 interface BiometricsTableData extends PaginationType {

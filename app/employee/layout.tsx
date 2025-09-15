@@ -7,6 +7,8 @@ import {
 import { AuthProvider } from '@/context/AuthProvider'
 import { Breadcrumbs } from '@/components/custom/Breadcrumbs'
 import { ReactNode } from 'react'
+import 'react-pdf/dist/Page/TextLayer.css'
+import 'react-pdf/dist/Page/AnnotationLayer.css'
 
 export default async function Layout({ children }: { children: ReactNode }) {
   return (

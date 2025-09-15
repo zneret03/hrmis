@@ -28,8 +28,9 @@ export function NavMain({ items }: { items: SideMenu[] }) {
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <Link href={item.url} className='cursor-pointer'>
+                <Link href={item.url} passHref>
                   <SidebarMenuButton
+                    className='cursor-pointer'
                     isActive={pathname === item?.url}
                     tooltip={item.title}
                   >

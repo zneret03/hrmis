@@ -28,27 +28,23 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-// import { Control } from 'react-hook-form'
-// import { useForm } from 'react-hook-form'
-// import { CalendarPicker } from '@/components/custom/CalendarPicker'
 import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
-import { BiometricsDB } from '@/lib/types/biometrics'
-import { biometricsStatus } from './helpers/constants'
-// import { LeaveApplicationsFormData } from '@/lib/types/leave_application'
+import { usePathname, permanentRedirect } from 'next/navigation'
+import { AttendanceDB } from '@/lib/types/attendance'
 
-interface BiometricsTableData extends PaginationType {
-  data: BiometricsDB[]
+interface AttendanceTableData extends PaginationType {
+  data: AttendanceDB[]
 }
 
-export function BiometricsTable({
+export function AttendanceTable({
   data,
   totalPages,
   currentPage,
   count
-}: BiometricsTableData) {
+}: AttendanceTableData) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -56,46 +52,60 @@ export function BiometricsTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-  // const { control, watch } = useForm<{ date: Date }>()
 
-  // const dateFilter = watch('date')
+  const pathname = usePathname()
 
-  const columns: ColumnDef<BiometricsDB>[] = React.useMemo(
+  const goAttendanceSummary = (id: string): void => {
+    permanentRedirect(`${pathname}/${id}`)
+  }
+
+  const columns: ColumnDef<AttendanceDB>[] = React.useMemo(
     () => [
       {
         accessorKey: 'employee_id',
         header: 'Employee ID',
         cell: function ({ row }) {
           return (
-            <div className='capitalize font-semibold'>
-              {row.getValue('employee_id')}
+            <div className='flex items-center gap-2'>
+              <div className='capitalize font-semibold'>
+                {row.original.users?.employee_id}
+              </div>
             </div>
           )
         }
       },
       {
-        accessorKey: 'timestamp',
-        header: 'Date Timestamp',
+        accessorKey: 'email',
+        header: 'Email',
+        cell: function ({ row }) {
+          return <div className='font-medium'>{row.original.users?.email}</div>
+        }
+      },
+      {
+        accessorKey: 'month',
+        header: 'Month',
         cell: function ({ row }) {
           return (
             <div className='capitalize'>
-              {format(
-                subHours(row.getValue('timestamp'), 8),
-                'MMMM d, yyyy, h:mm:ss a'
-              )}
+              {format(row.getValue('month'), 'MMMM')}
             </div>
           )
         }
       },
       {
-        accessorKey: 'type',
-        header: 'Type',
+        accessorKey: 'days_present',
+        header: 'Days Present',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>
-              {biometricsStatus[row.original.type]}
-            </div>
+            <div className='capitalize'>{row.getValue('days_present')}</div>
           )
+        }
+      },
+      {
+        accessorKey: 'days_absent',
+        header: 'Days Absent',
+        cell: function ({ row }) {
+          return <div className='capitalize'>{row.getValue('days_absent')}</div>
         }
       },
       {
@@ -120,7 +130,7 @@ export function BiometricsTable({
             <div className='capitalize'>
               {row.getValue('updated_at')
                 ? format(
-                    subHours(row.getValue('updated_at_at'), 8),
+                    subHours(row.getValue('created_at'), 8),
                     'MMMM d, yyyy, h:mm:ss a'
                   )
                 : 'N/A'}
@@ -154,43 +164,34 @@ export function BiometricsTable({
   return (
     <div className='w-full'>
       <div className='flex items-center py-4'>
-        {/*
-        <CalendarPicker
-          title='Start and End Date'
-          name='dateRange'
-          control={
-            control as Control<LeaveApplicationsFormData | { date: Date }>
-          }
-          isDisabled={false}
-          date={dateFilter}
-          mode='range'
-        />*/}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='outline' className='ml-auto'>
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map(function (column) {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className='capitalize'
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className='flex items-center gap-2'>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='outline' className='ml-auto'>
+                Columns <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end'>
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map(function (column) {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className='capitalize'
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  )
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className='rounded-md border'>
         <Table>
@@ -218,6 +219,12 @@ export function BiometricsTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  onClick={() =>
+                    goAttendanceSummary(
+                      row.original.users?.employee_id as string
+                    )
+                  }
+                  className='cursor-pointer'
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

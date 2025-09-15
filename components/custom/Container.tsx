@@ -19,8 +19,7 @@ export const Container = ({
   ...props
 }: Container): JSX.Element => {
   const pathname = usePathname()
-  const isHomePage =
-    pathname.endsWith('/businesses') || pathname.startsWith('/backend/')
+  const isHomePage = pathname.startsWith('/employee')
 
   return (
     <main className='space-y-4' {...props}>

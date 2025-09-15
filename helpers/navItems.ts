@@ -4,7 +4,8 @@ import {
   Users,
   TowerControl,
   Plane,
-  FileText
+  FileText,
+  FileStack
 } from 'lucide-react'
 
 export const adminMenus = (id: string): SideMenu[] => {
@@ -45,9 +46,15 @@ export const adminMenus = (id: string): SideMenu[] => {
 export const employeeMenus = (id: string): SideMenu[] => {
   return [
     {
-      title: 'Dashboard',
-      url: `/backend/${id}/dashboard`,
-      icon: LayoutDashboard,
+      title: 'Personal Management',
+      url: `/employee/${id}/personal_management`,
+      icon: FileStack,
+      isActive: true
+    },
+    {
+      title: 'Attendance',
+      url: `/employee/${id}/attendance`,
+      icon: FileText,
       isActive: true
     }
   ]

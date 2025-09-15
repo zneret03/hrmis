@@ -20,17 +20,20 @@ export async function GET(req: NextRequest) {
     const perPage = Number(url.get('perPage') || 10)
     const sortBy = url.get('sortBy') || 'created_at'
     const search = url.get('search') || ''
+    const limit = url.get('limit') || ''
 
     const { data, error, count, totalPages, currentPage } =
-      await paginatedData<AttendanceDB>(
-        'attendance',
+      await paginatedData<AttendanceDB>({
+        tableName: 'attendance',
         supabase,
-        'id, users!user_id!inner(email, username, id, employee_id), month, days_present, days_absent, created_at, updated_at',
-        { column: 'users.email', query: search },
+        columns:
+          'id, users!user_id!inner(email, username, id, employee_id), month, days_present, days_absent, created_at, updated_at',
+        search: { column: 'users.email', query: search },
         page,
         perPage,
-        sortBy
-      )
+        sortBy,
+        limit: Number(limit) as number
+      })
 
     if (error) {
       return badRequestResponse({ error: error.message })
@@ -39,7 +42,7 @@ export async function GET(req: NextRequest) {
     return successResponse({
       message: 'Successfully fetch attendance',
       data: {
-        attendance: data,
+        attendance: data || null,
         count,
         totalPages,
         currentPage

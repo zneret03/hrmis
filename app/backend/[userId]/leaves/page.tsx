@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { FileLeaveDialog } from './components/FileLeaveDialog'
+import { FileLeaveDialog } from '@/app/auth/components/FileLeaveDialog'
 import { ApproveDisapproveDialog } from './components/ApprovedDisapprovedStatus'
 import { EditFileLeaveDialog } from './components/EditLeaveRequestDialog'
 import { DeleteLeaveRequestDialog } from './components/DeleteDialog'

@@ -80,7 +80,7 @@ export const approveDisapprovestatus = async (
   status: LeaveStatus,
   userId: string,
   id: string,
-  countDates: number
+  countDates: number | null
 ) => {
   try {
     const response = await axiosService.put(

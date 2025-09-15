@@ -1,0 +1,82 @@
+import { JSX } from 'react'
+import PdfForm from './components/PdfForm'
+import { FileLeaveDialog } from '@/app/auth/components/FileLeaveDialog'
+import { AttendanceLeaves } from './components/AttendanveLeave'
+import { UserDetails } from '@/app/components/UserDetails'
+import { fetchUserWitHCredits } from '@/services/leave_credits/leave_credits.services'
+import { Container } from '@/components/custom/Container'
+import { LeaveCard } from './components/LeaveCard'
+
+import { getAttendanceSummary } from '@/services/attendance/attendance.services'
+import { getLeaveCategories } from '@/services/leave_categories/leave-categories.services'
+import { getLeaveApplications } from '@/services/leave_applications/leave-applications.services'
+import { LeaveApplicationsForm } from '@/lib/types/leave_application'
+import { CancelLeaveDialog } from './components/CancelLeave'
+import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder'
+
+export default async function PersonalManagement({
+  params
+}: {
+  params: Promise<{ userId: string }>
+}): Promise<JSX.Element> {
+  const { userId } = await params
+  const response = await fetchUserWitHCredits(userId)
+
+  const employeeId = response.users.employee_id
+  const today = new Date()
+  const todayMonth = (today.getMonth() + 1).toString()
+  const formatted = todayMonth.padStart(2, '0')
+
+  const attendanceResponse = await getAttendanceSummary(
+    employeeId,
+    `?page=1&perPage=31&sortBy=created_at&month=${formatted}&year=${today.getFullYear()}`
+  )
+
+  const { leave_applications: leaveApplications } = await getLeaveApplications(
+    `?page=1&perPage=5&limt=5&sortBy=status`
+  )
+
+  const category = await getLeaveCategories('')
+
+  return (
+    <Container
+      title='Personal Data Management'
+      description='You can update your PDS here'
+    >
+      <UserDetails
+        {...{
+          users: attendanceResponse.users,
+          attendance: {
+            daysPresent: attendanceResponse.attendance.days_present,
+            daysAbsent: attendanceResponse.attendance.days_absent
+          },
+          credits: attendanceResponse.userCredits.credits,
+          isAdmin: false
+        }}
+      />
+
+      <section className='flex gap-2'>
+        <div className='flex-1'>
+          <h1 className='text-2xl font-bold'>Personal Data Sheet</h1>
+          <span className='text-gray-500'>You can update your PDS here</span>
+          <PdfForm />
+        </div>
+        <div className='flex-1 space-y-4'>
+          <AttendanceLeaves />
+          {leaveApplications.map((item: LeaveApplicationsForm) => (
+            <LeaveCard key={item.id} {...item} />
+          ))}
+
+          {leaveApplications.length <= 0 && (
+            <div className='text-center'>
+              <EmptyPlaceholder />
+            </div>
+          )}
+        </div>
+      </section>
+
+      <FileLeaveDialog category={category.leave_categories} />
+      <CancelLeaveDialog />
+    </Container>
+  )
+}

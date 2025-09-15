@@ -13,6 +13,13 @@ import {
   useReactTable,
   VisibilityState
 } from '@tanstack/react-table'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 import { ChevronDown } from 'lucide-react'
 import {
   DropdownMenu,
@@ -28,27 +35,21 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-// import { Control } from 'react-hook-form'
-// import { useForm } from 'react-hook-form'
-// import { CalendarPicker } from '@/components/custom/CalendarPicker'
-import { format, subHours } from 'date-fns'
+import { Badge } from '@/components/ui/badge'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
-import { Pagination } from '@/components/custom/Pagination'
-import { Pagination as PaginationType } from '@/lib/types/pagination'
-import { BiometricsDB } from '@/lib/types/biometrics'
-import { biometricsStatus } from './helpers/constants'
-// import { LeaveApplicationsFormData } from '@/lib/types/leave_application'
+import { AttendanceSummaryDB } from '@/lib/types/attendance'
+import { months } from '@/helpers/months'
+import { getPreviousYears } from '@/helpers/getPreviousYears'
 
-interface BiometricsTableData extends PaginationType {
-  data: BiometricsDB[]
+interface RenderedTableData {
+  data: AttendanceSummaryDB[]
 }
 
-export function BiometricsTable({
-  data,
-  totalPages,
-  currentPage,
-  count
-}: BiometricsTableData) {
+export function RenderedTable({ data }: RenderedTableData) {
+  const [currentMonth, setCurrentMonth] = React.useState<string>('')
+  const [currentYear, setCurrentYear] = React.useState<string>('')
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -56,23 +57,39 @@ export function BiometricsTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-  // const { control, watch } = useForm<{ date: Date }>()
 
-  // const dateFilter = watch('date')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const monthParams = searchParams.get('month')
+  const yearParams = searchParams.get('year')
 
-  const columns: ColumnDef<BiometricsDB>[] = React.useMemo(
+  const onFilterMonth = (month: string): void => {
+    if (month === '0') {
+      router.replace(pathname)
+      setCurrentMonth('')
+      return
+    }
+
+    if (!yearParams) {
+      router.replace(`${pathname}?month=${month}`)
+      setCurrentMonth(month)
+      return
+    }
+
+    router.replace(`${pathname}?month=${month}&year=${yearParams}`)
+    setCurrentMonth(month)
+  }
+
+  const onFilterYear = (year: string): void => {
+    router.replace(
+      `${pathname}?month=${searchParams.get('month')}&year=${year}`
+    )
+    setCurrentYear(year)
+  }
+
+  const columns: ColumnDef<AttendanceSummaryDB>[] = React.useMemo(
     () => [
-      {
-        accessorKey: 'employee_id',
-        header: 'Employee ID',
-        cell: function ({ row }) {
-          return (
-            <div className='capitalize font-semibold'>
-              {row.getValue('employee_id')}
-            </div>
-          )
-        }
-      },
       {
         accessorKey: 'timestamp',
         header: 'Date Timestamp',
@@ -80,22 +97,25 @@ export function BiometricsTable({
           return (
             <div className='capitalize'>
               {format(
-                subHours(row.getValue('timestamp'), 8),
-                'MMMM d, yyyy, h:mm:ss a'
+                row.getValue('timestamp'),
+                "MMMM dd, yyyy hh:mm aaaaa'm'"
               )}
             </div>
           )
         }
       },
       {
-        accessorKey: 'type',
-        header: 'Type',
+        accessorKey: 'total_hours',
+        header: 'Total Hours',
         cell: function ({ row }) {
-          return (
-            <div className='capitalize'>
-              {biometricsStatus[row.original.type]}
-            </div>
-          )
+          return <div className='capitalize'>{row.original.total_hours}hr</div>
+        }
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: function ({ row }) {
+          return <Badge variant='outline'>{row.original.status}</Badge>
         }
       },
       {
@@ -105,8 +125,8 @@ export function BiometricsTable({
           return (
             <div className='capitalize'>
               {format(
-                subHours(row.getValue('created_at'), 8),
-                'MMMM d, yyyy, h:mm:ss a'
+                row.getValue('created_at'),
+                "MMMM dd, yyyy hh:mm aaaaa'm'"
               )}
             </div>
           )
@@ -120,8 +140,8 @@ export function BiometricsTable({
             <div className='capitalize'>
               {row.getValue('updated_at')
                 ? format(
-                    subHours(row.getValue('updated_at_at'), 8),
-                    'MMMM d, yyyy, h:mm:ss a'
+                    row.getValue('updated_at'),
+                    "MMMM dd, yyyy hh:mm aaaaa'm'"
                   )
                 : 'N/A'}
             </div>
@@ -151,23 +171,52 @@ export function BiometricsTable({
     }
   })
 
+  const monthKeys: string[] = Object.keys(months)
+  const yearsList = getPreviousYears()
+  const todayYear = new Date().getFullYear()
+  const todayMonth = (new Date().getMonth() + 1).toString()
+
   return (
     <div className='w-full'>
-      <div className='flex items-center py-4'>
-        {/*
-        <CalendarPicker
-          title='Start and End Date'
-          name='dateRange'
-          control={
-            control as Control<LeaveApplicationsFormData | { date: Date }>
+      <div className='flex items-center justify-end gap-2 py-4'>
+        <Select
+          value={currentYear || todayYear.toString()}
+          onValueChange={(e) => onFilterYear(e)}
+          disabled={!monthParams}
+        >
+          <SelectTrigger className='w-[10rem]'>
+            <SelectValue placeholder='Select year' />
+          </SelectTrigger>
+          <SelectContent>
+            {yearsList.map((item, index) => (
+              <SelectItem key={index} value={item.toString()}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          value={
+            currentMonth ||
+            (monthParams as string) ||
+            todayMonth.padStart(2, '0')
           }
-          isDisabled={false}
-          date={dateFilter}
-          mode='range'
-        />*/}
+          onValueChange={(e) => onFilterMonth(e)}
+        >
+          <SelectTrigger className='w-[10rem]'>
+            <SelectValue placeholder='Select month' />
+          </SelectTrigger>
+          <SelectContent>
+            {monthKeys.map((item) => (
+              <SelectItem key={item} value={months[item]}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='outline' className='ml-auto'>
+            <Button variant='outline'>
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
@@ -242,7 +291,6 @@ export function BiometricsTable({
           </TableBody>
         </Table>
       </div>
-      <Pagination {...{ totalPages, currentPage, count }} />
     </div>
   )
 }

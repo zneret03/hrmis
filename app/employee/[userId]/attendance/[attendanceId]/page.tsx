@@ -75,7 +75,6 @@ export default async function AttendnaceSummary({
           },
           credits: response.userCredits.credits
         }}
-        isAdmin
       />
       <AttendanceTabs
         defaultValue='biometrics'
