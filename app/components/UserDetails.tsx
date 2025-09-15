@@ -14,7 +14,7 @@ interface UserDetails {
     daysAbsent: number
   }
   credits: number
-  isAdmin: boolean
+  isAdmin?: boolean
 }
 
 export function UserDetails({

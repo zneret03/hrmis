@@ -50,6 +50,12 @@ export const employeeMenus = (id: string): SideMenu[] => {
       url: `/employee/${id}/personal_management`,
       icon: FileStack,
       isActive: true
+    },
+    {
+      title: 'Attendance',
+      url: `/employee/${id}/attendance`,
+      icon: FileText,
+      isActive: true
     }
   ]
 }
