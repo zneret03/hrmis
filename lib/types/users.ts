@@ -1,6 +1,7 @@
 import { Database } from './db-types'
 
 export type Users = Database['public']['Tables']['users']['Row']
+export type UpdateUser = Database['public']['Tables']['users']['Update']
 
 export type UserForm = Omit<
   Users,
