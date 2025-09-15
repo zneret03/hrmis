@@ -208,7 +208,11 @@ export function UsersTable({
         cell: ({ row }) => (
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
-              <Button variant='ghost' className='h-8 w-8 p-0'>
+              <Button
+                variant='ghost'
+                className='h-8 w-8 p-0'
+                onClick={(event) => event.stopPropagation()}
+              >
                 <span className='sr-only'>Open menu</span>
                 <MoreHorizontal />
               </Button>

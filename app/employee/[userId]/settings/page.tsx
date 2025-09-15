@@ -3,6 +3,8 @@ import { Container } from '@/components/custom/Container'
 import { SettingsForm } from './components/SettingsForm'
 import { fetchUser } from '@/services/users/users.services'
 
+import { UpdatePasswordDialog } from '@/app/components/UpdatePasswordDialog'
+
 export default async function SettingsPage({
   params
 }: {
@@ -20,6 +22,8 @@ export default async function SettingsPage({
       <main className='max-w-4xl mx-auto'>
         <SettingsForm {...response} userId={userId} />
       </main>
+
+      <UpdatePasswordDialog />
     </Container>
   )
 }
