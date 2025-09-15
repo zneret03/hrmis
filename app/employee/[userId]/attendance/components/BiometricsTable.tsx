@@ -28,16 +28,16 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { Control } from 'react-hook-form'
+// import { Control } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
-import { CalendarPicker } from '@/components/custom/CalendarPicker'
+// import { CalendarPicker } from '@/components/custom/CalendarPicker'
 import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
 import { BiometricsDB } from '@/lib/types/biometrics'
 import { biometricsStatus } from '@/app/backend/[userId]/attendance/components/helpers/constants'
-import { LeaveApplicationsFormData } from '@/lib/types/leave_application'
+// import { LeaveApplicationsFormData } from '@/lib/types/leave_application'
 
 interface BiometricsTableData extends PaginationType {
   data: BiometricsDB[]
@@ -154,6 +154,7 @@ export function BiometricsTable({
   return (
     <div className='w-full'>
       <div className='flex items-center py-4'>
+        {/*
         <CalendarPicker
           title='Start and End Date'
           name='dateRange'
@@ -163,7 +164,7 @@ export function BiometricsTable({
           isDisabled={false}
           date={dateFilter}
           mode='range'
-        />
+        />*/}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='outline' className='ml-auto'>
