@@ -29,7 +29,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 // import { Control } from 'react-hook-form'
-import { useForm } from 'react-hook-form'
+// import { useForm } from 'react-hook-form'
 // import { CalendarPicker } from '@/components/custom/CalendarPicker'
 import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
@@ -56,9 +56,9 @@ export function BiometricsTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-  const { control, watch } = useForm<{ date: Date }>()
+  // const { control, watch } = useForm<{ date: Date }>()
 
-  const dateFilter = watch('date')
+  // const dateFilter = watch('date')
 
   const columns: ColumnDef<BiometricsDB>[] = React.useMemo(
     () => [
