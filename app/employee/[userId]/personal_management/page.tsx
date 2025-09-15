@@ -6,7 +6,6 @@ import { UserDetails } from '@/app/backend/[userId]/components/UserDetails'
 import { fetchUserWitHCredits } from '@/services/leave_credits/leave_credits.services'
 import { Container } from '@/components/custom/Container'
 import { LeaveCard } from './components/LeaveCard'
-import { Button } from '@/components/ui/button'
 
 import { getAttendanceSummary } from '@/services/attendance/attendance.services'
 import { getLeaveCategories } from '@/services/leave_categories/leave-categories.services'
@@ -67,12 +66,6 @@ export default async function PersonalManagement({
           {leaveApplications.map((item: LeaveApplicationsForm) => (
             <LeaveCard key={item.id} {...item} />
           ))}
-
-          {leaveApplications.length > 5 && (
-            <Button variant='outline' className='w-full cursor-pointer'>
-              Show more
-            </Button>
-          )}
 
           {leaveApplications.length <= 0 && (
             <div className='text-center'>

@@ -9,6 +9,7 @@ import { LeaveApplicationsForm } from '@/lib/types/leave_application'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { useLeaveApplicationDialog } from '@/services/leave_applications/states/leave-application-dialog'
 import { useShallow } from 'zustand/shallow'
+import { cardStatus } from '../helpers/constants'
 
 export function LeaveCard(args: LeaveApplicationsForm): JSX.Element {
   const { leave_categories, start_date, end_date, remarks, status } = args
@@ -18,7 +19,7 @@ export function LeaveCard(args: LeaveApplicationsForm): JSX.Element {
   )
 
   return (
-    <Card className='bg-green-500 text-white'>
+    <Card className={`${cardStatus[status]} text-white`}>
       <CardContent className='space-y-2 py-0'>
         <CardTitle className='flex items-center justify-between'>
           <section className='flex items-center gap-2'>
