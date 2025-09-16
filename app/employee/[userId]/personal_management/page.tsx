@@ -1,5 +1,4 @@
 import { JSX } from 'react'
-import PdfForm from './components/PdfForm'
 import { FileLeaveDialog } from '@/app/auth/components/FileLeaveDialog'
 import { AttendanceLeaves } from './components/AttendanveLeave'
 import { UserDetails } from '@/app/components/UserDetails'
@@ -13,6 +12,9 @@ import { getLeaveApplications } from '@/services/leave_applications/leave-applic
 import { LeaveApplicationsForm } from '@/lib/types/leave_application'
 import { CancelLeaveDialog } from './components/CancelLeave'
 import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder'
+import { PDFAction } from './components/PDFAction'
+import { UpdatePDFDialog } from '@/app/components/PDFDialog'
+import PdfForm from './components/PdfForm'
 
 export default async function PersonalManagement({
   params
@@ -57,8 +59,7 @@ export default async function PersonalManagement({
 
       <section className='flex gap-2'>
         <div className='flex-1'>
-          <h1 className='text-2xl font-bold'>Personal Data Sheet</h1>
-          <span className='text-gray-500'>You can update your PDS here</span>
+          <PDFAction />
           <PdfForm />
         </div>
         <div className='flex-1 space-y-4'>
@@ -77,6 +78,7 @@ export default async function PersonalManagement({
 
       <FileLeaveDialog category={category.leave_categories} />
       <CancelLeaveDialog />
+      <UpdatePDFDialog />
     </Container>
   )
 }

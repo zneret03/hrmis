@@ -10,6 +10,7 @@ type UserDialogType =
   | 'reinstate'
   | 'verify-email'
   | 'update-password'
+  | 'update-pdf'
   | null
 
 export type UserData = Pick<
