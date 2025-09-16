@@ -26,7 +26,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { CustomButton } from '@/components/custom/CustomButton'
 import { useUserDialog } from '@/services/auth/states/user-dialog'
-import { UserForm } from '@/lib/types/users'
+import { UpdateUser } from '@/lib/types/users'
 import { useRouter } from 'next/navigation'
 import { updateUserInfo } from '@/services/users/users.services'
 import { useShallow } from 'zustand/react/shallow'
@@ -36,7 +36,7 @@ import { toPercentage } from '@/helpers/convertToPercent'
 import { isEqual } from 'lodash'
 import { toast } from 'sonner'
 
-interface EditUserDialog extends UserForm {
+interface EditUserDialog extends Omit<UpdateUser, 'avatar'> {
   avatar: File[] | string
   oldAvatar: string
 }
@@ -109,7 +109,7 @@ export function EditUserDialog(): JSX.Element {
     if (!!data) {
       reset({
         avatar: data.avatar as string,
-        username: data.username,
+        username: data.username as string,
         role: data.role,
         employee_id: data.employee_id,
         oldAvatar: data.avatar as string,

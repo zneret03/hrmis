@@ -9,6 +9,7 @@ type UserDialogType =
   | 'revoked'
   | 'reinstate'
   | 'verify-email'
+  | 'update-password'
   | null
 
 export type UserData = Pick<

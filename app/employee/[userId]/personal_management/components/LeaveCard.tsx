@@ -40,7 +40,7 @@ export function LeaveCard(args: LeaveApplicationsForm): JSX.Element {
           - <span>{format(end_date as string, 'MMMM dd, yyyy')}</span>
         </div>
 
-        {status !== 'cancelled' && (
+        {!['cancelled', 'disapproved', 'approved'].includes(status) && (
           <div className='mt-4 text-right'>
             <Button
               className='bg-transparent hover:bg-transparent cursor-pointer underline shadow-none'

@@ -20,6 +20,7 @@ import { signOut } from '@/services/auth/auth.services'
 import { avatarName } from '@/helpers/avatarName'
 import { usePathname } from 'next/navigation'
 import { permanentRedirect } from 'next/navigation'
+import { parentPath } from '@/helpers/parentPath'
 
 export function NavUser({
   user
@@ -31,10 +32,11 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const pathname = usePathname()
-  const baseUrl = pathname.split('/')
+
+  const parentPathname = parentPath(pathname)
 
   const redirectSettings = (): void => {
-    permanentRedirect(`/backend/${baseUrl[2]}/settings`)
+    permanentRedirect(`${parentPathname}/settings`)
   }
 
   const signOutUser = async (): Promise<void> => {

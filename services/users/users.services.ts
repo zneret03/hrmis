@@ -2,7 +2,7 @@ import axios from 'axios'
 import { toast } from 'sonner'
 import { AxiosResponse } from 'axios'
 import { axiosService } from '@/app/api/axios-client'
-import { UserForm, Users } from '@/lib/types/users'
+import { UpdateUser, UserForm, Users } from '@/lib/types/users'
 import { isArray, isEmpty } from 'lodash'
 import { Pagination } from '@/lib/types/pagination'
 
@@ -14,10 +14,25 @@ interface UsersResponse extends Pagination {
   users: Users[]
 }
 
-interface UpdateUserInfo
-  extends Pick<Users, 'id' | 'username' | 'employee_id' | 'role' | 'email'> {
+export interface UpdateUserInfo
+  extends Pick<
+    UpdateUser,
+    'id' | 'username' | 'employee_id' | 'role' | 'email'
+  > {
   avatar: File[]
   oldAvatar: string
+}
+
+export const fetchUser = async (id: string) => {
+  try {
+    const response = await axiosService.get(`/api/protected/users/${id}`)
+
+    return response.data.data
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error
+    }
+  }
 }
 
 export const updatePassword = async (password: string) => {
