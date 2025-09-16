@@ -7,7 +7,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose
+  DialogClose,
+  DialogDescription
 } from '@/components/ui/dialog'
 import { Document, Page, pdfjs } from 'react-pdf'
 import { Plus } from 'lucide-react'
@@ -738,9 +739,6 @@ export function UpdatePDFDialog(): JSX.Element {
 
   // --- Save Handler ---
   const handleSave = async () => {
-    alert(
-      'Saving data... Check the browser downloads for the generated PDF file.'
-    )
     try {
       const response = await fetch('/api/fill-pdf', {
         method: 'POST',
@@ -750,7 +748,9 @@ export function UpdatePDFDialog(): JSX.Element {
           eligibilities,
           workExperiences,
           voluntaryWorks,
-          learningAndDevelopment
+          learningAndDevelopment,
+          otherInformation,
+          references
         })
       })
       if (!response.ok) throw new Error(`Server error: ${response.statusText}`)
@@ -788,16 +788,12 @@ export function UpdatePDFDialog(): JSX.Element {
       <DialogContent className='sm:max-w-[80rem] max-h-[50rem] lg:max-h-[40rem] md:max-h-[30rem] sm:max-h-[20rem] overflow-auto'>
         <DialogHeader>
           <DialogTitle>Personal Data Sheet</DialogTitle>
+          <DialogDescription>
+            update your PDS accordingly, dont forget to save your PDS before
+            exiting the modal
+          </DialogDescription>
         </DialogHeader>
         <div className='w-full max-w-4xl mx-auto p-4'>
-          <div className='flex justify-end mb-4'>
-            <button
-              onClick={handleSave}
-              className='px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition-colors'
-            >
-              Save and Download PDF
-            </button>
-          </div>
           <Document
             file='/documents/pds-form.pdf'
             onLoadSuccess={onDocumentLoadSuccess}
@@ -918,7 +914,9 @@ export function UpdatePDFDialog(): JSX.Element {
               Cancel
             </Button>
           </DialogClose>
-          <CustomButton type='button'>Save to Profile</CustomButton>
+          <CustomButton type='button' onClick={handleSave}>
+            Save and Download PDS
+          </CustomButton>
         </DialogFooter>
       </DialogContent>
     </Dialog>
