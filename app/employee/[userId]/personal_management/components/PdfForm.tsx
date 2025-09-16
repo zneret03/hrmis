@@ -33,7 +33,13 @@ export default function PdfForm(): JSX.Element {
         onLoadSuccess={onDocumentLoadSuccess}
         onLoadError={(error) => onError(error.message)}
       >
-        <Page width={1000} height={500} pageNumber={pageNumber} />
+        <Page
+          width={1000}
+          height={500}
+          pageNumber={pageNumber}
+          renderAnnotationLayer={false}
+          renderTextLayer={false}
+        />
       </Document>
       {numPages && (
         <div className='text-right space-y-2'>
