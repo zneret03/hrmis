@@ -1159,316 +1159,334 @@ export const formFields: FormField[] = [
     y: 762,
     width: 10,
     height: 10
-  }
-  // {
-  //   name: 'q34_details',
-  //   type: 'textarea',
-  //   page: 4,
-  //   x: 350,
-  //   y: 747,
-  //   width: 225,
-  //   height: 80
-  // }
+  },
+  {
+    name: 'q34_details',
+    type: 'textarea',
+    page: 4,
+    x: 370,
+    y: 740,
+    width: 155,
+    height: 16
+  },
 
   // // Question 35
-  // {
-  //   name: 'q35a_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 662,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q35a_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 662,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q35a_details',
-  //   type: 'textarea',
-  //   page: 4,
-  //   x: 350,
-  //   y: 662,
-  //   width: 225,
-  //   height: 22
-  // },
-  // {
-  //   name: 'q35b_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 627,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q35b_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 627,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q35b_details',
-  //   type: 'textarea',
-  //   page: 4,
-  //   x: 350,
-  //   y: 627,
-  //   width: 225,
-  //   height: 22
-  // },
-  // {
-  //   name: 'q35b_date_filed',
-  //   type: 'text',
-  //   page: 4,
-  //   x: 388,
-  //   y: 601,
-  //   width: 187,
-  //   height: 14
-  // },
-  // {
-  //   name: 'q35b_status',
-  //   type: 'text',
-  //   page: 4,
-  //   x: 405,
-  //   y: 586,
-  //   width: 170,
-  //   height: 14
-  // },
-  //
-  // // Question 36
-  // {
-  //   name: 'q36_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 556,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q36_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 556,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q36_details',
-  //   type: 'textarea',
-  //   page: 4,
-  //   x: 350,
-  //   y: 556,
-  //   width: 225,
-  //   height: 28
-  // },
+  {
+    name: 'q35a_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 365,
+    y: 725,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q35a_no',
+    type: 'checkbox',
+    page: 4,
+    x: 415,
+    y: 725,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q35a_details',
+    type: 'textarea',
+    page: 4,
+    x: 370,
+    y: 700,
+    width: 155,
+    height: 16
+  },
+  {
+    name: 'q35b_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 365,
+    y: 685,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q35b_no',
+    type: 'checkbox',
+    page: 4,
+    x: 418,
+    y: 685,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q35b_details',
+    type: 'textarea',
+    page: 4,
+    x: 420,
+    y: 662,
+    width: 110,
+    height: 16
+  },
+  {
+    name: 'q35b_status',
+    type: 'text',
+    page: 4,
+    x: 420,
+    y: 650,
+    width: 110,
+    height: 16
+  },
+
+  // Question 36
+  {
+    name: 'q36_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 365,
+    y: 635,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q36_no',
+    type: 'checkbox',
+    page: 4,
+    x: 420,
+    y: 635,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q36_details',
+    type: 'textarea',
+    page: 4,
+    x: 370,
+    y: 612,
+    width: 160,
+    height: 16
+  },
   //
   // // Question 37
-  // {
-  //   name: 'q37_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 501,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q37_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 501,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q37_details',
-  //   type: 'textarea',
-  //   page: 4,
-  //   x: 350,
-  //   y: 501,
-  //   width: 225,
-  //   height: 35
-  // },
+  {
+    name: 'q37_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 363,
+    y: 598,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q37_no',
+    type: 'checkbox',
+    page: 4,
+    x: 420,
+    y: 598,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q37_details',
+    type: 'textarea',
+    page: 4,
+    x: 368,
+    y: 580,
+    width: 160,
+    height: 16
+  },
   //
   // // Question 38
-  // {
-  //   name: 'q38a_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 442,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q38a_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 442,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q38a_details',
-  //   type: 'textarea',
-  //   page: 4,
-  //   x: 350,
-  //   y: 442,
-  //   width: 225,
-  //   height: 22
-  // },
-  // {
-  //   name: 'q38b_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 392,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q38b_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 392,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q38b_details',
-  //   type: 'textarea',
-  //   page: 4,
-  //   x: 350,
-  //   y: 392,
-  //   width: 225,
-  //   height: 28
-  // },
-  //
+  {
+    name: 'q38a_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 365,
+    y: 565,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q38a_no',
+    type: 'checkbox',
+    page: 4,
+    x: 425,
+    y: 565,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q38a_details',
+    type: 'textarea',
+    page: 4,
+    x: 425,
+    y: 555,
+    width: 100,
+    height: 12
+  },
+  {
+    name: 'q38b_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 364,
+    y: 542,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q38b_no',
+    type: 'checkbox',
+    page: 4,
+    x: 425,
+    y: 540,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q38b_details',
+    type: 'textarea',
+    page: 4,
+    x: 422,
+    y: 530,
+    width: 100,
+    height: 12
+  },
   // // Question 39
-  // {
-  //   name: 'q39_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 347,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q39_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 347,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q39_details',
-  //   type: 'textarea',
-  //   page: 4,
-  //   x: 350,
-  //   y: 347,
-  //   width: 225,
-  //   height: 22
-  // },
-  //
-  // // Question 40
-  // {
-  //   name: 'q40a_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 261,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q40a_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 261,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q40a_specify',
-  //   type: 'text',
-  //   page: 4,
-  //   x: 405,
-  //   y: 261,
-  //   width: 170,
-  //   height: 14
-  // },
-  // {
-  //   name: 'q40b_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 236,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q40b_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 236,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q40b_id_no',
-  //   type: 'text',
-  //   page: 4,
-  //   x: 425,
-  //   y: 236,
-  //   width: 150,
-  //   height: 14
-  // },
-  // {
-  //   name: 'q40c_yes',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 257,
-  //   y: 211,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q40c_no',
-  //   type: 'checkbox',
-  //   page: 4,
-  //   x: 302,
-  //   y: 211,
-  //   width: 10,
-  //   height: 10
-  // },
-  // {
-  //   name: 'q40c_id_no',
-  //   type: 'text',
-  //   page: 4,
-  //   x: 425,
-  //   y: 211,
-  //   width: 150,
-  //   height: 14
-  // }
+  {
+    name: 'q39_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 364,
+    y: 514,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q39_no',
+    type: 'checkbox',
+    page: 4,
+    x: 425,
+    y: 515,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q39_details',
+    type: 'textarea',
+    page: 4,
+    x: 370,
+    y: 495,
+    width: 160,
+    height: 16
+  },
+  // Question 40
+  {
+    name: 'q40a_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 363,
+    y: 456,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q40a_no',
+    type: 'checkbox',
+    page: 4,
+    x: 425,
+    y: 456,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q40a_specify',
+    type: 'text',
+    page: 4,
+    x: 454,
+    y: 450,
+    width: 75,
+    height: 16
+  },
+  {
+    name: 'q40b_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 364,
+    y: 435,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q40b_no',
+    type: 'checkbox',
+    page: 4,
+    x: 424,
+    y: 435,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q40b_id_no',
+    type: 'text',
+    page: 4,
+    x: 455,
+    y: 428,
+    width: 73,
+    height: 14
+  },
+  {
+    name: 'q40c_yes',
+    type: 'checkbox',
+    page: 4,
+    x: 364,
+    y: 415,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q40c_no',
+    type: 'checkbox',
+    page: 4,
+    x: 425,
+    y: 415,
+    width: 10,
+    height: 10
+  },
+  {
+    name: 'q40c_id_no',
+    type: 'text',
+    page: 4,
+    x: 455,
+    y: 410,
+    width: 75,
+    height: 14
+  },
+
+  //GOVERNMENT ISSUED ID
+  {
+    name: 'governmentIssueID',
+    type: 'text',
+    page: 4,
+    x: 125,
+    y: 226,
+    width: 105,
+    height: 14
+  },
+  {
+    name: 'IDLicensePassortNo',
+    type: 'text',
+    page: 4,
+    x: 125,
+    y: 210,
+    width: 105,
+    height: 14
+  },
+  {
+    name: 'issuance',
+    type: 'text',
+    page: 4,
+    x: 125,
+    y: 195,
+    width: 105,
+    height: 14
+  }
 ]
 
 export type Eligibility = {
@@ -1514,6 +1532,12 @@ export type OtherInformation = {
   membershipOrganization: string
 }
 
+export type References = {
+  name: string
+  address: string
+  telNo: string
+}
+
 // --- DYNAMIC FIELD TEMPLATE INTERFACE ---
 
 export interface DynamicFieldTemplate {
@@ -1527,6 +1551,7 @@ export interface DynamicFieldTemplate {
       | keyof VoluntaryWork
       | keyof LearningAndDevelopment
       | keyof OtherInformation
+      | keyof References
     x: number
     width: number
   }[]
@@ -1600,5 +1625,16 @@ export const otherInformationFieldTemplate: DynamicFieldTemplate = {
     { name: 'specialSkills', x: 64, width: 116 },
     { name: 'nonAcademicDistrinction', x: 182, width: 232 },
     { name: 'membershipOrganization', x: 415, width: 120 }
+  ]
+}
+
+export const referencesFieldTemplate: DynamicFieldTemplate = {
+  page: 4,
+  startY: 370,
+  rowHeight: 15.5,
+  columns: [
+    { name: 'name', x: 64, width: 176 },
+    { name: 'address', x: 245, width: 108 },
+    { name: 'telNo', x: 358, width: 52 }
   ]
 }

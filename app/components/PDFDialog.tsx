@@ -20,11 +20,13 @@ import {
   voluntaryWorkFieldTemplate,
   learningAndDevelopmentFieldTemplate,
   otherInformationFieldTemplate,
+  referencesFieldTemplate,
   type Eligibility,
   type WorkExperience,
   type VoluntaryWork,
   type LearningAndDevelopment,
-  type OtherInformation
+  type OtherInformation,
+  type References
 } from '../helpers/pds-form-fields'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import { Button } from '@/components/ui/button'
@@ -97,7 +99,41 @@ export function UpdatePDFDialog(): JSX.Element {
     }
   ])
 
-  // Eligibility Handlers
+  const [references, setReferences] = useState<References[]>([
+    {
+      name: '',
+      address: '',
+      telNo: ''
+    }
+  ])
+
+  const addReferencesRow = () => {
+    setReferences([
+      ...references,
+      {
+        name: '',
+        address: '',
+        telNo: ''
+      }
+    ])
+  }
+
+  const removeReferencesRow = (index: number) => {
+    const newArr = [...references]
+    newArr.splice(index, 1)
+    setReferences(newArr)
+  }
+
+  const handleReferencesChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target
+    const newArr = [...references]
+    newArr[index] = { ...newArr[index], [name]: value }
+    setReferences(newArr)
+  }
+
   const addOtherInformationRow = () => {
     setOtherInformation([
       ...otherInformation,
@@ -283,7 +319,7 @@ export function UpdatePDFDialog(): JSX.Element {
       const left = field.x * scale
       const width = field.width * scale
       const height = field.height * scale
-      const fontSize = height * 0.8
+      const fontSize = height * 0.6
 
       const commonProps = {
         name: field.name,
@@ -331,6 +367,67 @@ export function UpdatePDFDialog(): JSX.Element {
           }}
         />
       )
+    })
+  }
+
+  const renderReferencesFields = (pageNumber: number) => {
+    if (pageNumber !== referencesFieldTemplate.page) return null
+    return references.map((info, index) => {
+      const yPos =
+        referencesFieldTemplate.startY -
+        index * referencesFieldTemplate.rowHeight
+
+      return referencesFieldTemplate.columns.map((column, colIndex) => {
+        const top = (PDF_A4_HEIGHT - yPos) * scale
+        const height = (referencesFieldTemplate.rowHeight - 2) * scale
+        const left = column.x * scale
+        const width = column.width * scale
+        const fontSize = height * 0.6
+
+        return (
+          <Fragment key={`${column.name}-${index}`}>
+            <input
+              type='text'
+              name={column.name}
+              value={info[column.name as keyof References]}
+              onChange={(e) => handleReferencesChange(index, e)}
+              style={{
+                position: 'absolute',
+                top: `${top}px`,
+                left: `${left}px`,
+                width: `${width}px`,
+                height: `${height}px`,
+                fontSize: `${fontSize}px`,
+                zIndex: 10,
+                border: 'none',
+                outline: '1px solid rgba(0, 150, 255, 0.5)',
+                backgroundColor: 'rgba(0, 150, 255, 0.1)',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            />
+            {references.length > 1 &&
+              colIndex === referencesFieldTemplate.columns.length - 1 && (
+                <button
+                  onClick={() => removeReferencesRow(index)}
+                  className='absolute z-20 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-700'
+                  style={{
+                    top: `${top + height * 0}px`,
+                    left: `${left + width + 5 * scale}px`,
+                    width: `${height}px`,
+                    height: `${height}px`,
+                    fontSize: `${height * 0.6}px`,
+                    lineHeight: '1',
+                    cursor: 'pointer'
+                  }}
+                >
+                  -
+                </button>
+              )}
+          </Fragment>
+        )
+      })
     })
   }
 
@@ -688,7 +785,7 @@ export function UpdatePDFDialog(): JSX.Element {
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className='sm:max-w-[80rem] max-h-[50rem] overflow-auto'>
+      <DialogContent className='sm:max-w-[80rem] max-h-[50rem] lg:max-h-[40rem] md:max-h-[30rem] sm:max-h-[20rem] overflow-auto'>
         <DialogHeader>
           <DialogTitle>Personal Data Sheet</DialogTitle>
         </DialogHeader>
@@ -725,6 +822,7 @@ export function UpdatePDFDialog(): JSX.Element {
                 {renderVoluntaryWorkFields(index + 1)}
                 {renderLdFields(index + 1)}
                 {renderOtherInformationFields(index + 1)}
+                {renderReferencesFields(index + 1)}
 
                 {index + 1 === eligibilityFieldTemplate.page && (
                   <button
@@ -786,6 +884,20 @@ export function UpdatePDFDialog(): JSX.Element {
                     style={{
                       top: `${(PDF_A4_HEIGHT - 225) * scale}px`,
                       left: `${40 * scale}px`,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <Plus className='w-4 h-4' />
+                  </button>
+                )}
+
+                {index + 1 === referencesFieldTemplate.page && (
+                  <button
+                    onClick={addReferencesRow}
+                    className='absolute z-20 bg-blue-500 text-white rounded-md p-1 hover:bg-yellow-700'
+                    style={{
+                      top: `${(PDF_A4_HEIGHT - 375) * scale}px`,
+                      left: `${35 * scale}px`,
                       cursor: 'pointer'
                     }}
                   >
