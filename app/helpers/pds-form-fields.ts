@@ -1103,8 +1103,35 @@ export const formFields: FormField[] = [
     height: 18
   },
   //PAGE 1 DATE
-  { name: 'date', type: 'text', page: 1, x: 423, y: 95, width: 110, height: 18 }
+  {
+    name: 'date',
+    type: 'text',
+    page: 1,
+    x: 423,
+    y: 95,
+    width: 110,
+    height: 18
+  },
+  //PAGE 2 DATE
+  {
+    name: 'date2',
+    type: 'text',
+    page: 3,
+    x: 418,
+    y: 92,
+    width: 116,
+    height: 16
+  }
 ]
+
+export type Eligibility = {
+  careerService: string
+  rating: string
+  dateOfExamination: string
+  placeOfExamination: string
+  licenseNumber: string
+  licenseDateOfValidity: string
+}
 
 export type WorkExperience = {
   inclusiveDatesFrom: string
@@ -1117,32 +1144,53 @@ export type WorkExperience = {
   govtService: string
 }
 
-export type Eligibility = {
-  careerService: string
-  rating: string
-  dateOfExamination: string
-  placeOfExamination: string
-  licenseNumber: string
-  licenseDateOfValidity: string
+export type VoluntaryWork = {
+  nameAndAddress: string
+  inclusiveDateFrom: string
+  inclusiveDateTo: string
+  numberOfHours: string
+  position: string
 }
 
-// --- Template for a single Civil Service Eligibility row ---
+export type LearningAndDevelopment = {
+  title: string
+  inclusiveDatesFrom: string
+  inclusiveDatesTo: string
+  numberOfHours: string
+  typeOfLd: string
+  conductedBy: string
+}
+
+export type OtherInformation = {
+  specialSkills: string
+  nonAcademicDistrinction: string
+  membershipOrganization: string
+}
+
+// --- DYNAMIC FIELD TEMPLATE INTERFACE ---
+
 export interface DynamicFieldTemplate {
   page: number
   startY: number
   rowHeight: number
   columns: {
-    name: keyof Eligibility | keyof WorkExperience
+    name:
+      | keyof Eligibility
+      | keyof WorkExperience
+      | keyof VoluntaryWork
+      | keyof LearningAndDevelopment
+      | keyof OtherInformation
     x: number
     width: number
   }[]
 }
 
-// --- The dynamic template, derived from your coordinates ---
+// --- DYNAMIC FIELD TEMPLATE DEFINITIONS ---
+
 export const eligibilityFieldTemplate: DynamicFieldTemplate = {
   page: 2,
-  startY: 765, // Based on the Y-coordinate of your first eligibility row
-  rowHeight: 18, // The difference between your rows (e.g., 768 - 750 = 18)
+  startY: 785,
+  rowHeight: 18,
   columns: [
     { name: 'careerService', x: 68, width: 143 },
     { name: 'rating', x: 212, width: 50 },
@@ -1153,11 +1201,10 @@ export const eligibilityFieldTemplate: DynamicFieldTemplate = {
   ]
 }
 
-// --- NEW: The dynamic template for Work Experience, derived from the PDF ---
 export const workExperienceFieldTemplate: DynamicFieldTemplate = {
   page: 2,
-  startY: 575, // Y-coordinate for the first row of the work experience table
-  rowHeight: 16.5, // The vertical distance between rows
+  startY: 575,
+  rowHeight: 16.5,
   columns: [
     { name: 'inclusiveDatesFrom', x: 68, width: 37 },
     { name: 'inclusiveDatesTo', x: 106, width: 37 },
@@ -1167,5 +1214,44 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
     { name: 'salaryGrade', x: 418, width: 35 },
     { name: 'statusOfAppointment', x: 455, width: 42 },
     { name: 'govtService', x: 498, width: 30 }
+  ]
+}
+
+// NEW & CORRECTED: Template for Voluntary Work
+export const voluntaryWorkFieldTemplate: DynamicFieldTemplate = {
+  page: 3, // This section is on page 3
+  startY: 775,
+  rowHeight: 17.5,
+  columns: [
+    { name: 'nameAndAddress', x: 62, width: 205 },
+    { name: 'inclusiveDateFrom', x: 268, width: 35 },
+    { name: 'inclusiveDateTo', x: 305, width: 35 },
+    { name: 'numberOfHours', x: 340, width: 35 },
+    { name: 'position', x: 376, width: 158 }
+  ]
+}
+
+export const learningAndDevelopmentFieldTemplate: DynamicFieldTemplate = {
+  page: 3,
+  startY: 590,
+  rowHeight: 15.5,
+  columns: [
+    { name: 'title', x: 60, width: 205 },
+    { name: 'inclusiveDatesFrom', x: 268, width: 34 },
+    { name: 'inclusiveDatesTo', x: 305, width: 35 },
+    { name: 'numberOfHours', x: 340, width: 35 },
+    { name: 'typeOfLd', x: 375, width: 40 },
+    { name: 'conductedBy', x: 416, width: 118 }
+  ]
+}
+
+export const otherInformationFieldTemplate: DynamicFieldTemplate = {
+  page: 3,
+  startY: 224,
+  rowHeight: 15.5,
+  columns: [
+    { name: 'specialSkills', x: 64, width: 116 },
+    { name: 'nonAcademicDistrinction', x: 182, width: 232 },
+    { name: 'membershipOrganization', x: 415, width: 120 }
   ]
 }
