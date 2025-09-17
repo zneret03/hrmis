@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
+import { PDFDocument, rgb, StandardFonts, PDFPage } from 'pdf-lib'
 import { promises as fs } from 'fs'
 import path from 'path'
 import {
@@ -12,6 +12,31 @@ import {
   referencesFieldTemplate,
   type DynamicFieldTemplate
 } from '@/app/helpers/pds-form-fields'
+
+const drawCheckmark = (
+  page: PDFPage,
+  { x = 0, y = 0, size = 10, thickness = 1.5, color = rgb(0, 0, 0) }
+): void => {
+  const x1 = x + size * 0.1
+  const y1 = y + size * 0.4
+  const x2 = x + size * 0.4
+  const y2 = y + size * 0.1
+  const x3 = x + size * 0.9
+  const y3 = y + size * 0.7
+
+  page.drawLine({
+    start: { x: x1, y: y1 },
+    end: { x: x2, y: y2 },
+    thickness: thickness,
+    color: color
+  })
+  page.drawLine({
+    start: { x: x2, y: y2 },
+    end: { x: x3, y: y3 },
+    thickness: thickness,
+    color: color
+  })
+}
 
 export async function POST(request: Request) {
   try {
@@ -46,12 +71,10 @@ export async function POST(request: Request) {
         const value = formData[field.name]
 
         if (field.type === 'checkbox' && value === true) {
-          page.drawText('✓', {
-            x: field.x,
-            y: field.y,
-            size: 10,
-            font,
-            color: rgb(0, 0, 0)
+          drawCheckmark(page, {
+            x: field.x - field.marginWidth,
+            y: field.y - field.marginHeight,
+            size: field.height
           })
         } else if (field.type === 'text' && typeof value === 'string') {
           page.drawText(value, {
@@ -109,7 +132,6 @@ export async function POST(request: Request) {
     drawDynamicRows(otherInformationFieldTemplate, otherInformation)
     drawDynamicRows(referencesFieldTemplate, references)
 
-    // --- 3. SAVE AND RETURN THE PDF ---
     const filledPdfBytes = await pdfDoc.save()
 
     return new NextResponse(filledPdfBytes, {

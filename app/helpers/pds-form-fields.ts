@@ -9,6 +9,8 @@ export type FormField =
       y: number
       width: number
       height: number
+      marginHeight: number
+      marginWidth: number
     }
   | {
       name: string
@@ -111,7 +113,9 @@ export const formFields: FormField[] = [
     x: 150,
     y: 642,
     width: 8,
-    height: 8
+    height: 8,
+    marginHeight: 52,
+    marginWidth: -10
   },
   {
     name: 'sexFemale',
@@ -120,7 +124,10 @@ export const formFields: FormField[] = [
     x: 217,
     y: 642,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 51,
+    marginWidth: -10
   },
   {
     name: 'civilStatusSingle',
@@ -129,7 +136,10 @@ export const formFields: FormField[] = [
     x: 150,
     y: 630,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 51,
+    marginWidth: -10
   },
   {
     name: 'civilStatusMarried',
@@ -138,7 +148,10 @@ export const formFields: FormField[] = [
     x: 218,
     y: 630,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 52,
+    marginWidth: -10
   },
   {
     name: 'civilStatusWidowed',
@@ -147,7 +160,10 @@ export const formFields: FormField[] = [
     x: 150,
     y: 620,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 52,
+    marginWidth: -10
   },
   {
     name: 'civilStatusSeparated',
@@ -156,7 +172,10 @@ export const formFields: FormField[] = [
     x: 218,
     y: 620,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 50,
+    marginWidth: -10
   },
   {
     name: 'civilStatusOthers',
@@ -165,7 +184,10 @@ export const formFields: FormField[] = [
     x: 150,
     y: 610,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 52,
+    marginWidth: -10
   },
   // Citizenship
   {
@@ -175,7 +197,10 @@ export const formFields: FormField[] = [
     x: 372,
     y: 680,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 52,
+    marginWidth: -10
   },
   {
     name: 'citizenshipDual',
@@ -184,7 +209,10 @@ export const formFields: FormField[] = [
     x: 416,
     y: 680,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 52,
+    marginWidth: -10
   },
   {
     name: 'dualCitizenshipTypeBirth',
@@ -193,7 +221,10 @@ export const formFields: FormField[] = [
     x: 428,
     y: 670,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 52,
+    marginWidth: -12
   },
   {
     name: 'dualCitizenshipTypeNaturalization',
@@ -202,7 +233,10 @@ export const formFields: FormField[] = [
     x: 465,
     y: 670,
     width: 8,
-    height: 8
+    height: 8,
+
+    marginHeight: 52,
+    marginWidth: -12
   },
   {
     name: 'dualCitizenshipCountry',
@@ -1581,7 +1615,10 @@ export const formFields: FormField[] = [
     x: 365,
     y: 774,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -10
   },
   {
     name: 'q34a_no',
@@ -1590,7 +1627,10 @@ export const formFields: FormField[] = [
     x: 415,
     y: 774,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -10
   },
   {
     name: 'q34b_yes',
@@ -1599,7 +1639,10 @@ export const formFields: FormField[] = [
     x: 365,
     y: 762,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -10
   },
   {
     name: 'q34b_no',
@@ -1608,7 +1651,10 @@ export const formFields: FormField[] = [
     x: 415,
     y: 762,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -10
   },
   {
     name: 'q34_details',
@@ -1632,7 +1678,10 @@ export const formFields: FormField[] = [
     x: 365,
     y: 725,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -10
   },
   {
     name: 'q35a_no',
@@ -1641,7 +1690,10 @@ export const formFields: FormField[] = [
     x: 415,
     y: 725,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -12
   },
   {
     name: 'q35a_details',
@@ -1663,7 +1715,10 @@ export const formFields: FormField[] = [
     x: 365,
     y: 685,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -10
   },
   {
     name: 'q35b_no',
@@ -1672,7 +1727,10 @@ export const formFields: FormField[] = [
     x: 418,
     y: 685,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -12
   },
   {
     name: 'q35b_details',
@@ -1709,7 +1767,10 @@ export const formFields: FormField[] = [
     x: 365,
     y: 635,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -10
   },
   {
     name: 'q36_no',
@@ -1718,7 +1779,10 @@ export const formFields: FormField[] = [
     x: 420,
     y: 635,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 50,
+    marginWidth: -12
   },
   {
     name: 'q36_details',
@@ -1742,7 +1806,10 @@ export const formFields: FormField[] = [
     x: 363,
     y: 598,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 54,
+    marginWidth: -12
   },
   {
     name: 'q37_no',
@@ -1751,7 +1818,10 @@ export const formFields: FormField[] = [
     x: 420,
     y: 598,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 54,
+    marginWidth: -12
   },
   {
     name: 'q37_details',
@@ -1775,7 +1845,10 @@ export const formFields: FormField[] = [
     x: 365,
     y: 565,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 55,
+    marginWidth: -12
   },
   {
     name: 'q38a_no',
@@ -1784,7 +1857,10 @@ export const formFields: FormField[] = [
     x: 425,
     y: 565,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 55,
+    marginWidth: -12
   },
   {
     name: 'q38a_details',
@@ -1806,7 +1882,10 @@ export const formFields: FormField[] = [
     x: 364,
     y: 542,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 55,
+    marginWidth: -12
   },
   {
     name: 'q38b_no',
@@ -1815,7 +1894,10 @@ export const formFields: FormField[] = [
     x: 425,
     y: 540,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 55,
+    marginWidth: -12
   },
   {
     name: 'q38b_details',
@@ -1838,7 +1920,10 @@ export const formFields: FormField[] = [
     x: 364,
     y: 514,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 58,
+    marginWidth: -12
   },
   {
     name: 'q39_no',
@@ -1847,7 +1932,10 @@ export const formFields: FormField[] = [
     x: 425,
     y: 515,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 58,
+    marginWidth: -12
   },
   {
     name: 'q39_details',
@@ -1870,7 +1958,10 @@ export const formFields: FormField[] = [
     x: 363,
     y: 456,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 58,
+    marginWidth: -12
   },
   {
     name: 'q40a_no',
@@ -1879,7 +1970,10 @@ export const formFields: FormField[] = [
     x: 425,
     y: 456,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 58,
+    marginWidth: -12
   },
   {
     name: 'q40a_specify',
@@ -1901,7 +1995,10 @@ export const formFields: FormField[] = [
     x: 364,
     y: 435,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 58,
+    marginWidth: -12
   },
   {
     name: 'q40b_no',
@@ -1910,7 +2007,10 @@ export const formFields: FormField[] = [
     x: 424,
     y: 435,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 58,
+    marginWidth: -14
   },
   {
     name: 'q40b_id_no',
@@ -1932,7 +2032,10 @@ export const formFields: FormField[] = [
     x: 364,
     y: 415,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 58,
+    marginWidth: -12
   },
   {
     name: 'q40c_no',
@@ -1941,7 +2044,10 @@ export const formFields: FormField[] = [
     x: 425,
     y: 415,
     width: 10,
-    height: 10
+    height: 10,
+
+    marginHeight: 58,
+    marginWidth: -14
   },
   {
     name: 'q40c_id_no',
@@ -1967,8 +2073,8 @@ export const formFields: FormField[] = [
     width: 105,
     height: 14,
 
-    marginHeight: 50,
-    marginWidth: -10,
+    marginHeight: 62,
+    marginWidth: -5,
     fontSize: 0.6
   },
   {
@@ -1980,8 +2086,8 @@ export const formFields: FormField[] = [
     width: 105,
     height: 14,
 
-    marginHeight: 50,
-    marginWidth: -10,
+    marginHeight: 62,
+    marginWidth: -5,
     fontSize: 0.6
   },
   {
@@ -1993,8 +2099,8 @@ export const formFields: FormField[] = [
     width: 105,
     height: 14,
 
-    marginHeight: 50,
-    marginWidth: -10,
+    marginHeight: 62,
+    marginWidth: -5,
     fontSize: 0.6
   }
 ]
@@ -2365,34 +2471,34 @@ export const otherInformationFieldTemplate: DynamicFieldTemplate = {
 export const referencesFieldTemplate: DynamicFieldTemplate = {
   page: 4,
   startY: 370,
-  rowHeight: 15.5,
+  rowHeight: 16.5,
   columns: [
     {
       name: 'name',
       x: 64,
       width: 176,
 
-      marginWidth: 55,
-      marginHeight: -10,
-      fontSize: 0.8
+      marginWidth: -4,
+      marginHeight: 72,
+      fontSize: 0.7
     },
     {
       name: 'address',
       x: 245,
       width: 108,
 
-      marginWidth: 55,
-      marginHeight: -10,
-      fontSize: 0.8
+      marginWidth: -6,
+      marginHeight: 72,
+      fontSize: 0.5
     },
     {
       name: 'telNo',
       x: 358,
       width: 52,
 
-      marginWidth: 55,
-      marginHeight: -10,
-      fontSize: 0.8
+      marginWidth: -10,
+      marginHeight: 73,
+      fontSize: 0.5
     }
   ]
 }
