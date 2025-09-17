@@ -85,14 +85,14 @@ export async function POST(request: Request) {
         data.forEach((item, index) => {
           const yPos = template.startY - index * template.rowHeight
 
-          template.columns.forEach((column: any) => {
+          template.columns.map((column: any) => {
             const text = item[column.name]
 
             if (text) {
               page.drawText(text, {
-                x: column.x,
-                y: yPos,
-                size: regularSize,
+                x: column.x - column.marginWidth,
+                y: yPos - column.marginHeight,
+                size: template.rowHeight * column.fontSize,
                 font,
                 color: rgb(0, 0, 0)
               })

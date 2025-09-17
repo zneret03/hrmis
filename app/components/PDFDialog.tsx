@@ -384,7 +384,7 @@ export function UpdatePDFDialog(): JSX.Element {
         const height = (referencesFieldTemplate.rowHeight - 2) * scale
         const left = column.x * scale
         const width = column.width * scale
-        const fontSize = height * 0.6
+        const fontSize = height * column.fontSize
 
         return (
           <Fragment key={`${column.name}-${index}`}>
@@ -445,7 +445,7 @@ export function UpdatePDFDialog(): JSX.Element {
         const height = (otherInformationFieldTemplate.rowHeight - 2) * scale
         const left = column.x * scale
         const width = column.width * scale
-        const fontSize = height * 0.6
+        const fontSize = height * column.fontSize
 
         return (
           <Fragment key={`${column.name}-${index}`}>
@@ -506,7 +506,7 @@ export function UpdatePDFDialog(): JSX.Element {
         const height = (eligibilityFieldTemplate.rowHeight - 2) * scale
         const left = column.x * scale
         const width = column.width * scale
-        const fontSize = height * 0.8
+        const fontSize = height * column.fontSize
 
         return (
           <Fragment key={`${column.name}-${index}`}>
@@ -569,7 +569,7 @@ export function UpdatePDFDialog(): JSX.Element {
         const left = column.x * scale
         const width = column.width * scale
         const height = (workExperienceFieldTemplate.rowHeight - 2) * scale
-        const fontSize = height * 0.4
+        const fontSize = height * column.fontSize
 
         return (
           <Fragment key={`${column.name}-${index}`}>
@@ -627,7 +627,8 @@ export function UpdatePDFDialog(): JSX.Element {
         const height = (voluntaryWorkFieldTemplate.rowHeight - 2) * scale
         const left = column.x * scale
         const width = column.width * scale
-        const fontSize = height * 0.5
+        const fontSize = height * column.fontSize
+
         return (
           <Fragment key={`${column.name}-${index}`}>
             <input
@@ -688,7 +689,8 @@ export function UpdatePDFDialog(): JSX.Element {
             (learningAndDevelopmentFieldTemplate.rowHeight - 2) * scale
           const left = column.x * scale
           const width = column.width * scale
-          const fontSize = height * 0.5
+          const fontSize = height * column.fontSize
+
           return (
             <Fragment key={`${column.name}-${index}`}>
               <input

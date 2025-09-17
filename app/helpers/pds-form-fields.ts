@@ -1554,8 +1554,8 @@ export const formFields: FormField[] = [
     width: 110,
     height: 18,
 
-    marginHeight: 50,
-    marginWidth: -10,
+    marginHeight: 65,
+    marginWidth: -16,
     fontSize: 0.6
   },
 
@@ -2064,6 +2064,9 @@ export interface DynamicFieldTemplate {
       | keyof References
     x: number
     width: number
+    marginWidth: number
+    marginHeight: number
+    fontSize: number
   }[]
 }
 
@@ -2074,12 +2077,59 @@ export const eligibilityFieldTemplate: DynamicFieldTemplate = {
   startY: 785,
   rowHeight: 18,
   columns: [
-    { name: 'careerService', x: 68, width: 143 },
-    { name: 'rating', x: 212, width: 50 },
-    { name: 'dateOfExamination', x: 262, width: 52 },
-    { name: 'placeOfExamination', x: 316, width: 138 },
-    { name: 'licenseNumber', x: 455, width: 42 },
-    { name: 'licenseDateOfValidity', x: 498, width: 30 }
+    {
+      name: 'careerService',
+      x: 68,
+      width: 143,
+      marginWidth: -5,
+      marginHeight: 63,
+      fontSize: 0.6
+    },
+    {
+      name: 'rating',
+      x: 212,
+      width: 50,
+
+      marginWidth: -8,
+      marginHeight: 63,
+      fontSize: 0.6
+    },
+    {
+      name: 'dateOfExamination',
+      x: 262,
+      width: 52,
+
+      marginWidth: -10,
+      marginHeight: 63,
+      fontSize: 0.6
+    },
+    {
+      name: 'placeOfExamination',
+      x: 316,
+      width: 138,
+
+      marginWidth: -14,
+      marginHeight: 63,
+      fontSize: 0.6
+    },
+    {
+      name: 'licenseNumber',
+      x: 455,
+      width: 42,
+
+      marginWidth: -16,
+      marginHeight: 63,
+      fontSize: 0.6
+    },
+    {
+      name: 'licenseDateOfValidity',
+      x: 498,
+      width: 30,
+
+      marginWidth: -16,
+      marginHeight: 63,
+      fontSize: 0.6
+    }
   ]
 }
 
@@ -2088,14 +2138,78 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
   startY: 575,
   rowHeight: 16.5,
   columns: [
-    { name: 'inclusiveDatesFrom', x: 68, width: 37 },
-    { name: 'inclusiveDatesTo', x: 106, width: 37 },
-    { name: 'positionTitle', x: 144, width: 118 },
-    { name: 'department', x: 263, width: 120 },
-    { name: 'monthlySalary', x: 385, width: 32 },
-    { name: 'salaryGrade', x: 418, width: 35 },
-    { name: 'statusOfAppointment', x: 455, width: 42 },
-    { name: 'govtService', x: 498, width: 30 }
+    {
+      name: 'inclusiveDatesFrom',
+      x: 68,
+      width: 37,
+
+      marginWidth: -1,
+      marginHeight: 53,
+      fontSize: 0.45
+    },
+    {
+      name: 'inclusiveDatesTo',
+      x: 106,
+      width: 37,
+
+      marginWidth: -2,
+      marginHeight: 53,
+      fontSize: 0.45
+    },
+    {
+      name: 'positionTitle',
+      x: 144,
+      width: 118,
+
+      marginWidth: -4,
+      marginHeight: 53,
+      fontSize: 0.5
+    },
+    {
+      name: 'department',
+      x: 263,
+      width: 120,
+
+      marginWidth: -5,
+      marginHeight: 53,
+      fontSize: 0.5
+    },
+    {
+      name: 'monthlySalary',
+      x: 385,
+      width: 32,
+
+      marginWidth: -10,
+      marginHeight: 53,
+      fontSize: 0.5
+    },
+    {
+      name: 'salaryGrade',
+      x: 418,
+      width: 35,
+
+      marginWidth: -12,
+      marginHeight: 53,
+      fontSize: 0.5
+    },
+    {
+      name: 'statusOfAppointment',
+      x: 455,
+      width: 42,
+
+      marginWidth: -12,
+      marginHeight: 53,
+      fontSize: 0.5
+    },
+    {
+      name: 'govtService',
+      x: 498,
+      width: 30,
+
+      marginWidth: -16,
+      marginHeight: 53,
+      fontSize: 0.5
+    }
   ]
 }
 
@@ -2105,11 +2219,50 @@ export const voluntaryWorkFieldTemplate: DynamicFieldTemplate = {
   startY: 775,
   rowHeight: 17.5,
   columns: [
-    { name: 'nameAndAddress', x: 62, width: 205 },
-    { name: 'inclusiveDateFrom', x: 268, width: 35 },
-    { name: 'inclusiveDateTo', x: 305, width: 35 },
-    { name: 'numberOfHours', x: 340, width: 35 },
-    { name: 'position', x: 376, width: 158 }
+    {
+      name: 'nameAndAddress',
+      x: 62,
+      width: 205,
+
+      marginWidth: -5,
+      marginHeight: 65,
+      fontSize: 0.6
+    },
+    {
+      name: 'inclusiveDateFrom',
+      x: 268,
+      width: 35,
+      marginWidth: -8,
+      marginHeight: 65,
+      fontSize: 0.5
+    },
+    {
+      name: 'inclusiveDateTo',
+      x: 305,
+      width: 35,
+
+      marginWidth: -8,
+      marginHeight: 65,
+      fontSize: 0.5
+    },
+    {
+      name: 'numberOfHours',
+      x: 340,
+      width: 35,
+
+      marginWidth: -12,
+      marginHeight: 65,
+      fontSize: 0.5
+    },
+    {
+      name: 'position',
+      x: 376,
+      width: 158,
+
+      marginWidth: -12,
+      marginHeight: 65,
+      fontSize: 0.5
+    }
   ]
 }
 
@@ -2118,12 +2271,60 @@ export const learningAndDevelopmentFieldTemplate: DynamicFieldTemplate = {
   startY: 590,
   rowHeight: 15.5,
   columns: [
-    { name: 'title', x: 60, width: 205 },
-    { name: 'inclusiveDatesFrom', x: 268, width: 34 },
-    { name: 'inclusiveDatesTo', x: 305, width: 35 },
-    { name: 'numberOfHours', x: 340, width: 35 },
-    { name: 'typeOfLd', x: 375, width: 40 },
-    { name: 'conductedBy', x: 416, width: 118 }
+    {
+      name: 'title',
+      x: 60,
+      width: 205,
+
+      marginWidth: -6,
+      marginHeight: 68,
+      fontSize: 0.6
+    },
+    {
+      name: 'inclusiveDatesFrom',
+      x: 268,
+      width: 34,
+
+      marginWidth: -10,
+      marginHeight: 68,
+      fontSize: 0.5
+    },
+    {
+      name: 'inclusiveDatesTo',
+      x: 305,
+      width: 35,
+
+      marginWidth: -8,
+      marginHeight: 68,
+      fontSize: 0.5
+    },
+    {
+      name: 'numberOfHours',
+      x: 340,
+      width: 35,
+
+      marginWidth: -9,
+      marginHeight: 68,
+      fontSize: 0.5
+    },
+    {
+      name: 'typeOfLd',
+      x: 375,
+      width: 40,
+
+      marginWidth: -12,
+      marginHeight: 68,
+      fontSize: 0.6
+    },
+    {
+      name: 'conductedBy',
+      x: 416,
+      width: 118,
+
+      marginWidth: -14,
+      marginHeight: 68,
+      fontSize: 0.6
+    }
   ]
 }
 
@@ -2132,9 +2333,32 @@ export const otherInformationFieldTemplate: DynamicFieldTemplate = {
   startY: 224,
   rowHeight: 15.5,
   columns: [
-    { name: 'specialSkills', x: 64, width: 116 },
-    { name: 'nonAcademicDistrinction', x: 182, width: 232 },
-    { name: 'membershipOrganization', x: 415, width: 120 }
+    {
+      name: 'specialSkills',
+      x: 64,
+      width: 116,
+
+      marginWidth: -6,
+      marginHeight: 78,
+      fontSize: 0.6
+    },
+    {
+      name: 'nonAcademicDistrinction',
+      x: 182,
+      width: 232,
+      marginWidth: -10,
+      marginHeight: 78,
+      fontSize: 0.6
+    },
+    {
+      name: 'membershipOrganization',
+      x: 415,
+      width: 120,
+
+      marginWidth: -14,
+      marginHeight: 78,
+      fontSize: 0.6
+    }
   ]
 }
 
@@ -2143,8 +2367,32 @@ export const referencesFieldTemplate: DynamicFieldTemplate = {
   startY: 370,
   rowHeight: 15.5,
   columns: [
-    { name: 'name', x: 64, width: 176 },
-    { name: 'address', x: 245, width: 108 },
-    { name: 'telNo', x: 358, width: 52 }
+    {
+      name: 'name',
+      x: 64,
+      width: 176,
+
+      marginWidth: 55,
+      marginHeight: -10,
+      fontSize: 0.8
+    },
+    {
+      name: 'address',
+      x: 245,
+      width: 108,
+
+      marginWidth: 55,
+      marginHeight: -10,
+      fontSize: 0.8
+    },
+    {
+      name: 'telNo',
+      x: 358,
+      width: 52,
+
+      marginWidth: 55,
+      marginHeight: -10,
+      fontSize: 0.8
+    }
   ]
 }
