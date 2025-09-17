@@ -320,7 +320,8 @@ export function UpdatePDFDialog(): JSX.Element {
       const left = field.x * scale
       const width = field.width * scale
       const height = field.height * scale
-      const fontSize = height * 0.6
+      const fontSize =
+        field.type === 'text' ? height * field.fontSize : height * 0.6
 
       const commonProps = {
         name: field.name,
@@ -740,7 +741,7 @@ export function UpdatePDFDialog(): JSX.Element {
   // --- Save Handler ---
   const handleSave = async () => {
     try {
-      const response = await fetch('/api/fill-pdf', {
+      const response = await fetch('/api/protected/pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -785,7 +786,7 @@ export function UpdatePDFDialog(): JSX.Element {
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className='sm:max-w-[80rem] max-h-[50rem] lg:max-h-[40rem] md:max-h-[30rem] sm:max-h-[20rem] overflow-auto'>
+      <DialogContent className='sm:max-w-[80rem] xl:max-h-[50rem] lg:max-h-[40rem] md:max-h-[30rem] sm:max-h-[20rem] overflow-auto'>
         <DialogHeader>
           <DialogTitle>Personal Data Sheet</DialogTitle>
           <DialogDescription>

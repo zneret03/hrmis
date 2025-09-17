@@ -1,14 +1,27 @@
 // lib/pds-form-fields.ts
 
-export interface FormField {
-  name: string
-  type: 'text' | 'checkbox' | 'textarea'
-  page: number
-  x: number
-  y: number
-  width: number
-  height: number
-}
+export type FormField =
+  | {
+      name: string
+      type: 'checkbox'
+      page: number
+      x: number
+      y: number
+      width: number
+      height: number
+    }
+  | {
+      name: string
+      type: 'text' | 'textarea'
+      page: number
+      x: number
+      y: number
+      width: number
+      height: number
+      marginHeight: number
+      marginWidth: number
+      fontSize: number
+    }
 
 export const PDF_A4_WIDTH = 595
 export const PDF_A4_HEIGHT = 842
@@ -20,10 +33,13 @@ export const formFields: FormField[] = [
     name: 'surname',
     type: 'text',
     page: 1,
-    x: 143,
+    x: 145,
     y: 726,
     width: 390,
-    height: 12
+    height: 12,
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'firstName',
@@ -32,7 +48,10 @@ export const formFields: FormField[] = [
     x: 145,
     y: 710,
     width: 275,
-    height: 12
+    height: 12,
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'middleName',
@@ -41,7 +60,10 @@ export const formFields: FormField[] = [
     x: 145,
     y: 695,
     width: 390,
-    height: 12
+    height: 12,
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'nameExtension',
@@ -50,7 +72,11 @@ export const formFields: FormField[] = [
     x: 425,
     y: 710,
     width: 110,
-    height: 12
+    height: 12,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirth',
@@ -59,7 +85,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 673,
     width: 112,
-    height: 22
+    height: 22,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'placeOfBirth',
@@ -68,7 +98,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 655,
     width: 112,
-    height: 15
+    height: 15,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'sexMale',
@@ -177,7 +211,11 @@ export const formFields: FormField[] = [
     x: 365,
     y: 640,
     width: 152,
-    height: 15
+    height: 15,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   // Addresses
   {
@@ -187,7 +225,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 628,
     width: 100,
-    height: 10
+    height: 10,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'resStreet',
@@ -196,7 +238,11 @@ export const formFields: FormField[] = [
     x: 430,
     y: 628,
     width: 105,
-    height: 10
+    height: 10,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'resSubdivision',
@@ -205,7 +251,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 613,
     width: 100,
-    height: 8
+    height: 8,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'resBarangay',
@@ -214,7 +264,11 @@ export const formFields: FormField[] = [
     x: 430,
     y: 613,
     width: 102,
-    height: 8
+    height: 8,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'resCity',
@@ -223,7 +277,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 598,
     width: 102,
-    height: 8
+    height: 8,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'resProvince',
@@ -232,7 +290,11 @@ export const formFields: FormField[] = [
     x: 435,
     y: 598,
     width: 102,
-    height: 8
+    height: 8,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'resZipCode',
@@ -241,7 +303,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 578,
     width: 202,
-    height: 13
+    height: 13,
+
+    marginHeight: 52,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   //Permanent Address
   {
@@ -251,7 +317,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 565,
     width: 100,
-    height: 10
+    height: 10,
+
+    marginHeight: 56,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'perStreet',
@@ -260,7 +330,11 @@ export const formFields: FormField[] = [
     x: 430,
     y: 565,
     width: 105,
-    height: 10
+    height: 10,
+
+    marginHeight: 56,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'perSubdivision',
@@ -269,7 +343,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 550,
     width: 100,
-    height: 8
+    height: 8,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'perBarangay',
@@ -278,7 +356,11 @@ export const formFields: FormField[] = [
     x: 430,
     y: 550,
     width: 102,
-    height: 8
+    height: 8,
+
+    marginHeight: 56,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'perCity',
@@ -287,7 +369,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 534,
     width: 102,
-    height: 8
+    height: 8,
+
+    marginHeight: 56,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'perProvince',
@@ -296,7 +382,11 @@ export const formFields: FormField[] = [
     x: 435,
     y: 534,
     width: 102,
-    height: 8
+    height: 8,
+
+    marginHeight: 56,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   {
     name: 'perZipCode',
@@ -305,7 +395,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 512,
     width: 202,
-    height: 13
+    height: 13,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.8
   },
   //Personal info
   {
@@ -315,7 +409,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 592,
     width: 115,
-    height: 13
+    height: 13,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'weight',
@@ -324,7 +422,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 578,
     width: 115,
-    height: 13
+    height: 13,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'bloodType',
@@ -333,7 +435,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 562,
     width: 115,
-    height: 13
+    height: 13,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   //Government Ideas
   {
@@ -343,7 +449,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 545,
     width: 115,
-    height: 13
+    height: 13,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'pagibigNo',
@@ -352,7 +462,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 527,
     width: 115,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'philhealthNo',
@@ -361,7 +475,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 510,
     width: 115,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'sssNo',
@@ -370,7 +488,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 496,
     width: 115,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'tinNo',
@@ -379,7 +501,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 479,
     width: 115,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'agencyEmployeeNo',
@@ -388,7 +514,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 463,
     width: 115,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   // Contact
   {
@@ -398,7 +528,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 495,
     width: 205,
-    height: 15
+    height: 15,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'mobileNo',
@@ -407,7 +541,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 479,
     width: 205,
-    height: 14
+    height: 14,
+
+    marginHeight: 54,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'emailAddress',
@@ -416,7 +554,11 @@ export const formFields: FormField[] = [
     x: 328,
     y: 463,
     width: 205,
-    height: 15
+    height: 15,
+
+    marginHeight: 54,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   //Family Background
   {
@@ -426,7 +568,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 437,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 55,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'spouseFirstName',
@@ -435,7 +581,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 424,
     width: 114,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'spouseNameExtension',
@@ -444,7 +594,11 @@ export const formFields: FormField[] = [
     x: 260,
     y: 424,
     width: 68,
-    height: 8
+    height: 8,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'spouseMiddleName',
@@ -453,7 +607,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 410,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'spouseOccupation',
@@ -462,7 +620,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 395,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'employerOrBusinessPartner',
@@ -471,7 +633,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 382,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'businessAddress',
@@ -480,7 +646,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 368,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'businessTelPho',
@@ -489,7 +659,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 354,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   //Family background Father side
   {
@@ -499,7 +673,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 340,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'fatherFirstName',
@@ -508,7 +686,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 328,
     width: 114,
-    height: 13
+    height: 13,
+
+    marginHeight: 62,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'fatherNameExtension',
@@ -517,7 +699,11 @@ export const formFields: FormField[] = [
     x: 260,
     y: 328,
     width: 68,
-    height: 8
+    height: 8,
+
+    marginHeight: 62,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'fatherMiddleName',
@@ -526,26 +712,38 @@ export const formFields: FormField[] = [
     x: 145,
     y: 313,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 62,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   // Mother Maidens name
   {
-    name: 'motherSurname',
+    name: 'motherMaidenName',
     type: 'text',
     page: 1,
     x: 145,
     y: 300,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 62,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
-    name: 'motherNameExtension',
+    name: 'motherSurname',
     type: 'text',
     page: 1,
     x: 145,
     y: 285,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 62,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'motherFirstName',
@@ -554,7 +752,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 273,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 62,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'motherMiddleName',
@@ -563,7 +765,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 260,
     width: 182,
-    height: 13
+    height: 13,
+
+    marginHeight: 62,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   //Childrens Name
   {
@@ -573,7 +779,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 424,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild1',
@@ -582,7 +792,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 424,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName2',
@@ -591,7 +805,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 410,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild2',
@@ -600,7 +818,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 410,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 55,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName3',
@@ -609,7 +831,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 395,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 55,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild3',
@@ -618,7 +844,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 395,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 55,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName4',
@@ -627,7 +857,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 383,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild4',
@@ -636,7 +870,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 383,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 58,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName5',
@@ -645,7 +883,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 369,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild5',
@@ -654,7 +896,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 369,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName6',
@@ -663,7 +909,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 355,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild6',
@@ -672,7 +922,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 355,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName7',
@@ -681,7 +935,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 340,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild7',
@@ -690,7 +948,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 340,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName8',
@@ -699,7 +961,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 328,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild8',
@@ -708,7 +974,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 328,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName9',
@@ -717,7 +987,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 314,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild9',
@@ -726,7 +1000,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 314,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName10',
@@ -735,7 +1013,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 300,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild10',
@@ -744,7 +1026,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 300,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName11',
@@ -753,7 +1039,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 285,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild11',
@@ -762,7 +1052,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 285,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 60,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   {
     name: 'childrenName12',
@@ -771,7 +1065,11 @@ export const formFields: FormField[] = [
     x: 330,
     y: 273,
     width: 135,
-    height: 13
+    height: 13,
+
+    marginHeight: 64,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'dateOfBirthChild12',
@@ -780,7 +1078,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 273,
     width: 70,
-    height: 13
+    height: 13,
+
+    marginHeight: 64,
+    marginWidth: -15,
+    fontSize: 0.6
   },
   //EDUCATIONAL Background elementary
   {
@@ -790,7 +1092,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 198,
     width: 112,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'elementaryBasicEdu',
@@ -799,7 +1105,11 @@ export const formFields: FormField[] = [
     x: 260,
     y: 198,
     width: 104,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'elementaryFrom',
@@ -808,7 +1118,11 @@ export const formFields: FormField[] = [
     x: 365,
     y: 198,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'elementaryTo',
@@ -817,7 +1131,11 @@ export const formFields: FormField[] = [
     x: 394,
     y: 198,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'elementaryHighestLevel',
@@ -826,7 +1144,11 @@ export const formFields: FormField[] = [
     x: 424,
     y: 198,
     width: 40,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'elementaryYearGraduated',
@@ -835,7 +1157,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 198,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   {
     name: 'elementaryHonors',
@@ -844,7 +1170,11 @@ export const formFields: FormField[] = [
     x: 500,
     y: 198,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   //EDUCATIONAL Secondary
   {
@@ -854,7 +1184,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 178,
     width: 112,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'secondaryBasicEdu',
@@ -863,7 +1197,11 @@ export const formFields: FormField[] = [
     x: 260,
     y: 178,
     width: 104,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'secondaryFrom',
@@ -872,7 +1210,11 @@ export const formFields: FormField[] = [
     x: 365,
     y: 178,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'secondaryTo',
@@ -881,7 +1223,11 @@ export const formFields: FormField[] = [
     x: 394,
     y: 178,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'secondaryHighestLevel',
@@ -890,7 +1236,11 @@ export const formFields: FormField[] = [
     x: 424,
     y: 178,
     width: 40,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   {
     name: 'secondaryYearGraduated',
@@ -899,7 +1249,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 178,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   {
     name: 'secondaryHonors',
@@ -908,7 +1262,11 @@ export const formFields: FormField[] = [
     x: 500,
     y: 178,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -13,
+    fontSize: 0.6
   },
   // EDUCATIONAL Trade Course
   {
@@ -918,7 +1276,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 160,
     width: 112,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'vocationalBasicEdu',
@@ -927,7 +1289,11 @@ export const formFields: FormField[] = [
     x: 260,
     y: 160,
     width: 104,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'vocationalFrom',
@@ -936,7 +1302,11 @@ export const formFields: FormField[] = [
     x: 365,
     y: 160,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'vocationalTo',
@@ -945,7 +1315,11 @@ export const formFields: FormField[] = [
     x: 394,
     y: 160,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'vocationalHighestLevel',
@@ -954,7 +1328,11 @@ export const formFields: FormField[] = [
     x: 424,
     y: 160,
     width: 40,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'vocationalYearGraduated',
@@ -963,7 +1341,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 160,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   {
     name: 'vocationalHonors',
@@ -972,7 +1354,11 @@ export const formFields: FormField[] = [
     x: 500,
     y: 160,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   //EDUCATIONAL College
   {
@@ -982,7 +1368,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 140,
     width: 112,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'collegeBasicEdu',
@@ -991,7 +1381,11 @@ export const formFields: FormField[] = [
     x: 260,
     y: 140,
     width: 104,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'collegeFrom',
@@ -1000,7 +1394,11 @@ export const formFields: FormField[] = [
     x: 365,
     y: 140,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'collegeTo',
@@ -1009,7 +1407,11 @@ export const formFields: FormField[] = [
     x: 394,
     y: 140,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'collegeHighestLevel',
@@ -1018,7 +1420,11 @@ export const formFields: FormField[] = [
     x: 424,
     y: 140,
     width: 40,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'collegeYearGraduated',
@@ -1027,7 +1433,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 140,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   {
     name: 'collegeHonors',
@@ -1036,7 +1446,11 @@ export const formFields: FormField[] = [
     x: 500,
     y: 140,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   //GRADUATE STUDIES
   {
@@ -1046,7 +1460,11 @@ export const formFields: FormField[] = [
     x: 145,
     y: 122,
     width: 112,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'graduateBasicEdu',
@@ -1055,7 +1473,11 @@ export const formFields: FormField[] = [
     x: 260,
     y: 122,
     width: 104,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -8,
+    fontSize: 0.6
   },
   {
     name: 'graduateFrom',
@@ -1064,7 +1486,11 @@ export const formFields: FormField[] = [
     x: 365,
     y: 122,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'graduateTo',
@@ -1073,7 +1499,11 @@ export const formFields: FormField[] = [
     x: 394,
     y: 122,
     width: 28,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -12,
+    fontSize: 0.6
   },
   {
     name: 'graduateHighestLevel',
@@ -1082,7 +1512,11 @@ export const formFields: FormField[] = [
     x: 424,
     y: 122,
     width: 40,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   {
     name: 'graduateYearGraduated',
@@ -1091,7 +1525,11 @@ export const formFields: FormField[] = [
     x: 465,
     y: 122,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   {
     name: 'graduateHonors',
@@ -1100,7 +1538,11 @@ export const formFields: FormField[] = [
     x: 500,
     y: 122,
     width: 34,
-    height: 18
+    height: 18,
+
+    marginHeight: 64,
+    marginWidth: -14,
+    fontSize: 0.6
   },
   //PAGE 1 DATE
   {
@@ -1110,7 +1552,11 @@ export const formFields: FormField[] = [
     x: 423,
     y: 95,
     width: 110,
-    height: 18
+    height: 18,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
 
   //PAGE 3 DATE
@@ -1121,7 +1567,11 @@ export const formFields: FormField[] = [
     x: 418,
     y: 92,
     width: 116,
-    height: 16
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
 
   {
@@ -1167,7 +1617,11 @@ export const formFields: FormField[] = [
     x: 370,
     y: 740,
     width: 155,
-    height: 16
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
 
   // // Question 35
@@ -1196,7 +1650,11 @@ export const formFields: FormField[] = [
     x: 370,
     y: 700,
     width: 155,
-    height: 16
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'q35b_yes',
@@ -1223,7 +1681,11 @@ export const formFields: FormField[] = [
     x: 420,
     y: 662,
     width: 110,
-    height: 16
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'q35b_status',
@@ -1232,7 +1694,11 @@ export const formFields: FormField[] = [
     x: 420,
     y: 650,
     width: 110,
-    height: 16
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
 
   // Question 36
@@ -1261,7 +1727,11 @@ export const formFields: FormField[] = [
     x: 370,
     y: 612,
     width: 160,
-    height: 16
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   //
   // // Question 37
@@ -1290,7 +1760,11 @@ export const formFields: FormField[] = [
     x: 368,
     y: 580,
     width: 160,
-    height: 16
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   //
   // // Question 38
@@ -1319,7 +1793,11 @@ export const formFields: FormField[] = [
     x: 425,
     y: 555,
     width: 100,
-    height: 12
+    height: 12,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'q38b_yes',
@@ -1346,7 +1824,11 @@ export const formFields: FormField[] = [
     x: 422,
     y: 530,
     width: 100,
-    height: 12
+    height: 12,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   // // Question 39
   {
@@ -1374,7 +1856,11 @@ export const formFields: FormField[] = [
     x: 370,
     y: 495,
     width: 160,
-    height: 16
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   // Question 40
   {
@@ -1402,7 +1888,11 @@ export const formFields: FormField[] = [
     x: 454,
     y: 450,
     width: 75,
-    height: 16
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'q40b_yes',
@@ -1429,7 +1919,11 @@ export const formFields: FormField[] = [
     x: 455,
     y: 428,
     width: 73,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'q40c_yes',
@@ -1456,7 +1950,11 @@ export const formFields: FormField[] = [
     x: 455,
     y: 410,
     width: 75,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
 
   //GOVERNMENT ISSUED ID
@@ -1467,7 +1965,11 @@ export const formFields: FormField[] = [
     x: 125,
     y: 226,
     width: 105,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'IDLicensePassortNo',
@@ -1476,7 +1978,11 @@ export const formFields: FormField[] = [
     x: 125,
     y: 210,
     width: 105,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   },
   {
     name: 'issuance',
@@ -1485,7 +1991,11 @@ export const formFields: FormField[] = [
     x: 125,
     y: 195,
     width: 105,
-    height: 14
+    height: 14,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
   }
 ]
 
