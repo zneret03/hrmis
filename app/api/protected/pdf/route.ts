@@ -90,8 +90,8 @@ export async function POST(request: Request) {
 
           for (const line of lines) {
             page.drawText(line, {
-              x: field.x + 2,
-              y: y,
+              x: field.x - field.marginWidth,
+              y: y - field.marginHeight,
               size: regularSize,
               font,
               color: rgb(0, 0, 0)
