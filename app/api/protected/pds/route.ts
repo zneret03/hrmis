@@ -78,12 +78,12 @@ export async function POST(request: Request) {
       ...otherStaticFields
     ]
 
-    const formData = [
+    const formData = {
       ...personalInfoData,
       ...familyBackgroundData,
       ...educationalBackgroundData,
       ...otherStaticData
-    ]
+    }
 
     for (const field of formFields) {
       if (formData[field.name]) {
