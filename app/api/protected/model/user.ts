@@ -222,6 +222,18 @@ export const signUp = async (body: SignUp) => {
       return badRequestResponse({ error: creditUser.message || '' })
     }
 
+    const { error: pdsError } = await supabase.from('pds').insert({
+      user_id: data.user.id
+    })
+
+    if (pdsError) {
+      if (body.avatar) {
+        removeImageViaPath(supabase, getImagePath(body.avatar as string))
+      }
+      await supabase.auth.admin.deleteUser(data.user.id)
+      return badRequestResponse({ error: pdsError.message || '' })
+    }
+
     return successResponse({
       message: 'Sign up successfully',
       userId: data.user.id

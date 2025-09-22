@@ -3,7 +3,10 @@ import { PDFDocument, rgb, StandardFonts, PDFPage } from 'pdf-lib'
 import { promises as fs } from 'fs'
 import path from 'path'
 import {
-  formFields,
+  personalInfoFields,
+  familyBackgroundFields,
+  educationalBackgroundFields,
+  otherStaticFields,
   eligibilityFieldTemplate,
   workExperienceFieldTemplate,
   voluntaryWorkFieldTemplate,
@@ -49,7 +52,10 @@ export async function POST(request: Request) {
       learningAndDevelopment,
       otherInformation,
       references,
-      ...formData
+      personalInfoData,
+      familyBackgroundData,
+      educationalBackgroundData,
+      otherStaticData
     } = body
 
     const pdfPath = path.join(
@@ -64,6 +70,20 @@ export async function POST(request: Request) {
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
     const regularSize = 8
     const lineHeight = 10
+
+    const formFields = [
+      ...personalInfoFields,
+      ...familyBackgroundFields,
+      ...educationalBackgroundFields,
+      ...otherStaticFields
+    ]
+
+    const formData = [
+      ...personalInfoData,
+      ...familyBackgroundData,
+      ...educationalBackgroundData,
+      ...otherStaticData
+    ]
 
     for (const field of formFields) {
       if (formData[field.name]) {

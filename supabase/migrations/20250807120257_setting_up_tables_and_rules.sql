@@ -58,7 +58,7 @@ CREATE INDEX idx_attendance_summary_total_hourse ON public.attendance_summary(to
 CREATE TABLE public.pds (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    personal_information JSONB NOT NULL,
+    personal_information JSONB,
     family_background JSONB,
     educational_background JSONB,
     civil_service_eligibility JSONB,

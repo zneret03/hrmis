@@ -28,15 +28,14 @@ export type FormField =
 export const PDF_A4_WIDTH = 595
 export const PDF_A4_HEIGHT = 842
 
-// --- Your static form fields (with Civil Service Eligibility removed) ---
-export const formFields: FormField[] = [
+export const personalInfoFields: FormField[] = [
   // --- PERSONAL INFORMATION (Page 1) ---
   {
     name: 'surname',
     type: 'text',
     page: 1,
     x: 145,
-    y: 726,
+    y: 738,
     width: 390,
     height: 12,
     marginHeight: 50,
@@ -48,7 +47,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 710,
+    y: 723,
     width: 275,
     height: 12,
     marginHeight: 50,
@@ -60,7 +59,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 695,
+    y: 708,
     width: 390,
     height: 12,
     marginHeight: 50,
@@ -72,7 +71,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 425,
-    y: 710,
+    y: 722,
     width: 110,
     height: 12,
 
@@ -85,7 +84,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 673,
+    y: 695,
     width: 112,
     height: 22,
 
@@ -98,7 +97,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 655,
+    y: 670,
     width: 112,
     height: 15,
 
@@ -111,7 +110,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 150,
-    y: 642,
+    y: 650,
     width: 8,
     height: 8,
     marginHeight: 52,
@@ -122,7 +121,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 217,
-    y: 642,
+    y: 651,
     width: 8,
     height: 8,
 
@@ -134,7 +133,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 150,
-    y: 630,
+    y: 637,
     width: 8,
     height: 8,
 
@@ -146,7 +145,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 218,
-    y: 630,
+    y: 637,
     width: 8,
     height: 8,
 
@@ -158,7 +157,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 150,
-    y: 620,
+    y: 628,
     width: 8,
     height: 8,
 
@@ -169,8 +168,8 @@ export const formFields: FormField[] = [
     name: 'civilStatusSeparated',
     type: 'checkbox',
     page: 1,
-    x: 218,
-    y: 620,
+    x: 216,
+    y: 628,
     width: 8,
     height: 8,
 
@@ -182,7 +181,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 150,
-    y: 610,
+    y: 618,
     width: 8,
     height: 8,
 
@@ -195,7 +194,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 372,
-    y: 680,
+    y: 688,
     width: 8,
     height: 8,
 
@@ -207,7 +206,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 416,
-    y: 680,
+    y: 688,
     width: 8,
     height: 8,
 
@@ -219,7 +218,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 428,
-    y: 670,
+    y: 678,
     width: 8,
     height: 8,
 
@@ -231,7 +230,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 1,
     x: 465,
-    y: 670,
+    y: 678,
     width: 8,
     height: 8,
 
@@ -243,7 +242,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 365,
-    y: 640,
+    y: 655,
     width: 152,
     height: 15,
 
@@ -257,7 +256,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 628,
+    y: 638,
     width: 100,
     height: 10,
 
@@ -270,7 +269,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 430,
-    y: 628,
+    y: 638,
     width: 105,
     height: 10,
 
@@ -283,7 +282,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 613,
+    y: 622,
     width: 100,
     height: 8,
 
@@ -296,7 +295,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 430,
-    y: 613,
+    y: 622,
     width: 102,
     height: 8,
 
@@ -309,7 +308,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 598,
+    y: 605,
     width: 102,
     height: 8,
 
@@ -322,7 +321,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 435,
-    y: 598,
+    y: 605,
     width: 102,
     height: 8,
 
@@ -335,7 +334,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 578,
+    y: 590,
     width: 202,
     height: 13,
 
@@ -349,7 +348,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 565,
+    y: 575,
     width: 100,
     height: 10,
 
@@ -362,7 +361,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 430,
-    y: 565,
+    y: 575,
     width: 105,
     height: 10,
 
@@ -375,7 +374,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 550,
+    y: 558,
     width: 100,
     height: 8,
 
@@ -388,7 +387,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 430,
-    y: 550,
+    y: 558,
     width: 102,
     height: 8,
 
@@ -401,7 +400,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 534,
+    y: 542,
     width: 102,
     height: 8,
 
@@ -414,7 +413,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 435,
-    y: 534,
+    y: 542,
     width: 102,
     height: 8,
 
@@ -427,7 +426,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 512,
+    y: 524,
     width: 202,
     height: 13,
 
@@ -441,7 +440,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 592,
+    y: 606,
     width: 115,
     height: 13,
 
@@ -454,7 +453,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 578,
+    y: 590,
     width: 115,
     height: 13,
 
@@ -467,7 +466,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 562,
+    y: 574,
     width: 115,
     height: 13,
 
@@ -481,7 +480,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 545,
+    y: 558,
     width: 115,
     height: 13,
 
@@ -494,7 +493,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 527,
+    y: 542,
     width: 115,
     height: 14,
 
@@ -507,7 +506,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 510,
+    y: 525,
     width: 115,
     height: 14,
 
@@ -520,7 +519,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 496,
+    y: 510,
     width: 115,
     height: 14,
 
@@ -533,7 +532,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 479,
+    y: 494,
     width: 115,
     height: 14,
 
@@ -546,7 +545,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 463,
+    y: 475,
     width: 115,
     height: 14,
 
@@ -560,7 +559,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 495,
+    y: 510,
     width: 205,
     height: 15,
 
@@ -573,7 +572,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 479,
+    y: 494,
     width: 205,
     height: 14,
 
@@ -586,7 +585,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 328,
-    y: 463,
+    y: 478,
     width: 205,
     height: 15,
 
@@ -594,13 +593,14 @@ export const formFields: FormField[] = [
     marginWidth: -12,
     fontSize: 0.6
   },
-  //Family Background
+
+  //FAMILY BACKGROUND PAGE 1
   {
     name: 'spousesSurname',
     type: 'text',
     page: 1,
     x: 145,
-    y: 437,
+    y: 450,
     width: 182,
     height: 13,
 
@@ -613,7 +613,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 424,
+    y: 438,
     width: 114,
     height: 13,
 
@@ -626,7 +626,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 260,
-    y: 424,
+    y: 432,
     width: 68,
     height: 8,
 
@@ -639,7 +639,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 410,
+    y: 422,
     width: 182,
     height: 13,
 
@@ -652,7 +652,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 395,
+    y: 410,
     width: 182,
     height: 13,
 
@@ -665,7 +665,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 382,
+    y: 395,
     width: 182,
     height: 13,
 
@@ -678,7 +678,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 368,
+    y: 380,
     width: 182,
     height: 13,
 
@@ -691,21 +691,23 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 354,
+    y: 368,
     width: 182,
     height: 13,
 
     marginHeight: 58,
     marginWidth: -10,
     fontSize: 0.6
-  },
-  //Family background Father side
+  }
+]
+
+export const familyBackgroundFields: FormField[] = [
   {
     name: 'fatherSurname',
     type: 'text',
     page: 1,
     x: 145,
-    y: 340,
+    y: 355,
     width: 182,
     height: 13,
 
@@ -718,7 +720,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 328,
+    y: 340,
     width: 114,
     height: 13,
 
@@ -731,7 +733,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 260,
-    y: 328,
+    y: 335,
     width: 68,
     height: 8,
 
@@ -744,7 +746,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 313,
+    y: 328,
     width: 182,
     height: 13,
 
@@ -758,7 +760,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 300,
+    y: 314,
     width: 182,
     height: 13,
 
@@ -771,7 +773,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 285,
+    y: 298,
     width: 182,
     height: 13,
 
@@ -784,7 +786,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 273,
+    y: 284,
     width: 182,
     height: 13,
 
@@ -797,7 +799,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 260,
+    y: 270,
     width: 182,
     height: 13,
 
@@ -811,7 +813,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 424,
+    y: 435,
     width: 135,
     height: 13,
 
@@ -824,7 +826,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 424,
+    y: 438,
     width: 70,
     height: 13,
 
@@ -837,7 +839,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 410,
+    y: 422,
     width: 135,
     height: 13,
 
@@ -850,7 +852,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 410,
+    y: 424,
     width: 70,
     height: 13,
 
@@ -863,7 +865,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 395,
+    y: 410,
     width: 135,
     height: 13,
 
@@ -876,7 +878,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 395,
+    y: 410,
     width: 70,
     height: 13,
 
@@ -889,7 +891,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 383,
+    y: 395,
     width: 135,
     height: 13,
 
@@ -902,7 +904,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 383,
+    y: 395,
     width: 70,
     height: 13,
 
@@ -915,7 +917,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 369,
+    y: 380,
     width: 135,
     height: 13,
 
@@ -928,7 +930,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 369,
+    y: 380,
     width: 70,
     height: 13,
 
@@ -941,7 +943,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 355,
+    y: 368,
     width: 135,
     height: 13,
 
@@ -954,7 +956,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 355,
+    y: 368,
     width: 70,
     height: 13,
 
@@ -967,7 +969,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 340,
+    y: 355,
     width: 135,
     height: 13,
 
@@ -980,7 +982,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 340,
+    y: 355,
     width: 70,
     height: 13,
 
@@ -993,7 +995,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 328,
+    y: 340,
     width: 135,
     height: 13,
 
@@ -1006,7 +1008,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 328,
+    y: 340,
     width: 70,
     height: 13,
 
@@ -1019,7 +1021,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 314,
+    y: 325,
     width: 135,
     height: 13,
 
@@ -1032,7 +1034,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 314,
+    y: 325,
     width: 70,
     height: 13,
 
@@ -1045,7 +1047,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 300,
+    y: 311,
     width: 135,
     height: 13,
 
@@ -1058,7 +1060,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 300,
+    y: 311,
     width: 70,
     height: 13,
 
@@ -1071,7 +1073,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 285,
+    y: 298,
     width: 135,
     height: 13,
 
@@ -1084,7 +1086,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 285,
+    y: 298,
     width: 70,
     height: 13,
 
@@ -1097,7 +1099,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 330,
-    y: 273,
+    y: 285,
     width: 135,
     height: 13,
 
@@ -1110,21 +1112,23 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 273,
+    y: 285,
     width: 70,
     height: 13,
 
     marginHeight: 64,
     marginWidth: -15,
     fontSize: 0.6
-  },
-  //EDUCATIONAL Background elementary
+  }
+]
+
+export const educationalBackgroundFields: FormField[] = [
   {
     name: 'elementary',
     type: 'text',
     page: 1,
     x: 145,
-    y: 198,
+    y: 214,
     width: 112,
     height: 18,
 
@@ -1137,7 +1141,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 260,
-    y: 198,
+    y: 214,
     width: 104,
     height: 18,
 
@@ -1150,7 +1154,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 365,
-    y: 198,
+    y: 214,
     width: 28,
     height: 18,
 
@@ -1163,7 +1167,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 394,
-    y: 198,
+    y: 214,
     width: 28,
     height: 18,
 
@@ -1176,7 +1180,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 424,
-    y: 198,
+    y: 214,
     width: 40,
     height: 18,
 
@@ -1189,7 +1193,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 198,
+    y: 214,
     width: 34,
     height: 18,
 
@@ -1202,7 +1206,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 500,
-    y: 198,
+    y: 214,
     width: 34,
     height: 18,
 
@@ -1216,7 +1220,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 178,
+    y: 195,
     width: 112,
     height: 18,
 
@@ -1229,7 +1233,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 260,
-    y: 178,
+    y: 195,
     width: 104,
     height: 18,
 
@@ -1242,7 +1246,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 365,
-    y: 178,
+    y: 195,
     width: 28,
     height: 18,
 
@@ -1255,7 +1259,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 394,
-    y: 178,
+    y: 195,
     width: 28,
     height: 18,
 
@@ -1268,7 +1272,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 424,
-    y: 178,
+    y: 195,
     width: 40,
     height: 18,
 
@@ -1281,7 +1285,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 178,
+    y: 195,
     width: 34,
     height: 18,
 
@@ -1294,7 +1298,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 500,
-    y: 178,
+    y: 195,
     width: 34,
     height: 18,
 
@@ -1308,7 +1312,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 160,
+    y: 178,
     width: 112,
     height: 18,
 
@@ -1321,7 +1325,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 260,
-    y: 160,
+    y: 178,
     width: 104,
     height: 18,
 
@@ -1334,7 +1338,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 365,
-    y: 160,
+    y: 178,
     width: 28,
     height: 18,
 
@@ -1347,7 +1351,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 394,
-    y: 160,
+    y: 178,
     width: 28,
     height: 18,
 
@@ -1360,7 +1364,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 424,
-    y: 160,
+    y: 178,
     width: 40,
     height: 18,
 
@@ -1373,7 +1377,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 160,
+    y: 178,
     width: 34,
     height: 18,
 
@@ -1386,7 +1390,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 500,
-    y: 160,
+    y: 178,
     width: 34,
     height: 18,
 
@@ -1400,7 +1404,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 140,
+    y: 160,
     width: 112,
     height: 18,
 
@@ -1413,7 +1417,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 260,
-    y: 140,
+    y: 160,
     width: 104,
     height: 18,
 
@@ -1426,7 +1430,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 365,
-    y: 140,
+    y: 160,
     width: 28,
     height: 18,
 
@@ -1439,7 +1443,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 394,
-    y: 140,
+    y: 160,
     width: 28,
     height: 18,
 
@@ -1452,7 +1456,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 424,
-    y: 140,
+    y: 160,
     width: 40,
     height: 18,
 
@@ -1465,7 +1469,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 140,
+    y: 160,
     width: 34,
     height: 18,
 
@@ -1478,7 +1482,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 500,
-    y: 140,
+    y: 160,
     width: 34,
     height: 18,
 
@@ -1492,7 +1496,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 145,
-    y: 122,
+    y: 140,
     width: 112,
     height: 18,
 
@@ -1505,7 +1509,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 260,
-    y: 122,
+    y: 140,
     width: 104,
     height: 18,
 
@@ -1518,7 +1522,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 365,
-    y: 122,
+    y: 140,
     width: 28,
     height: 18,
 
@@ -1531,7 +1535,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 394,
-    y: 122,
+    y: 140,
     width: 28,
     height: 18,
 
@@ -1544,7 +1548,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 424,
-    y: 122,
+    y: 140,
     width: 40,
     height: 18,
 
@@ -1557,7 +1561,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 465,
-    y: 122,
+    y: 140,
     width: 34,
     height: 18,
 
@@ -1570,21 +1574,24 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 1,
     x: 500,
-    y: 122,
+    y: 140,
     width: 34,
     height: 18,
 
     marginHeight: 64,
     marginWidth: -14,
     fontSize: 0.4
-  },
+  }
+]
+
+export const otherStaticFields: FormField[] = [
   //PAGE 1 DATE
   {
     name: 'date',
     type: 'text',
     page: 1,
     x: 423,
-    y: 95,
+    y: 112,
     width: 110,
     height: 18,
 
@@ -1593,13 +1600,27 @@ export const formFields: FormField[] = [
     fontSize: 0.6
   },
 
-  //PAGE 3 DATE
   {
     name: 'date2',
     type: 'text',
+    page: 2,
+    x: 388,
+    y: 122,
+    width: 140,
+    height: 16,
+
+    marginHeight: 50,
+    marginWidth: -10,
+    fontSize: 0.6
+  },
+
+  //PAGE 3 DATE
+  {
+    name: 'date3',
+    type: 'text',
     page: 3,
     x: 418,
-    y: 92,
+    y: 110,
     width: 116,
     height: 16,
 
@@ -1613,7 +1634,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 365,
-    y: 774,
+    y: 785,
     width: 10,
     height: 10,
 
@@ -1625,7 +1646,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 415,
-    y: 774,
+    y: 785,
     width: 10,
     height: 10,
 
@@ -1637,7 +1658,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 365,
-    y: 762,
+    y: 770,
     width: 10,
     height: 10,
 
@@ -1649,7 +1670,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 415,
-    y: 762,
+    y: 770,
     width: 10,
     height: 10,
 
@@ -1661,7 +1682,7 @@ export const formFields: FormField[] = [
     type: 'textarea',
     page: 4,
     x: 370,
-    y: 740,
+    y: 758,
     width: 155,
     height: 16,
 
@@ -1676,7 +1697,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 365,
-    y: 725,
+    y: 735,
     width: 10,
     height: 10,
 
@@ -1688,7 +1709,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 415,
-    y: 725,
+    y: 735,
     width: 10,
     height: 10,
 
@@ -1700,7 +1721,7 @@ export const formFields: FormField[] = [
     type: 'textarea',
     page: 4,
     x: 370,
-    y: 700,
+    y: 720,
     width: 155,
     height: 16,
 
@@ -1713,7 +1734,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 365,
-    y: 685,
+    y: 695,
     width: 10,
     height: 10,
 
@@ -1725,7 +1746,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 418,
-    y: 685,
+    y: 695,
     width: 10,
     height: 10,
 
@@ -1737,7 +1758,7 @@ export const formFields: FormField[] = [
     type: 'textarea',
     page: 4,
     x: 420,
-    y: 662,
+    y: 680,
     width: 110,
     height: 16,
 
@@ -1750,7 +1771,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 4,
     x: 420,
-    y: 650,
+    y: 670,
     width: 110,
     height: 16,
 
@@ -1765,7 +1786,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 365,
-    y: 635,
+    y: 645,
     width: 10,
     height: 10,
 
@@ -1777,7 +1798,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 420,
-    y: 635,
+    y: 645,
     width: 10,
     height: 10,
 
@@ -1789,7 +1810,7 @@ export const formFields: FormField[] = [
     type: 'textarea',
     page: 4,
     x: 370,
-    y: 612,
+    y: 630,
     width: 160,
     height: 16,
 
@@ -1804,7 +1825,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 363,
-    y: 598,
+    y: 608,
     width: 10,
     height: 10,
 
@@ -1816,7 +1837,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 420,
-    y: 598,
+    y: 608,
     width: 10,
     height: 10,
 
@@ -1828,7 +1849,7 @@ export const formFields: FormField[] = [
     type: 'textarea',
     page: 4,
     x: 368,
-    y: 580,
+    y: 600,
     width: 160,
     height: 16,
 
@@ -1843,7 +1864,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 365,
-    y: 565,
+    y: 575,
     width: 10,
     height: 10,
 
@@ -1855,7 +1876,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 425,
-    y: 565,
+    y: 575,
     width: 10,
     height: 10,
 
@@ -1867,7 +1888,7 @@ export const formFields: FormField[] = [
     type: 'textarea',
     page: 4,
     x: 425,
-    y: 555,
+    y: 570,
     width: 100,
     height: 12,
 
@@ -1880,7 +1901,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 364,
-    y: 542,
+    y: 550,
     width: 10,
     height: 10,
 
@@ -1892,7 +1913,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 425,
-    y: 540,
+    y: 550,
     width: 10,
     height: 10,
 
@@ -1904,7 +1925,7 @@ export const formFields: FormField[] = [
     type: 'textarea',
     page: 4,
     x: 422,
-    y: 530,
+    y: 542,
     width: 100,
     height: 12,
 
@@ -1918,7 +1939,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 364,
-    y: 514,
+    y: 524,
     width: 10,
     height: 10,
 
@@ -1930,7 +1951,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 425,
-    y: 515,
+    y: 524,
     width: 10,
     height: 10,
 
@@ -1942,7 +1963,7 @@ export const formFields: FormField[] = [
     type: 'textarea',
     page: 4,
     x: 370,
-    y: 495,
+    y: 510,
     width: 160,
     height: 16,
 
@@ -1956,7 +1977,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 363,
-    y: 456,
+    y: 465,
     width: 10,
     height: 10,
 
@@ -1968,7 +1989,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 425,
-    y: 456,
+    y: 465,
     width: 10,
     height: 10,
 
@@ -1980,7 +2001,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 4,
     x: 454,
-    y: 450,
+    y: 462,
     width: 75,
     height: 16,
 
@@ -1993,7 +2014,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 364,
-    y: 435,
+    y: 445,
     width: 10,
     height: 10,
 
@@ -2005,7 +2026,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 424,
-    y: 435,
+    y: 445,
     width: 10,
     height: 10,
 
@@ -2017,7 +2038,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 4,
     x: 455,
-    y: 428,
+    y: 440,
     width: 73,
     height: 14,
 
@@ -2030,7 +2051,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 364,
-    y: 415,
+    y: 425,
     width: 10,
     height: 10,
 
@@ -2042,7 +2063,7 @@ export const formFields: FormField[] = [
     type: 'checkbox',
     page: 4,
     x: 425,
-    y: 415,
+    y: 425,
     width: 10,
     height: 10,
 
@@ -2054,7 +2075,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 4,
     x: 455,
-    y: 410,
+    y: 422,
     width: 75,
     height: 14,
 
@@ -2069,7 +2090,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 4,
     x: 125,
-    y: 226,
+    y: 240,
     width: 105,
     height: 14,
 
@@ -2082,7 +2103,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 4,
     x: 125,
-    y: 210,
+    y: 225,
     width: 105,
     height: 14,
 
@@ -2095,7 +2116,7 @@ export const formFields: FormField[] = [
     type: 'text',
     page: 4,
     x: 125,
-    y: 195,
+    y: 208,
     width: 105,
     height: 14,
 
@@ -2241,7 +2262,7 @@ export const eligibilityFieldTemplate: DynamicFieldTemplate = {
 
 export const workExperienceFieldTemplate: DynamicFieldTemplate = {
   page: 2,
-  startY: 575,
+  startY: 592,
   rowHeight: 16.5,
   columns: [
     {

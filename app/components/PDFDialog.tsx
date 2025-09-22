@@ -13,7 +13,10 @@ import {
 import { Document, Page, pdfjs } from 'react-pdf'
 import { Plus } from 'lucide-react'
 import {
-  formFields,
+  personalInfoFields,
+  familyBackgroundFields,
+  educationalBackgroundFields,
+  otherStaticFields,
   PDF_A4_WIDTH,
   PDF_A4_HEIGHT,
   eligibilityFieldTemplate,
@@ -27,7 +30,8 @@ import {
   type VoluntaryWork,
   type LearningAndDevelopment,
   type OtherInformation,
-  type References
+  type References,
+  type FormField
 } from '../helpers/pds-form-fields'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import { Button } from '@/components/ui/button'
@@ -35,17 +39,33 @@ import { CustomButton } from '@/components/custom/CustomButton'
 import { useShallow } from 'zustand/react/shallow'
 import { useUserDialog } from '@/services/auth/states/user-dialog'
 
-type FormData = Record<string, string | boolean>
-
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url
 ).toString()
 
+const personalInfoNames = new Set(personalInfoFields.map((f) => f.name))
+const familyBackgroundNames = new Set(familyBackgroundFields.map((f) => f.name))
+const educationalBackgroundNames = new Set(
+  educationalBackgroundFields.map((f) => f.name)
+)
+
 export function UpdatePDFDialog(): JSX.Element {
   const [numPages, setNumPages] = useState<number | null>(null)
-  const [formData, setFormData] = useState<FormData>({})
   const [scale, setScale] = useState(1.0)
+
+  const [personalInfoData, setPersonalInfoData] = useState<
+    Record<string, string | boolean>
+  >({})
+  const [familyBackgroundData, setFamilyBackgroundData] = useState<
+    Record<string, string | boolean>
+  >({})
+  const [educationalBackgroundData, setEducationalBackgroundData] = useState<
+    Record<string, string | boolean>
+  >({})
+  const [otherStaticData, setOtherStaticData] = useState<
+    Record<string, string | boolean>
+  >({})
 
   // --- STATES FOR DYNAMIC DATA ---
   const [eligibilities, setEligibilities] = useState<Eligibility[]>([
@@ -107,6 +127,24 @@ export function UpdatePDFDialog(): JSX.Element {
       telNo: ''
     }
   ])
+
+  const handleStaticFieldChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = e.target
+    const checked = (e.target as HTMLInputElement).checked
+    const fieldValue = type === 'checkbox' ? checked : value
+
+    if (personalInfoNames.has(name)) {
+      setPersonalInfoData((prev) => ({ ...prev, [name]: fieldValue }))
+    } else if (familyBackgroundNames.has(name)) {
+      setFamilyBackgroundData((prev) => ({ ...prev, [name]: fieldValue }))
+    } else if (educationalBackgroundNames.has(name)) {
+      setEducationalBackgroundData((prev) => ({ ...prev, [name]: fieldValue }))
+    } else {
+      setOtherStaticData((prev) => ({ ...prev, [name]: fieldValue }))
+    }
+  }
 
   const addReferencesRow = () => {
     setReferences([
@@ -290,14 +328,6 @@ export function UpdatePDFDialog(): JSX.Element {
     setNumPages(numPages)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
-  }
-
   const pageWrapperRef = useCallback((node: HTMLDivElement | null) => {
     if (node) {
       const updateScale = () => {
@@ -311,88 +341,99 @@ export function UpdatePDFDialog(): JSX.Element {
   }, [])
 
   // --- RENDER FUNCTIONS ---
-  const renderFormFields = (pageNumber: number) => {
-    const fieldsForPage = formFields.filter(
-      (field) => field.page === pageNumber
-    )
-    return fieldsForPage.map((field) => {
-      const top = (PDF_A4_HEIGHT - field.y - field.height) * scale
-      const left = field.x * scale
-      const width = field.width * scale
-      const height = field.height * scale
-      const fontSize =
-        field.type === 'text' ? height * field.fontSize : height * 0.6
+  const renderStaticFields = (
+    pageNumber: number,
+    fields: FormField[],
+    data: Record<string, any>
+  ) => {
+    return fields
+      .filter((field) => field.page === pageNumber)
+      .map((field) => {
+        const top = (PDF_A4_HEIGHT - field.y) * scale
+        const left = field.x * scale
+        const width = field.width * scale
+        const height = field.height * scale
+        const fontSize =
+          field.type === 'text' ? height * field.fontSize : height * 0.6
 
-      const commonProps = {
-        name: field.name,
-        style: {
-          position: 'absolute',
-          top: `${top}px`,
-          left: `${left}px`,
-          width: `${width}px`,
-          height: `${height}px`,
-          fontSize: `${fontSize}px`,
-          zIndex: 10
-        } as React.CSSProperties
-      }
-
-      if (field.type === 'checkbox') {
-        return (
-          <input
-            key={field.name}
-            type='checkbox'
-            checked={(formData[field.name] as boolean) || false}
-            onChange={handleInputChange}
-            {...commonProps}
-            style={{
-              ...commonProps.style,
-              outline: '1px solid rgba(0, 150, 255, 0.5)',
-              backgroundColor: 'rgba(0, 150, 255, 0.1)'
-            }}
-          />
-        )
-      }
-
-      return (
-        <input
-          key={field.name}
-          type='text'
-          value={(formData[field.name] as string) || ''}
-          onChange={handleInputChange}
-          {...commonProps}
-          style={{
-            ...commonProps.style,
+        const commonProps = {
+          key: field.name,
+          name: field.name,
+          style: {
+            position: 'absolute',
+            top: `${top}px`,
+            left: `${left}px`,
+            width: `${width}px`,
+            height: `${height}px`,
+            fontSize: `${fontSize}px`,
+            zIndex: 10,
             border: 'none',
             outline: '1px solid rgba(0, 150, 255, 0.5)',
             backgroundColor: 'rgba(0, 150, 255, 0.1)',
             boxSizing: 'border-box'
-          }}
-        />
-      )
-    })
+          } as React.CSSProperties
+        }
+
+        if (field.type === 'checkbox') {
+          return (
+            <input
+              type='checkbox'
+              {...commonProps}
+              checked={(data[field.name] as boolean) || false}
+              onChange={handleStaticFieldChange}
+            />
+          )
+        }
+
+        if (field.type === 'textarea') {
+          return (
+            <textarea
+              {...commonProps}
+              value={(data[field.name] as string) || ''}
+              onChange={handleStaticFieldChange}
+              style={{
+                ...commonProps.style,
+                resize: 'none',
+                padding: `${2 * scale}px`
+              }}
+            />
+          )
+        }
+
+        return (
+          <input
+            type='text'
+            {...commonProps}
+            value={(data[field.name] as string) || ''}
+            onChange={handleStaticFieldChange}
+          />
+        )
+      })
   }
 
-  const renderReferencesFields = (pageNumber: number) => {
-    if (pageNumber !== referencesFieldTemplate.page) return null
-    return references.map((info, index) => {
-      const yPos =
-        referencesFieldTemplate.startY -
-        index * referencesFieldTemplate.rowHeight
-
-      return referencesFieldTemplate.columns.map((column, colIndex) => {
+  const renderDynamicFields = (
+    pageNumber: number,
+    template: any,
+    data: any[],
+    changeHandler: any,
+    removeHandler: any
+  ) => {
+    if (pageNumber !== template.page) return null
+    return data.map((item, index) => {
+      const yPos = template.startY - index * template.rowHeight
+      return template.columns.map((column, colIndex) => {
         const top = (PDF_A4_HEIGHT - yPos) * scale
-        const height = (referencesFieldTemplate.rowHeight - 2) * scale
+        const height = (template.rowHeight - 2) * scale
         const left = column.x * scale
         const width = column.width * scale
-        const fontSize = height * column.fontSize
-
+        const fontSize = (template.fontSize || 8) * scale
         return (
           <Fragment key={`${column.name}-${index}`}>
             <input
               type='text'
               name={column.name}
-              value={info[column.name as keyof References]}
-              onChange={(e) => handleReferencesChange(index, e)}
+              value={item[column.name]}
+              onChange={(e) => changeHandler(index, e)}
               style={{
                 position: 'absolute',
                 top: `${top}px`,
@@ -409,196 +450,12 @@ export function UpdatePDFDialog(): JSX.Element {
                 alignItems: 'center'
               }}
             />
-            {references.length > 1 &&
-              colIndex === referencesFieldTemplate.columns.length - 1 && (
-                <button
-                  onClick={() => removeReferencesRow(index)}
-                  className='absolute z-20 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-700'
-                  style={{
-                    top: `${top + height * 0}px`,
-                    left: `${left + width + 5 * scale}px`,
-                    width: `${height}px`,
-                    height: `${height}px`,
-                    fontSize: `${height * 0.6}px`,
-                    lineHeight: '1',
-                    cursor: 'pointer'
-                  }}
-                >
-                  -
-                </button>
-              )}
-          </Fragment>
-        )
-      })
-    })
-  }
-
-  const renderOtherInformationFields = (pageNumber: number) => {
-    if (pageNumber !== otherInformationFieldTemplate.page) return null
-    return otherInformation.map((info, index) => {
-      const yPos =
-        otherInformationFieldTemplate.startY -
-        index * otherInformationFieldTemplate.rowHeight
-
-      return otherInformationFieldTemplate.columns.map((column, colIndex) => {
-        const top = (PDF_A4_HEIGHT - yPos) * scale
-        const height = (otherInformationFieldTemplate.rowHeight - 2) * scale
-        const left = column.x * scale
-        const width = column.width * scale
-        const fontSize = height * column.fontSize
-
-        return (
-          <Fragment key={`${column.name}-${index}`}>
-            <input
-              type='text'
-              name={column.name}
-              value={info[column.name as keyof OtherInformation]}
-              onChange={(e) => handleOtherInformationChange(index, e)}
-              style={{
-                position: 'absolute',
-                top: `${top}px`,
-                left: `${left}px`,
-                width: `${width}px`,
-                height: `${height}px`,
-                fontSize: `${fontSize}px`,
-                zIndex: 10,
-                border: 'none',
-                outline: '1px solid rgba(0, 150, 255, 0.5)',
-                backgroundColor: 'rgba(0, 150, 255, 0.1)',
-                boxSizing: 'border-box',
-                display: 'flex',
-                alignItems: 'center'
-              }}
-            />
-            {otherInformation.length > 1 &&
-              colIndex === otherInformationFieldTemplate.columns.length - 1 && (
-                <button
-                  onClick={() => removeOtherInformationRow(index)}
-                  className='absolute z-20 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-700'
-                  style={{
-                    top: `${top + height * 0}px`,
-                    left: `${left + width + 5 * scale}px`,
-                    width: `${height}px`,
-                    height: `${height}px`,
-                    fontSize: `${height * 0.6}px`,
-                    lineHeight: '1',
-                    cursor: 'pointer'
-                  }}
-                >
-                  -
-                </button>
-              )}
-          </Fragment>
-        )
-      })
-    })
-  }
-
-  const renderEligibilityFields = (pageNumber: number) => {
-    if (pageNumber !== eligibilityFieldTemplate.page) return null
-    return eligibilities.map((eligibility, index) => {
-      const yPos =
-        eligibilityFieldTemplate.startY -
-        index * eligibilityFieldTemplate.rowHeight
-
-      return eligibilityFieldTemplate.columns.map((column, colIndex) => {
-        const top = (PDF_A4_HEIGHT - yPos) * scale
-        const height = (eligibilityFieldTemplate.rowHeight - 2) * scale
-        const left = column.x * scale
-        const width = column.width * scale
-        const fontSize = height * column.fontSize
-
-        return (
-          <Fragment key={`${column.name}-${index}`}>
-            <input
-              type='text'
-              name={column.name}
-              value={eligibility[column.name as keyof Eligibility]}
-              onChange={(e) => handleEligibilityChange(index, e)}
-              style={{
-                position: 'absolute',
-                top: `${top}px`,
-                left: `${left}px`,
-                width: `${width}px`,
-                height: `${height}px`,
-                fontSize: `${fontSize}px`,
-                zIndex: 10,
-                border: 'none',
-                outline: '1px solid rgba(0, 150, 255, 0.5)',
-                backgroundColor: 'rgba(0, 150, 255, 0.1)',
-                boxSizing: 'border-box',
-                display: 'flex',
-                alignItems: 'center'
-              }}
-            />
-            {eligibilities.length > 1 &&
-              colIndex === eligibilityFieldTemplate.columns.length - 1 && (
-                <button
-                  onClick={() => removeEligibilityRow(index)}
-                  className='absolute z-20 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-700'
-                  style={{
-                    top: `${top + height * 0}px`,
-                    left: `${left + width + 5 * scale}px`,
-                    width: `${height}px`,
-                    height: `${height}px`,
-                    fontSize: `${height * 0.6}px`,
-                    lineHeight: '1',
-                    cursor: 'pointer'
-                  }}
-                >
-                  -
-                </button>
-              )}
-          </Fragment>
-        )
-      })
-    })
-  }
-
-  const renderWorkExperienceFields = (pageNumber: number) => {
-    if (pageNumber !== workExperienceFieldTemplate.page) return null
-
-    return workExperiences.map((experience, index) => {
-      const yPos =
-        workExperienceFieldTemplate.startY -
-        index * workExperienceFieldTemplate.rowHeight
-
-      return workExperienceFieldTemplate.columns.map((column) => {
-        const top =
-          (PDF_A4_HEIGHT - yPos - workExperienceFieldTemplate.rowHeight) * scale
-        const left = column.x * scale
-        const width = column.width * scale
-        const height = (workExperienceFieldTemplate.rowHeight - 2) * scale
-        const fontSize = height * column.fontSize
-
-        return (
-          <Fragment key={`${column.name}-${index}`}>
-                       {' '}
-            <input
-              type='text'
-              name={column.name}
-              value={experience[column.name as keyof WorkExperience]}
-              onChange={(e) => handleWorkExperienceChange(index, e)}
-              style={{
-                position: 'absolute',
-                top: `${top}px`,
-                left: `${left}px`,
-                width: `${width}px`,
-                height: `${height}px`,
-                fontSize: `${fontSize}px`,
-                zIndex: 10,
-                border: 'none',
-                outline: '1px solid rgba(0, 150, 255, 0.5)',
-                backgroundColor: 'rgba(0, 150, 255, 0.1)',
-                boxSizing: 'border-box'
-              }}
-            />
-            {workExperiences.length > 1 && column.name === 'govtService' && (
+            {data.length > 1 && colIndex === template.columns.length - 1 && (
               <button
-                onClick={() => removeWorkExperienceRow(index)}
+                onClick={() => removeHandler(index)}
                 className='absolute z-20 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-700'
                 style={{
-                  top: `${top + height * 0}px`,
+                  top: `${top + height * 0.1}px`,
                   left: `${left + width + 5 * scale}px`,
                   width: `${height}px`,
                   height: `${height}px`,
@@ -616,138 +473,17 @@ export function UpdatePDFDialog(): JSX.Element {
     })
   }
 
-  const renderVoluntaryWorkFields = (pageNumber: number) => {
-    if (pageNumber !== voluntaryWorkFieldTemplate.page) return null
-    return voluntaryWorks.map((voluntaryWork, index) => {
-      const yPos =
-        voluntaryWorkFieldTemplate.startY -
-        index * voluntaryWorkFieldTemplate.rowHeight
-      return voluntaryWorkFieldTemplate.columns.map((column, colIndex) => {
-        const top = (PDF_A4_HEIGHT - yPos) * scale
-        const height = (voluntaryWorkFieldTemplate.rowHeight - 2) * scale
-        const left = column.x * scale
-        const width = column.width * scale
-        const fontSize = height * column.fontSize
-
-        return (
-          <Fragment key={`${column.name}-${index}`}>
-            <input
-              type='text'
-              name={column.name}
-              value={voluntaryWork[column.name as keyof VoluntaryWork]}
-              onChange={(e) => handleVoluntaryWorkChange(index, e)}
-              style={{
-                position: 'absolute',
-                top: `${top}px`,
-                left: `${left}px`,
-                width: `${width}px`,
-                height: `${height}px`,
-                fontSize: `${fontSize}px`,
-                zIndex: 10,
-                border: 'none',
-                outline: '1px solid rgba(0, 150, 255, 0.5)',
-                backgroundColor: 'rgba(0, 150, 255, 0.1)',
-                boxSizing: 'border-box',
-                display: 'flex',
-                alignItems: 'center'
-              }}
-            />
-            {voluntaryWorks.length > 1 &&
-              colIndex === voluntaryWorkFieldTemplate.columns.length - 1 && (
-                <button
-                  onClick={() => removeVoluntaryWorkRow(index)}
-                  className='absolute z-20 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-700'
-                  style={{
-                    top: `${top + height * 0.1}px`,
-                    left: `${left + width + 5 * scale}px`,
-                    width: `${height}px`,
-                    height: `${height}px`,
-                    fontSize: `${height * 0.6}px`,
-                    lineHeight: '1',
-                    cursor: 'pointer'
-                  }}
-                >
-                  -
-                </button>
-              )}
-          </Fragment>
-        )
-      })
-    })
-  }
-
-  const renderLdFields = (pageNumber: number) => {
-    if (pageNumber !== learningAndDevelopmentFieldTemplate.page) return null
-    return learningAndDevelopment.map((ld, index) => {
-      const yPos =
-        learningAndDevelopmentFieldTemplate.startY -
-        index * learningAndDevelopmentFieldTemplate.rowHeight
-      return learningAndDevelopmentFieldTemplate.columns.map(
-        (column, colIndex) => {
-          const top = (PDF_A4_HEIGHT - yPos) * scale
-          const height =
-            (learningAndDevelopmentFieldTemplate.rowHeight - 2) * scale
-          const left = column.x * scale
-          const width = column.width * scale
-          const fontSize = height * column.fontSize
-
-          return (
-            <Fragment key={`${column.name}-${index}`}>
-              <input
-                type='text'
-                name={column.name}
-                value={ld[column.name as keyof LearningAndDevelopment]}
-                onChange={(e) => handleLdChange(index, e)}
-                style={{
-                  position: 'absolute',
-                  top: `${top}px`,
-                  left: `${left}px`,
-                  width: `${width}px`,
-                  height: `${height}px`,
-                  fontSize: `${fontSize}px`,
-                  zIndex: 10,
-                  border: 'none',
-                  outline: '1px solid rgba(0, 150, 255, 0.5)',
-                  backgroundColor: 'rgba(0, 150, 255, 0.1)',
-                  boxSizing: 'border-box',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-              />
-              {learningAndDevelopment.length > 1 &&
-                colIndex ===
-                  learningAndDevelopmentFieldTemplate.columns.length - 1 && (
-                  <button
-                    onClick={() => removeLdRow(index)}
-                    className='absolute z-20 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-700'
-                    style={{
-                      top: `${top + height * 0.1}px`,
-                      left: `${left + width + 5 * scale}px`,
-                      width: `${height}px`,
-                      height: `${height}px`,
-                      fontSize: `${height * 0.6}px`,
-                      lineHeight: '1',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    -
-                  </button>
-                )}
-            </Fragment>
-          )
-        }
-      )
-    })
-  }
-
   // --- Save Handler ---
   const handleSave = async () => {
     try {
-      const response = await fetch('/api/protected/pdf', {
+      const response = await fetch('/api/protected/pds', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
+          personalInfoData,
+          familyBackgroundData,
+          educationalBackgroundData,
+          otherStaticData,
           eligibilities,
           workExperiences,
           voluntaryWorks,
@@ -815,13 +551,69 @@ export function UpdatePDFDialog(): JSX.Element {
                   renderTextLayer={true}
                 />
 
-                {renderFormFields(index + 1)}
-                {renderEligibilityFields(index + 1)}
-                {renderWorkExperienceFields(index + 1)}
-                {renderVoluntaryWorkFields(index + 1)}
-                {renderLdFields(index + 1)}
-                {renderOtherInformationFields(index + 1)}
-                {renderReferencesFields(index + 1)}
+                {renderStaticFields(
+                  index + 1,
+                  personalInfoFields,
+                  personalInfoData
+                )}
+                {renderStaticFields(
+                  index + 1,
+                  familyBackgroundFields,
+                  familyBackgroundData
+                )}
+                {renderStaticFields(
+                  index + 1,
+                  educationalBackgroundFields,
+                  educationalBackgroundData
+                )}
+                {renderStaticFields(
+                  index + 1,
+                  otherStaticFields,
+                  otherStaticData
+                )}
+
+                {renderDynamicFields(
+                  index + 1,
+                  eligibilityFieldTemplate,
+                  eligibilities,
+                  handleEligibilityChange,
+                  removeEligibilityRow
+                )}
+                {renderDynamicFields(
+                  index + 1,
+                  workExperienceFieldTemplate,
+                  workExperiences,
+                  handleWorkExperienceChange,
+                  removeWorkExperienceRow
+                )}
+                {renderDynamicFields(
+                  index + 1,
+                  voluntaryWorkFieldTemplate,
+                  voluntaryWorks,
+                  handleVoluntaryWorkChange,
+                  removeVoluntaryWorkRow
+                )}
+                {renderDynamicFields(
+                  index + 1,
+                  learningAndDevelopmentFieldTemplate,
+                  learningAndDevelopment,
+                  handleLdChange,
+                  removeLdRow
+                )}
+                {renderDynamicFields(
+                  index + 1,
+                  otherInformationFieldTemplate,
+                  otherInformation,
+                  handleOtherInformationChange,
+                  removeOtherInformationRow
+                )}
+                {renderDynamicFields(
+                  index + 1,
+                  referencesFieldTemplate,
+                  references,
+                  handleReferencesChange,
+                  removeReferencesRow
+                )}
 
                 {index + 1 === eligibilityFieldTemplate.page && (
                   <button
