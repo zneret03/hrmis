@@ -15,6 +15,8 @@ import {
   referencesFieldTemplate,
   type DynamicFieldTemplate
 } from '@/app/helpers/pds-form-fields'
+import { createClient } from '@/config'
+import { generalErrorResponse } from '../../helpers/response'
 
 const drawCheckmark = (
   page: PDFPage,
@@ -44,6 +46,7 @@ const drawCheckmark = (
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    const supabase = await createClient()
 
     const {
       eligibilities,
@@ -83,6 +86,17 @@ export async function POST(request: Request) {
       ...familyBackgroundData,
       ...educationalBackgroundData,
       ...otherStaticData
+    }
+
+    const toDb = {
+      personal_information: personalInfoData,
+      family_background: familyBackgroundData,
+      educational_background: educationalBackgroundData,
+      civil_service_eligibility: eligibilities,
+      work_experience: workExperiences,
+      voluntary_work: voluntaryWorks,
+      training_programs: learningAndDevelopment,
+      other_information: otherStaticData
     }
 
     for (const field of formFields) {
@@ -153,6 +167,12 @@ export async function POST(request: Request) {
     drawDynamicRows(referencesFieldTemplate, references)
 
     const filledPdfBytes = await pdfDoc.save()
+
+    const { error } = await supabase.from('pds').upsert(toDb)
+
+    if (error) {
+      return generalErrorResponse({ error: error.message })
+    }
 
     return new NextResponse(filledPdfBytes, {
       status: 200,
