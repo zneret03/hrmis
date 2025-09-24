@@ -25,7 +25,6 @@ export const uploadCSVOrBatFile = async (file: File, type: UploadType) => {
     })
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      console.log(e)
       if (
         e.response?.data.error ===
         'insert or update on table \"biometrics\" violates foreign key constraint \"biometrics_employee_id_fkey\"'

@@ -190,7 +190,14 @@ export function AddUserDialog(): JSX.Element {
             )}
           </div>
 
-          <Input title='Employee ID' isOptional {...register('employee_id')} />
+          <Input
+            title='Employee ID'
+            hasError={!!errors.employee_id}
+            errorMessage={errors.employee_id?.message}
+            {...register('employee_id', {
+              required: 'This field is required.'
+            })}
+          />
         </div>
 
         <div className='space-y-2'>

@@ -38,7 +38,7 @@ export const personalInfoFields: FormField[] = [
     y: 738,
     width: 390,
     height: 12,
-    marginHeight: 50,
+    marginHeight: 60,
     marginWidth: -10,
     fontSize: 0.6
   },
@@ -50,7 +50,7 @@ export const personalInfoFields: FormField[] = [
     y: 723,
     width: 275,
     height: 12,
-    marginHeight: 50,
+    marginHeight: 62,
     marginWidth: -10,
     fontSize: 0.6
   },
@@ -62,7 +62,7 @@ export const personalInfoFields: FormField[] = [
     y: 708,
     width: 390,
     height: 12,
-    marginHeight: 50,
+    marginHeight: 62,
     marginWidth: -10,
     fontSize: 0.6
   },
@@ -75,7 +75,7 @@ export const personalInfoFields: FormField[] = [
     width: 110,
     height: 12,
 
-    marginHeight: 50,
+    marginHeight: 62,
     marginWidth: -10,
     fontSize: 0.6
   },
@@ -88,7 +88,7 @@ export const personalInfoFields: FormField[] = [
     width: 112,
     height: 22,
 
-    marginHeight: 50,
+    marginHeight: 62,
     marginWidth: -10,
     fontSize: 0.6
   },
@@ -101,7 +101,7 @@ export const personalInfoFields: FormField[] = [
     width: 112,
     height: 15,
 
-    marginHeight: 50,
+    marginHeight: 62,
     marginWidth: -10,
     fontSize: 0.6
   },
@@ -113,8 +113,8 @@ export const personalInfoFields: FormField[] = [
     y: 650,
     width: 8,
     height: 8,
-    marginHeight: 52,
-    marginWidth: -10
+    marginHeight: 60,
+    marginWidth: -4
   },
   {
     name: 'sexFemale',

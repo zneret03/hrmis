@@ -39,6 +39,10 @@ import { CustomButton } from '@/components/custom/CustomButton'
 import { useShallow } from 'zustand/react/shallow'
 import { useUserDialog } from '@/services/auth/states/user-dialog'
 
+interface UpdatePDFDialog {
+  userId: string
+}
+
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url
@@ -50,7 +54,7 @@ const educationalBackgroundNames = new Set(
   educationalBackgroundFields.map((f) => f.name)
 )
 
-export function UpdatePDFDialog(): JSX.Element {
+export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   const [numPages, setNumPages] = useState<number | null>(null)
   const [scale, setScale] = useState(1.0)
 
@@ -127,6 +131,10 @@ export function UpdatePDFDialog(): JSX.Element {
       telNo: ''
     }
   ])
+
+  const resetVariables = (): void => {
+    toggleOpen?.(false, null, null)
+  }
 
   const handleStaticFieldChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -489,7 +497,8 @@ export function UpdatePDFDialog(): JSX.Element {
           voluntaryWorks,
           learningAndDevelopment,
           otherInformation,
-          references
+          references,
+          userId
         })
       })
       if (!response.ok) throw new Error(`Server error: ${response.statusText}`)
@@ -502,6 +511,8 @@ export function UpdatePDFDialog(): JSX.Element {
       a.click()
       a.remove()
       window.URL.revokeObjectURL(url)
+
+      // resetVariables()
     } catch (error) {
       console.error('Failed to generate and download PDF:', error)
     }
@@ -524,7 +535,7 @@ export function UpdatePDFDialog(): JSX.Element {
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className='sm:max-w-[80rem] xl:max-h-[50rem] lg:max-h-[40rem] md:max-h-[30rem] sm:max-h-[20rem] overflow-auto'>
+      <DialogContent className='sm:max-w-[80rem] xl:max-h-[45rem] lg:max-h-[40rem] md:max-h-[30rem] sm:max-h-[20rem] overflow-auto'>
         <DialogHeader>
           <DialogTitle>Personal Data Sheet</DialogTitle>
           <DialogDescription>

@@ -49,10 +49,10 @@ export default async function PersonalManagement({
         {...{
           users: attendanceResponse.users,
           attendance: {
-            daysPresent: attendanceResponse.attendance.days_present,
-            daysAbsent: attendanceResponse.attendance.days_absent
+            daysPresent: attendanceResponse.attendance?.days_present,
+            daysAbsent: attendanceResponse.attendance?.days_absent
           },
-          credits: attendanceResponse.userCredits.credits,
+          credits: attendanceResponse.userCredits?.credits,
           isAdmin: false
         }}
       />
@@ -78,7 +78,7 @@ export default async function PersonalManagement({
 
       <FileLeaveDialog category={category.leave_categories} />
       <CancelLeaveDialog />
-      <UpdatePDFDialog />
+      <UpdatePDFDialog userId={userId} />
     </Container>
   )
 }

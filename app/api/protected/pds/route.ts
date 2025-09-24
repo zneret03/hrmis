@@ -58,7 +58,8 @@ export async function POST(request: Request) {
       personalInfoData,
       familyBackgroundData,
       educationalBackgroundData,
-      otherStaticData
+      otherStaticData,
+      userId
     } = body
 
     const pdfPath = path.join(
@@ -168,11 +169,14 @@ export async function POST(request: Request) {
 
     const filledPdfBytes = await pdfDoc.save()
 
-    const { error } = await supabase.from('pds').upsert(toDb)
-
-    if (error) {
-      return generalErrorResponse({ error: error.message })
-    }
+    // const { error } = await supabase
+    //   .from('pds')
+    //   .update(toDb)
+    //   .eq('user_id', userId)
+    //
+    // if (error) {
+    //   return generalErrorResponse({ error: error.message })
+    // }
 
     return new NextResponse(filledPdfBytes, {
       status: 200,
@@ -182,10 +186,6 @@ export async function POST(request: Request) {
       }
     })
   } catch (error) {
-    console.error('PDF generation failed:', error)
-    return NextResponse.json(
-      { error: 'Failed to generate PDF' },
-      { status: 500 }
-    )
+    return generalErrorResponse({ error: error })
   }
 }
