@@ -13,7 +13,13 @@ import {
   learningAndDevelopmentFieldTemplate,
   otherInformationFieldTemplate,
   referencesFieldTemplate,
-  type DynamicFieldTemplate
+  type DynamicFieldTemplate,
+  type Eligibility,
+  type WorkExperience,
+  type VoluntaryWork,
+  type LearningAndDevelopment,
+  type OtherInformation,
+  type References
 } from '@/app/helpers/pds-form-fields'
 import { createClient } from '@/config'
 import { generalErrorResponse } from '../../helpers/response'
@@ -89,17 +95,6 @@ export async function POST(request: Request) {
       ...otherStaticData
     }
 
-    const toDb = {
-      personal_information: personalInfoData,
-      family_background: familyBackgroundData,
-      educational_background: educationalBackgroundData,
-      civil_service_eligibility: eligibilities,
-      work_experience: workExperiences,
-      voluntary_work: voluntaryWorks,
-      training_programs: learningAndDevelopment,
-      other_information: otherStaticData
-    }
-
     for (const field of formFields) {
       if (formData[field.name]) {
         const page = pages[field.page - 1]
@@ -137,13 +132,22 @@ export async function POST(request: Request) {
       }
     }
 
-    const drawDynamicRows = (template: DynamicFieldTemplate, data: any[]) => {
+    const drawDynamicRows = (
+      template: DynamicFieldTemplate,
+      data:
+        | Eligibility
+        | WorkExperience
+        | VoluntaryWork
+        | LearningAndDevelopment
+        | OtherInformation
+        | References
+    ) => {
       if (data && Array.isArray(data) && data.length > 0) {
         const page = pages[template.page - 1]
         data.forEach((item, index) => {
           const yPos = template.startY - index * template.rowHeight
 
-          template.columns.map((column: any) => {
+          template.columns.map((column) => {
             const text = item[column.name]
 
             if (text) {
@@ -169,14 +173,45 @@ export async function POST(request: Request) {
 
     const filledPdfBytes = await pdfDoc.save()
 
-    // const { error } = await supabase
-    //   .from('pds')
-    //   .update(toDb)
-    //   .eq('user_id', userId)
-    //
-    // if (error) {
-    //   return generalErrorResponse({ error: error.message })
-    // }
+    const filePath = `${userId}/pds-form-${new Date().toISOString()}.pdf`
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('pds_documents')
+      .upload(filePath, filledPdfBytes, {
+        contentType: 'application/pdf',
+        upsert: true
+      })
+
+    const {
+      data: { publicUrl }
+    } = supabase.storage
+      .from('pds_documents')
+      .getPublicUrl(uploadData?.path as string)
+
+    if (uploadError) {
+      return generalErrorResponse({ error: uploadError.message })
+    }
+
+    const toDb = {
+      personal_information: personalInfoData,
+      family_background: familyBackgroundData,
+      educational_background: educationalBackgroundData,
+      civil_service_eligibility: eligibilities,
+      work_experience: workExperiences,
+      voluntary_work: voluntaryWorks,
+      training_programs: learningAndDevelopment,
+      other_information: otherStaticData,
+      file: publicUrl
+    }
+
+    const { error } = await supabase
+      .from('pds')
+      .update(toDb)
+      .eq('user_id', userId)
+
+    if (error) {
+      return generalErrorResponse({ error: error.message })
+    }
 
     return new NextResponse(filledPdfBytes, {
       status: 200,

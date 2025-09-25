@@ -38,8 +38,8 @@ export const personalInfoFields: FormField[] = [
     y: 738,
     width: 390,
     height: 12,
-    marginHeight: 60,
-    marginWidth: -10,
+    marginHeight: 62,
+    marginWidth: -8,
     fontSize: 0.6
   },
   {

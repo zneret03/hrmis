@@ -26,7 +26,8 @@ export const uploadImage = async (
   images: File[],
   supabase: SupabaseClient,
   id: string,
-  bucket = 'avatars'
+  bucket = 'avatars',
+  contentType = 'image/png'
 ): Promise<{ imageUrls: string[]; error: NextResponse }> => {
   const imageUrls: string[] = []
   let error: NextResponse | null = null
@@ -39,7 +40,7 @@ export const uploadImage = async (
       const { error: uploadError } = await supabase.storage
         .from(bucket)
         .upload(storageName, image, {
-          contentType: 'image/png'
+          contentType: contentType
         })
 
       if (uploadError?.message === 'The resource already exists') {

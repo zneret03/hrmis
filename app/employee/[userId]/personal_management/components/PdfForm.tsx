@@ -11,7 +11,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString()
 
-export default function PdfForm(): JSX.Element {
+interface PdfForm {
+  file: string
+}
+
+export default function PdfForm({ file }: PdfForm): JSX.Element {
   const [numPages, setNumPages] = useState<number | null>(null)
   const [pageNumber, setPageNumber] = useState<number>(1)
 
@@ -28,7 +32,7 @@ export default function PdfForm(): JSX.Element {
   return (
     <div className='relative'>
       <Document
-        file='/documents/pds-form.pdf'
+        file={file}
         noData={<EmptyPlaceholder />}
         onLoadSuccess={onDocumentLoadSuccess}
         onLoadError={(error) => onError(error.message)}

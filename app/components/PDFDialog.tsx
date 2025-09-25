@@ -33,11 +33,13 @@ import {
   type References,
   type FormField
 } from '../helpers/pds-form-fields'
+import { useRouter } from 'next/navigation'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import { Button } from '@/components/ui/button'
 import { CustomButton } from '@/components/custom/CustomButton'
 import { useShallow } from 'zustand/react/shallow'
 import { useUserDialog } from '@/services/auth/states/user-dialog'
+import { toast } from 'sonner'
 
 interface UpdatePDFDialog {
   userId: string
@@ -57,6 +59,8 @@ const educationalBackgroundNames = new Set(
 export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   const [numPages, setNumPages] = useState<number | null>(null)
   const [scale, setScale] = useState(1.0)
+
+  const router = useRouter()
 
   const [personalInfoData, setPersonalInfoData] = useState<
     Record<string, string | boolean>
@@ -134,6 +138,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
 
   const resetVariables = (): void => {
     toggleOpen?.(false, null, null)
+    router.refresh()
   }
 
   const handleStaticFieldChange = (
@@ -352,7 +357,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   const renderStaticFields = (
     pageNumber: number,
     fields: FormField[],
-    data: Record<string, any>
+    data: Record<string, string | boolean>
   ) => {
     return fields
       .filter((field) => field.page === pageNumber)
@@ -387,6 +392,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
             <input
               type='checkbox'
               {...commonProps}
+              key={field.name}
               checked={(data[field.name] as boolean) || false}
               onChange={handleStaticFieldChange}
             />
@@ -399,6 +405,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
               {...commonProps}
               value={(data[field.name] as string) || ''}
               onChange={handleStaticFieldChange}
+              key={field.name}
               style={{
                 ...commonProps.style,
                 resize: 'none',
@@ -412,6 +419,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
           <input
             type='text'
             {...commonProps}
+            key={field.name}
             value={(data[field.name] as string) || ''}
             onChange={handleStaticFieldChange}
           />
@@ -484,7 +492,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   // --- Save Handler ---
   const handleSave = async () => {
     try {
-      const response = await fetch('/api/protected/pds', {
+      await fetch('/api/protected/pds', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -501,18 +509,12 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
           userId
         })
       })
-      if (!response.ok) throw new Error(`Server error: ${response.statusText}`)
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'pds-form-filled.pdf'
-      document.body.appendChild(a)
-      a.click()
-      a.remove()
-      window.URL.revokeObjectURL(url)
 
-      // resetVariables()
+      toast('Successfully', {
+        description: 'Successfully updated PDS file'
+      })
+
+      resetVariables()
     } catch (error) {
       console.error('Failed to generate and download PDF:', error)
     }
@@ -721,7 +723,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
             </Button>
           </DialogClose>
           <CustomButton type='button' onClick={handleSave}>
-            Save and Download PDS
+            Update PDS Form
           </CustomButton>
         </DialogFooter>
       </DialogContent>

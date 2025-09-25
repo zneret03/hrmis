@@ -15,6 +15,7 @@ import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder'
 import { PDFAction } from './components/PDFAction'
 import { UpdatePDFDialog } from '@/app/components/PDFDialog'
 import PdfForm from './components/PdfForm'
+import { fetchUserPds } from '@/services/pds/pds.service'
 
 export default async function PersonalManagement({
   params
@@ -28,6 +29,8 @@ export default async function PersonalManagement({
   const today = new Date()
   const todayMonth = (today.getMonth() + 1).toString()
   const formatted = todayMonth.padStart(2, '0')
+
+  const pdsInfo = await fetchUserPds(userId)
 
   const attendanceResponse = await getAttendanceSummary(
     employeeId,
@@ -60,7 +63,7 @@ export default async function PersonalManagement({
       <section className='flex gap-2'>
         <div className='flex-1'>
           <PDFAction />
-          <PdfForm />
+          <PdfForm file={pdsInfo.file} />
         </div>
         <div className='flex-1 space-y-4'>
           <AttendanceLeaves />
