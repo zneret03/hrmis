@@ -23,6 +23,7 @@ import {
 } from '@/app/helpers/pds-form-fields'
 import { createClient } from '@/config'
 import { generalErrorResponse } from '../../helpers/response'
+import { removeImageViaPath } from '../../helpers/image/image'
 
 const drawCheckmark = (
   page: PDFPage,
@@ -65,7 +66,8 @@ export async function POST(request: Request) {
       familyBackgroundData,
       educationalBackgroundData,
       otherStaticData,
-      userId
+      userId,
+      fileBucketPath
     } = body
 
     const pdfPath = path.join(
@@ -182,6 +184,10 @@ export async function POST(request: Request) {
         upsert: true
       })
 
+    if (typeof fileBucketPath === 'string') {
+      removeImageViaPath(supabase, fileBucketPath, 'pds_documents')
+    }
+
     const {
       data: { publicUrl }
     } = supabase.storage
@@ -189,6 +195,7 @@ export async function POST(request: Request) {
       .getPublicUrl(uploadData?.path as string)
 
     if (uploadError) {
+      removeImageViaPath(supabase, fileBucketPath, 'pds_documents')
       return generalErrorResponse({ error: uploadError.message })
     }
 
@@ -212,6 +219,7 @@ export async function POST(request: Request) {
       .eq('user_id', userId)
 
     if (error) {
+      removeImageViaPath(supabase, fileBucketPath, 'pds_documents')
       return generalErrorResponse({ error: error.message })
     }
 

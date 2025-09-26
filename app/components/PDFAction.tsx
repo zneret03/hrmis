@@ -38,9 +38,11 @@ export function PDFAction({ data, isAdmin = false }: PDFAction): JSX.Element {
           {icon}
           {title}
         </Button>
-        <Link href={data.file as string} target='__blank'>
-          <Button>Download PDS</Button>
-        </Link>
+        {!!data.file && (
+          <Link href={(data.file as string) ?? ''} target='__blank'>
+            <Button>Download PDS</Button>
+          </Link>
+        )}
       </div>
     </section>
   )

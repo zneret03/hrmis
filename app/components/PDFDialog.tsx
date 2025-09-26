@@ -42,6 +42,7 @@ import { CustomButton } from '@/components/custom/CustomButton'
 import { useShallow } from 'zustand/react/shallow'
 import { toast } from 'sonner'
 import { Json } from '@/lib/types/db-types'
+import { getPdsFilePath, parentPath } from '@/helpers/parentPath'
 
 interface UpdatePDFDialog {
   userId: string
@@ -560,7 +561,8 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
           learningAndDevelopment,
           otherInformation,
           references,
-          userId
+          userId,
+          fileBucketPath: data?.file?.split('pds_documents/')[1]
         })
       })
 

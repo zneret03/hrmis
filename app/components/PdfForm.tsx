@@ -13,9 +13,10 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 interface PdfForm {
   file: string
+  isAdmin: boolean
 }
 
-export function PdfForm({ file }: PdfForm): JSX.Element {
+export function PdfForm({ file, isAdmin = false }: PdfForm): JSX.Element {
   const [numPages, setNumPages] = useState<number | null>(null)
   const [pageNumber, setPageNumber] = useState<number>(1)
 
@@ -29,16 +30,19 @@ export function PdfForm({ file }: PdfForm): JSX.Element {
     })
   }
 
+  const pdfFile = !file ? '/documents/pds-form.pdf' : file
+  const documentWidth = !isAdmin ? 1000 : 1300
+
   return (
     <div className='relative'>
       <Document
-        file={file}
+        file={pdfFile}
         noData={<EmptyPlaceholder />}
         onLoadSuccess={onDocumentLoadSuccess}
         onLoadError={(error) => onError(error.message)}
       >
         <Page
-          width={1300}
+          width={documentWidth}
           height={500}
           pageNumber={pageNumber}
           renderAnnotationLayer={false}
