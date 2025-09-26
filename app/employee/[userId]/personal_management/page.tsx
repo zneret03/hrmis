@@ -1,7 +1,6 @@
 import { JSX } from 'react'
-import PdfForm from './components/PdfForm'
 import { FileLeaveDialog } from '@/app/auth/components/FileLeaveDialog'
-import { AttendanceLeaves } from './components/AttendanveLeave'
+import { AttendanceLeaves } from './components/AttendanceLeave'
 import { UserDetails } from '@/app/components/UserDetails'
 import { fetchUserWitHCredits } from '@/services/leave_credits/leave_credits.services'
 import { Container } from '@/components/custom/Container'
@@ -13,6 +12,10 @@ import { getLeaveApplications } from '@/services/leave_applications/leave-applic
 import { LeaveApplicationsForm } from '@/lib/types/leave_application'
 import { CancelLeaveDialog } from './components/CancelLeave'
 import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder'
+import { PDFAction } from '@/app/components/PDFAction'
+import { UpdatePDFDialog } from '@/app/components/PDFDialog'
+import { PdfForm } from '@/app/components/PdfForm'
+import { fetchUserPds } from '@/services/pds/pds.service'
 
 export default async function PersonalManagement({
   params
@@ -26,6 +29,8 @@ export default async function PersonalManagement({
   const today = new Date()
   const todayMonth = (today.getMonth() + 1).toString()
   const formatted = todayMonth.padStart(2, '0')
+
+  const pdsInfo = await fetchUserPds(userId)
 
   const attendanceResponse = await getAttendanceSummary(
     employeeId,
@@ -47,19 +52,18 @@ export default async function PersonalManagement({
         {...{
           users: attendanceResponse.users,
           attendance: {
-            daysPresent: attendanceResponse.attendance.days_present,
-            daysAbsent: attendanceResponse.attendance.days_absent
+            daysPresent: attendanceResponse.attendance?.days_present,
+            daysAbsent: attendanceResponse.attendance?.days_absent
           },
-          credits: attendanceResponse.userCredits.credits,
+          credits: attendanceResponse.userCredits?.credits,
           isAdmin: false
         }}
       />
 
       <section className='flex gap-2'>
         <div className='flex-1'>
-          <h1 className='text-2xl font-bold'>Personal Data Sheet</h1>
-          <span className='text-gray-500'>You can update your PDS here</span>
-          <PdfForm />
+          <PDFAction data={pdsInfo} />
+          <PdfForm file={pdsInfo.file} />
         </div>
         <div className='flex-1 space-y-4'>
           <AttendanceLeaves />
@@ -77,6 +81,7 @@ export default async function PersonalManagement({
 
       <FileLeaveDialog category={category.leave_categories} />
       <CancelLeaveDialog />
+      <UpdatePDFDialog userId={userId} />
     </Container>
   )
 }

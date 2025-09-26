@@ -2,6 +2,7 @@ import axios from 'axios'
 import { axiosService } from '@/app/api/axios-client'
 import { LeaveCreditsForm } from '@/lib/types/leave_credits'
 import { Pagination } from '@/lib/types/pagination'
+import { toast } from 'sonner'
 
 export interface CreditsForm extends Pagination {
   user_credits: LeaveCreditsForm[]
@@ -30,6 +31,12 @@ export const fetchUserWitHCredits = async (id: string) => {
     return response.data.data
   } catch (e) {
     if (axios.isAxiosError(e)) {
+      if (e.response?.data.error === 'user does not have employee id') {
+        toast.error('ERROR', {
+          description: e.response?.data.error
+        })
+        return
+      }
       throw e.response?.data.error
     }
   }

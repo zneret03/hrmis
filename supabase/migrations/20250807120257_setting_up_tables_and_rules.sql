@@ -58,7 +58,7 @@ CREATE INDEX idx_attendance_summary_total_hourse ON public.attendance_summary(to
 CREATE TABLE public.pds (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    personal_information JSONB NOT NULL,
+    personal_information JSONB,
     family_background JSONB,
     educational_background JSONB,
     civil_service_eligibility JSONB,
@@ -66,6 +66,9 @@ CREATE TABLE public.pds (
     voluntary_work JSONB,
     training_programs JSONB,
     other_information JSONB,
+    other_static_data JSONB,
+    pds_references JSONB,
+    file TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,
     archived_at TIMESTAMP WITH TIME ZONE
@@ -193,6 +196,19 @@ CREATE POLICY "Upload Update avatars" ON storage.objects
     FOR UPDATE TO public USING (bucket_id = 'avatars');
 CREATE POLICY "Upload Delete avatars" ON storage.objects
     FOR DELETE TO public USING (bucket_id = 'avatars');
+
+
+INSERT INTO storage.buckets (id, name, public, file_size_limit)
+VALUES ('pds_documents', 'pds_documents', TRUE, 5242880); -- 5MB limit
+
+CREATE POLICY "Upload Select pds documents" ON storage.objects
+    FOR SELECT TO public USING (bucket_id = 'pds_documents');
+CREATE POLICY "Upload Insert pds documents" ON storage.objects
+    FOR INSERT TO public WITH CHECK (bucket_id = 'pds_documents');
+CREATE POLICY "Upload Update pds documents" ON storage.objects
+    FOR UPDATE TO public USING (bucket_id = 'pds_documents');
+CREATE POLICY "Upload Delete pds documents" ON storage.objects
+    FOR DELETE TO public USING (bucket_id = 'pds_documents');
 
 -- Trigger function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION public.update_updated_at_column()

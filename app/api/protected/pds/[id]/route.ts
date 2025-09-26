@@ -1,12 +1,10 @@
 import { NextRequest } from 'next/server'
 import { createClient } from '@/config'
 import {
-  successResponse,
   badRequestResponse,
   generalErrorResponse,
-  conflictRequestResponse
-} from '../../../helpers/response'
-import { LeaveCreditsForm } from '@/lib/types/leave_credits'
+  successResponse
+} from '@/app/api/helpers/response'
 
 export async function GET(
   req: NextRequest,
@@ -17,22 +15,17 @@ export async function GET(
     const { id: userId } = await params
 
     const { error, data } = await supabase
-      .from('leave_credits')
+      .from('pds')
       .select(
-        'id, credits, users!inner(id, email, username, role, employee_id), created_at, updated_at, archived_at'
+        `id, users!inner(id, email, username, role, employee_id), personal_information, family_background, educational_background, 
+         civil_service_eligibility, work_experience, voluntary_work, training_programs, 
+         other_information, file, created_at, updated_at, other_static_data, pds_references`
       )
       .eq('user_id', userId)
       .single()
-      .returns<LeaveCreditsForm>()
 
     if (error) {
       return badRequestResponse({ error: error.message })
-    }
-
-    if (data.users.employee_id === '') {
-      return conflictRequestResponse({
-        error: 'user does not have employee id'
-      })
     }
 
     return successResponse({

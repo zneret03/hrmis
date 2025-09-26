@@ -6,9 +6,13 @@ import { Button } from '@/components/ui/button'
 import { CardSummary } from '../components/CardSummary'
 import { Users } from '@/lib/types/users'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import Link from 'next/link'
 
 interface UserDetails {
-  users: Pick<Users, 'avatar' | 'email' | 'username' | 'employee_id' | 'role'>
+  users: Pick<
+    Users,
+    'avatar' | 'email' | 'username' | 'employee_id' | 'role' | 'id'
+  >
   attendance: {
     daysPresent: number
     daysAbsent: number
@@ -69,9 +73,11 @@ export function UserDetails({
               </div>
 
               {isAdmin && (
-                <Button className='mt-2 xl:text-md lg:text-md md:text-sm sm:text-xs'>
-                  <FileSpreadsheet /> View PDS
-                </Button>
+                <Link href={`/backend/${users.id}/pds_information`}>
+                  <Button className='mt-2 xl:text-md lg:text-md md:text-sm sm:text-xs'>
+                    <FileSpreadsheet /> View PDS
+                  </Button>
+                </Link>
               )}
             </div>
           </section>
