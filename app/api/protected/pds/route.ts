@@ -200,7 +200,9 @@ export async function POST(request: Request) {
       work_experience: workExperiences,
       voluntary_work: voluntaryWorks,
       training_programs: learningAndDevelopment,
-      other_information: otherStaticData,
+      other_information: otherInformation,
+      other_static_data: otherStaticData,
+      pds_references: references,
       file: publicUrl
     }
 
@@ -213,7 +215,7 @@ export async function POST(request: Request) {
       return generalErrorResponse({ error: error.message })
     }
 
-    return new NextResponse(filledPdfBytes, {
+    return new NextResponse(filledPdfBytes as BodyInit, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

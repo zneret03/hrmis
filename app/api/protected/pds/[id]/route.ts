@@ -17,9 +17,9 @@ export async function GET(
     const { error, data } = await supabase
       .from('pds')
       .select(
-        `id, users!inner(id, email, username, role, employee_id), personal_information, family_background, educational_background, civil_service_eligibility, 
-          work_experience, voluntary_work, training_programs, 
-          other_information, file, created_at, updated_at`
+        `id, users!inner(id, email, username, role, employee_id), personal_information, family_background, educational_background, 
+         civil_service_eligibility, work_experience, voluntary_work, training_programs, 
+         other_information, file, created_at, updated_at, other_static_data, pds_references`
       )
       .eq('user_id', userId)
       .single()

@@ -1,10 +1,12 @@
-export type Json =
+export type Json = Record<
+  string,
   | string
   | number
   | boolean
   | null
   | { [key: string]: Json | undefined }
   | Json[]
+>
 
 export type Database = {
   graphql_public: {
@@ -344,48 +346,57 @@ export type Database = {
       pds: {
         Row: {
           archived_at: string | null
-          civil_service_eligibility: Json | null
           created_at: string | null
           educational_background: Json | null
           family_background: Json | null
           id: string
-          other_information: Json | null
-          personal_information: Json
-          training_programs: Json | null
+          personal_information: Json | null
           updated_at: string | null
           user_id: string | null
-          voluntary_work: Json | null
-          work_experience: Json | null
+          file: string | null
+          other_static_data: Json | null
+          voluntary_work: Json[] | null
+          civil_service_eligibility: Json[] | null
+          training_programs: Json[] | null
+          other_information: Json[] | null
+          pds_references: Json[] | null
+          work_experience: Json[] | null
         }
         Insert: {
           archived_at?: string | null
-          civil_service_eligibility?: Json | null
           created_at?: string | null
           educational_background?: Json | null
           family_background?: Json | null
           id?: string
-          other_information?: Json | null
           personal_information: Json
-          training_programs?: Json | null
           updated_at?: string | null
           user_id?: string | null
-          voluntary_work?: Json | null
-          work_experience?: Json | null
+          file?: string | null
+          other_static_data?: Json | null
+          voluntary_work?: Json[] | null
+          civil_service_eligibility?: Json[] | null
+          training_programs?: Json[] | null
+          other_information?: Json[] | null
+          pds_references: Json[] | null
+          work_experience?: Json[] | null
         }
         Update: {
           archived_at?: string | null
-          civil_service_eligibility?: Json | null
           created_at?: string | null
           educational_background?: Json | null
           family_background?: Json | null
           id?: string
-          other_information?: Json | null
           personal_information?: Json
-          training_programs?: Json | null
           updated_at?: string | null
           user_id?: string | null
-          voluntary_work?: Json | null
-          work_experience?: Json | null
+          file?: string | null
+          other_static_data?: Json | null
+          voluntary_work?: Json[] | null
+          civil_service_eligibility?: Json[] | null
+          training_programs?: Json[] | null
+          other_information?: Json[] | null
+          pds_references: Json[] | null
+          work_experience?: Json[] | null
         }
         Relationships: [
           {

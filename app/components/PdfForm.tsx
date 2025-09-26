@@ -15,7 +15,7 @@ interface PdfForm {
   file: string
 }
 
-export default function PdfForm({ file }: PdfForm): JSX.Element {
+export function PdfForm({ file }: PdfForm): JSX.Element {
   const [numPages, setNumPages] = useState<number | null>(null)
   const [pageNumber, setPageNumber] = useState<number>(1)
 
@@ -38,7 +38,7 @@ export default function PdfForm({ file }: PdfForm): JSX.Element {
         onLoadError={(error) => onError(error.message)}
       >
         <Page
-          width={1000}
+          width={1300}
           height={500}
           pageNumber={pageNumber}
           renderAnnotationLayer={false}

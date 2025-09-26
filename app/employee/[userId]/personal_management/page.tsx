@@ -1,6 +1,6 @@
 import { JSX } from 'react'
 import { FileLeaveDialog } from '@/app/auth/components/FileLeaveDialog'
-import { AttendanceLeaves } from './components/AttendanveLeave'
+import { AttendanceLeaves } from './components/AttendanceLeave'
 import { UserDetails } from '@/app/components/UserDetails'
 import { fetchUserWitHCredits } from '@/services/leave_credits/leave_credits.services'
 import { Container } from '@/components/custom/Container'
@@ -12,9 +12,9 @@ import { getLeaveApplications } from '@/services/leave_applications/leave-applic
 import { LeaveApplicationsForm } from '@/lib/types/leave_application'
 import { CancelLeaveDialog } from './components/CancelLeave'
 import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder'
-import { PDFAction } from './components/PDFAction'
+import { PDFAction } from '@/app/components/PDFAction'
 import { UpdatePDFDialog } from '@/app/components/PDFDialog'
-import PdfForm from './components/PdfForm'
+import { PdfForm } from '@/app/components/PdfForm'
 import { fetchUserPds } from '@/services/pds/pds.service'
 
 export default async function PersonalManagement({
@@ -62,7 +62,7 @@ export default async function PersonalManagement({
 
       <section className='flex gap-2'>
         <div className='flex-1'>
-          <PDFAction />
+          <PDFAction data={pdsInfo} />
           <PdfForm file={pdsInfo.file} />
         </div>
         <div className='flex-1 space-y-4'>

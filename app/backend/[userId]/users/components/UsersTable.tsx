@@ -101,6 +101,10 @@ export function UsersTable({
     permanentRedirect(`${userDetails[0]}/attendance/${id}`)
   }
 
+  const onViewPds = (userId: string): void => {
+    permanentRedirect(`/backend/${userId}/pds_information`)
+  }
+
   const state = useAuth()
 
   const columns: ColumnDef<LeaveCreditsForm>[] = React.useMemo(
@@ -219,31 +223,38 @@ export function UsersTable({
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
               {['employee'].includes(row.original?.users?.role) && (
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    onViewPds(row.original.users.id)
+                  }}
+                >
                   <File />
                   View PDS
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem
-                onClick={() =>
+                onClick={(event) => {
+                  event.stopPropagation()
                   toggleOpen?.(true, 'edit', {
                     ...row.original?.users,
                     credits: row.original.credits
                   })
-                }
+                }}
               >
                 <Pencil />
                 Edit info
               </DropdownMenuItem>
               {state.id !== row.original.id && (
                 <DropdownMenuItem
-                  onClick={() =>
+                  onClick={(event) => {
+                    event.stopPropagation()
                     toggleOpen?.(
                       true,
                       row.original.archived_at ? 'reinstate' : 'revoked',
                       { ...row.original?.users }
                     )
-                  }
+                  }}
                 >
                   <Trash />
                   {row.original.archived_at ? 'Reinstate' : 'Revoke'}

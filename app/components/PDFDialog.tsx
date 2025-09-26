@@ -1,6 +1,6 @@
 'use client'
 
-import { JSX, useState, useCallback, Fragment } from 'react'
+import { JSX, useState, useCallback, Fragment, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -31,15 +31,17 @@ import {
   type LearningAndDevelopment,
   type OtherInformation,
   type References,
-  type FormField
+  type FormField,
+  DynamicFieldTemplate
 } from '../helpers/pds-form-fields'
+import { usePDS } from '@/services/pds/state/use-pds'
 import { useRouter } from 'next/navigation'
 import type { PDFDocumentProxy } from 'pdfjs-dist'
 import { Button } from '@/components/ui/button'
 import { CustomButton } from '@/components/custom/CustomButton'
 import { useShallow } from 'zustand/react/shallow'
-import { useUserDialog } from '@/services/auth/states/user-dialog'
 import { toast } from 'sonner'
+import { Json } from '@/lib/types/db-types'
 
 interface UpdatePDFDialog {
   userId: string
@@ -56,85 +58,134 @@ const educationalBackgroundNames = new Set(
   educationalBackgroundFields.map((f) => f.name)
 )
 
+const initialStateEligibilities = {
+  careerService: '',
+  rating: '',
+  dateOfExamination: '',
+  placeOfExamination: '',
+  licenseNumber: '',
+  licenseDateOfValidity: ''
+}
+
+const initialStateWorkExperience = {
+  inclusiveDatesFrom: '',
+  inclusiveDatesTo: '',
+  positionTitle: '',
+  department: '',
+  monthlySalary: '',
+  salaryGrade: '',
+  statusOfAppointment: '',
+  govtService: ''
+}
+
+const initialStateVoluntaryWork = {
+  nameAndAddress: '',
+  inclusiveDateFrom: '',
+  inclusiveDateTo: '',
+  numberOfHours: '',
+  position: ''
+}
+
+const initialStateLearningDevelopment = {
+  title: '',
+  inclusiveDatesFrom: '',
+  inclusiveDatesTo: '',
+  numberOfHours: '',
+  typeOfLd: '',
+  conductedBy: ''
+}
+
+const initialStateOtherInfo = {
+  specialSkills: '',
+  nonAcademicDistrinction: '',
+  membershipOrganization: ''
+}
+
+const initialStatePdsReference = {
+  name: '',
+  address: '',
+  telNo: ''
+}
+
 export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   const [numPages, setNumPages] = useState<number | null>(null)
   const [scale, setScale] = useState(1.0)
 
+  const { open, toggleOpen, type, data } = usePDS(
+    useShallow((state) => ({
+      open: state.open,
+      type: state.type,
+      toggleOpen: state.toggleOpenDialog,
+      data: state.data
+    }))
+  )
+
   const router = useRouter()
 
-  const [personalInfoData, setPersonalInfoData] = useState<
-    Record<string, string | boolean>
-  >({})
-  const [familyBackgroundData, setFamilyBackgroundData] = useState<
-    Record<string, string | boolean>
-  >({})
-  const [educationalBackgroundData, setEducationalBackgroundData] = useState<
-    Record<string, string | boolean>
-  >({})
-  const [otherStaticData, setOtherStaticData] = useState<
-    Record<string, string | boolean>
-  >({})
+  const [personalInfoData, setPersonalInfoData] = useState<Json>(
+    (data?.personal_information as Json) ?? {}
+  )
+  const [familyBackgroundData, setFamilyBackgroundData] = useState<Json>(
+    (data?.family_background as Json) ?? {}
+  )
+  const [educationalBackgroundData, setEducationalBackgroundData] =
+    useState<Json>((data?.educational_background as Json) ?? {})
+  const [otherStaticData, setOtherStaticData] = useState<Json>(
+    (data?.other_static_data as Json) ?? {}
+  )
 
   // --- STATES FOR DYNAMIC DATA ---
-  const [eligibilities, setEligibilities] = useState<Eligibility[]>([
-    {
-      careerService: '',
-      rating: '',
-      dateOfExamination: '',
-      placeOfExamination: '',
-      licenseNumber: '',
-      licenseDateOfValidity: ''
-    }
-  ])
-  const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>([
-    {
-      inclusiveDatesFrom: '',
-      inclusiveDatesTo: '',
-      positionTitle: '',
-      department: '',
-      monthlySalary: '',
-      salaryGrade: '',
-      statusOfAppointment: '',
-      govtService: ''
-    }
-  ])
-  const [voluntaryWorks, setVoluntaryWorks] = useState<VoluntaryWork[]>([
-    {
-      nameAndAddress: '',
-      inclusiveDateFrom: '',
-      inclusiveDateTo: '',
-      numberOfHours: '',
-      position: ''
-    }
-  ])
+  const [eligibilities, setEligibilities] = useState<Eligibility[] | Json[]>(
+    data?.civil_service_eligibility || [initialStateEligibilities]
+  )
+
+  const [workExperiences, setWorkExperiences] = useState<
+    WorkExperience[] | Json[]
+  >(data?.work_experience || [initialStateWorkExperience])
+
+  const [voluntaryWorks, setVoluntaryWorks] = useState<
+    VoluntaryWork[] | Json[]
+  >(data?.voluntary_work || [initialStateVoluntaryWork])
   const [learningAndDevelopment, setLearningAndDevelopment] = useState<
-    LearningAndDevelopment[]
-  >([
-    {
-      title: '',
-      inclusiveDatesFrom: '',
-      inclusiveDatesTo: '',
-      numberOfHours: '',
-      typeOfLd: '',
-      conductedBy: ''
-    }
-  ])
+    LearningAndDevelopment[] | Json[]
+  >(data?.training_programs || [initialStateLearningDevelopment])
 
-  const [otherInformation, setOtherInformation] = useState<OtherInformation[]>([
-    {
-      specialSkills: '',
-      nonAcademicDistrinction: '',
-      membershipOrganization: ''
-    }
-  ])
+  const [otherInformation, setOtherInformation] = useState<
+    OtherInformation[] | Json[]
+  >(data?.other_information || [initialStateOtherInfo])
 
-  const [references, setReferences] = useState<References[]>([
-    {
-      name: '',
-      address: '',
-      telNo: ''
+  const [references, setReferences] = useState<References[] | Json[]>(
+    data?.pds_references || [initialStatePdsReference]
+  )
+
+  useEffect(() => {
+    if (data) {
+      setPersonalInfoData((data?.personal_information as Json) ?? {})
+      setFamilyBackgroundData((data?.family_background as Json) ?? {})
+      setEducationalBackgroundData((data?.educational_background as Json) ?? {})
+      setOtherStaticData((data?.other_static_data as Json) ?? {})
+      setEligibilities(
+        (data?.civil_service_eligibility as Json[]) ?? [
+          initialStateEligibilities
+        ]
+      )
+      setWorkExperiences(
+        (data?.work_experience as Json[]) ?? [initialStateWorkExperience]
+      )
+      setVoluntaryWorks(
+        (data?.voluntary_work as Json[]) ?? [initialStateVoluntaryWork]
+      )
+      setLearningAndDevelopment(
+        (data?.training_programs as Json[]) ?? [initialStateLearningDevelopment]
+      )
+      setOtherInformation(
+        (data?.other_information as Json[]) ?? [initialStateOtherInfo]
+      )
+      setReferences(
+        (data?.pds_references as Json[]) ?? [initialStatePdsReference]
+      )
     }
-  ])
+  }, [data])
 
   const resetVariables = (): void => {
     toggleOpen?.(false, null, null)
@@ -237,7 +288,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   const handleEligibilityChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  ): void => {
     const { name, value } = e.target
     const newArr = [...eligibilities]
     newArr[index] = { ...newArr[index], [name]: value }
@@ -308,7 +359,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   }
 
   // Learning & Development Handlers
-  const addLdRow = () => {
+  const addLdRow = (): void => {
     setLearningAndDevelopment([
       ...learningAndDevelopment,
       {
@@ -321,15 +372,16 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
       }
     ])
   }
-  const removeLdRow = (index: number) => {
+  const removeLdRow = (index: number): void => {
     const newArr = [...learningAndDevelopment]
     newArr.splice(index, 1)
     setLearningAndDevelopment(newArr)
   }
+
   const handleLdChange = (
     index: number,
     e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  ): void => {
     const { name, value } = e.target
     const newArr = [...learningAndDevelopment]
     newArr[index] = { ...newArr[index], [name]: value }
@@ -337,7 +389,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   }
 
   // --- CORE PDF & STATIC FORM HANDLERS ---
-  const onDocumentLoadSuccess = ({ numPages }: PDFDocumentProxy) => {
+  const onDocumentLoadSuccess = ({ numPages }: PDFDocumentProxy): void => {
     setNumPages(numPages)
   }
 
@@ -357,9 +409,9 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   const renderStaticFields = (
     pageNumber: number,
     fields: FormField[],
-    data: Record<string, string | boolean>
-  ) => {
-    return fields
+    data: Json
+  ) =>
+    fields
       .filter((field) => field.page === pageNumber)
       .map((field) => {
         const top = (PDF_A4_HEIGHT - field.y) * scale
@@ -425,14 +477,16 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
           />
         )
       })
-  }
 
   const renderDynamicFields = (
     pageNumber: number,
-    template: any,
-    data: any[],
-    changeHandler: any,
-    removeHandler: any
+    template: DynamicFieldTemplate,
+    data: Record<string, string>[] | Json[],
+    changeHandler: (
+      index: number,
+      e: React.ChangeEvent<HTMLInputElement>
+    ) => void,
+    removeHandler: (index: number) => void
   ) => {
     if (pageNumber !== template.page) return null
     return data.map((item, index) => {
@@ -448,7 +502,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
             <input
               type='text'
               name={column.name}
-              value={item[column.name]}
+              value={item[column.name] as string}
               onChange={(e) => changeHandler(index, e)}
               style={{
                 position: 'absolute',
@@ -520,16 +574,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
     }
   }
 
-  // --- Dialog State Management ---
-  const { open, toggleOpen, type } = useUserDialog(
-    useShallow((state) => ({
-      open: state.open,
-      type: state.type,
-      toggleOpen: state.toggleOpenDialog
-    }))
-  )
-
-  const isOpenDialog = open && type === 'update-pdf'
+  const isOpenDialog = open && type === 'edit'
 
   // --- Component JSX ---
   return (

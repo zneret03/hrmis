@@ -2181,6 +2181,7 @@ export interface DynamicFieldTemplate {
   page: number
   startY: number
   rowHeight: number
+  fontSize?: number
   columns: {
     name:
       | keyof Eligibility

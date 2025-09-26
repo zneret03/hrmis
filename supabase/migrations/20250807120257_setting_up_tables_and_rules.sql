@@ -66,6 +66,8 @@ CREATE TABLE public.pds (
     voluntary_work JSONB,
     training_programs JSONB,
     other_information JSONB,
+    other_static_data JSONB,
+    pds_references JSONB,
     file TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,
