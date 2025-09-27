@@ -136,7 +136,7 @@ CREATE TABLE public.attendance (
     month DATE NOT NULL,
     days_present INTEGER NOT NULL,
     days_absent INTEGER NOT NULL,
-    -- tardiness_count INTEGER NOT NULL,
+    tardiness_count INTEGER,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,
     archived_at TIMESTAMP WITH TIME ZONE,
@@ -635,27 +635,24 @@ DECLARE
     login_time TIMESTAMP WITH TIME ZONE;
     total_days_in_month INTEGER;
     days_present_count INTEGER;
+    v_tardiness_count INTEGER;
 BEGIN
     SELECT EXTRACT(DAY FROM (DATE_TRUNC('month', NEW.timestamp) + INTERVAL '1 month - 1 day')) INTO total_days_in_month;
 
     IF NEW.type IN (1, 15) THEN
         SELECT timestamp INTO login_time
         FROM biometrics
-        WHERE employee_id = NEW.employee_id
-          AND DATE(timestamp) = DATE(NEW.timestamp)
-          AND timestamp < NEW.timestamp
-          AND NOT EXISTS (
-              SELECT 1
-              FROM biometrics b2
-              WHERE b2.employee_id = NEW.employee_id
-                AND DATE(b2.timestamp) = DATE(NEW.timestamp)
-                AND b2.timestamp > biometrics.timestamp
-                AND b2.timestamp < NEW.timestamp
-          )
+        WHERE employee_id = NEW.employee_id AND DATE(timestamp) = DATE(NEW.timestamp) AND timestamp < NEW.timestamp
+        AND NOT EXISTS (
+            SELECT 1 FROM biometrics b2
+            WHERE b2.employee_id = NEW.employee_id AND DATE(b2.timestamp) = DATE(NEW.timestamp)
+            AND b2.timestamp > biometrics.timestamp AND b2.timestamp < NEW.timestamp
+        )
         ORDER BY timestamp DESC
         LIMIT 1;
 
         IF login_time IS NOT NULL THEN
+            -- Your confirmed "days_present" logic (unchanged).
             SELECT COUNT(DISTINCT DATE(b.timestamp))
             INTO days_present_count
             FROM biometrics b
@@ -669,12 +666,37 @@ BEGIN
                     AND b2.timestamp > b.timestamp
               );
 
-            INSERT INTO attendance (employee_id, user_id, month, days_present, days_absent)
-            VALUES (NEW.employee_id, (SELECT id FROM users WHERE employee_id = NEW.employee_id), 
-                    DATE_TRUNC('month', NEW.timestamp), days_present_count, total_days_in_month - days_present_count)
+            -- **REWRITTEN: A more robust tardiness calculation.**
+            WITH daily_stats AS (
+                SELECT
+                    MIN(timestamp AT TIME ZONE 'Asia/Manila') as first_punch,
+                    COUNT(*) as punch_count
+                FROM biometrics
+                WHERE employee_id = NEW.employee_id
+                  AND DATE_TRUNC('month', timestamp) = DATE_TRUNC('month', NEW.timestamp)
+                GROUP BY DATE(timestamp AT TIME ZONE 'Asia/Manila')
+            )
+            SELECT COUNT(*)
+            INTO v_tardiness_count
+            FROM daily_stats
+            WHERE
+                punch_count > 1 -- Rule 1: It must be a "present" day.
+                AND first_punch::time > '08:00:00'; -- Rule 2: The first punch must be late.
+
+            -- Insert or update the attendance record.
+            INSERT INTO attendance (employee_id, user_id, month, days_present, days_absent, tardiness_count)
+            VALUES (
+                NEW.employee_id,
+                (SELECT id FROM users WHERE employee_id = NEW.employee_id),
+                DATE_TRUNC('month', NEW.timestamp),
+                days_present_count,
+                total_days_in_month - days_present_count,
+                v_tardiness_count
+            )
             ON CONFLICT (employee_id, month) DO UPDATE
             SET days_present = days_present_count,
-                days_absent = total_days_in_month - days_present_count, 
+                days_absent = total_days_in_month - days_present_count,
+                tardiness_count = v_tardiness_count,
                 updated_at = CURRENT_TIMESTAMP;
         END IF;
     END IF;

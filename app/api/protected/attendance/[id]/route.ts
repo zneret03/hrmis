@@ -85,7 +85,7 @@ export async function GET(
 
     const { data: attendance, error: errorAttendance } = await supabase
       .from('attendance')
-      .select('id, days_present, days_absent')
+      .select('id, days_present, days_absent, tardiness_count')
       .eq('employee_id', id)
       .single()
 

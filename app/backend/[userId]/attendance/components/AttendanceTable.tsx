@@ -136,6 +136,15 @@ export function AttendanceTable({
         }
       },
       {
+        accessorKey: 'tardiness_count',
+        header: 'Tardiness/Late',
+        cell: function ({ row }) {
+          return (
+            <div className='capitalize'>{row.getValue('tardiness_count')}</div>
+          )
+        }
+      },
+      {
         accessorKey: 'created_at',
         header: 'Created At',
         cell: function ({ row }) {

@@ -52,8 +52,10 @@ export default async function PersonalManagement({
         {...{
           users: attendanceResponse.users,
           attendance: {
-            daysPresent: attendanceResponse.attendance?.days_present,
-            daysAbsent: attendanceResponse.attendance?.days_absent
+            daysPresent: attendanceResponse.attendance?.days_present || 0,
+            daysAbsent: attendanceResponse.attendance?.days_absent || 0,
+            tardiness_count:
+              attendanceResponse?.attendance?.tardiness_count || 0
           },
           credits: attendanceResponse.userCredits?.credits,
           isAdmin: false

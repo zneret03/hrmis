@@ -13,7 +13,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 interface PdfForm {
   file: string
-  isAdmin: boolean
+  isAdmin?: boolean
 }
 
 export function PdfForm({ file, isAdmin = false }: PdfForm): JSX.Element {

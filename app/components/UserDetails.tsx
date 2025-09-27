@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { FileSpreadsheet, CalendarDays, Plane } from 'lucide-react'
+import { FileSpreadsheet, CalendarDays, Plane, ClockAlert } from 'lucide-react'
 import { avatarName } from '@/helpers/avatarName'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ interface UserDetails {
   attendance: {
     daysPresent: number
     daysAbsent: number
+    tardiness_count: number
   }
   credits: number
   isAdmin?: boolean
@@ -27,7 +28,7 @@ export function UserDetails({
   credits,
   isAdmin = false
 }: UserDetails): JSX.Element {
-  const { daysPresent, daysAbsent } = attendance
+  const { daysPresent, daysAbsent, tardiness_count } = attendance
   const { avatar, email, username, employee_id, role } = users
   const userSummary = [
     {
@@ -39,6 +40,11 @@ export function UserDetails({
       title: 'Days Absent',
       icon: <CalendarDays className='text-gray-500' />,
       count: daysAbsent
+    },
+    {
+      title: 'Tardiness/Late',
+      icon: <ClockAlert className='text-gray-500' />,
+      count: tardiness_count
     },
     {
       title: 'Leave Credits',

@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
         tableName: 'attendance',
         supabase,
         columns:
-          'id, users!user_id!inner(email, username, id, employee_id), month, days_present, days_absent, created_at, updated_at',
+          'id, users!user_id!inner(email, username, id, employee_id), month, days_present, days_absent, tardiness_count, created_at, updated_at',
         search: { column: 'users.email', query: search },
         page,
         perPage,
