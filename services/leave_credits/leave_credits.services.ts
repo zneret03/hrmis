@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { axiosService } from '@/app/api/axios-client'
-import { LeaveCreditsForm } from '@/lib/types/leave_credits'
+import { LeaveCredits, LeaveCreditsForm } from '@/lib/types/leave_credits'
 import { Pagination } from '@/lib/types/pagination'
 import { toast } from 'sonner'
 
@@ -37,6 +37,25 @@ export const fetchUserWitHCredits = async (id: string) => {
         })
         return
       }
+      throw e.response?.data.error
+    }
+  }
+}
+
+export const updateLeaveCredits = async (
+  data: Pick<LeaveCredits, 'id' | 'credits'>
+) => {
+  try {
+    const response = await axiosService.post('/api/protected/user_credits', {
+      ...data,
+      type: 'update-credits'
+    })
+
+    toast('Successful', {
+      description: response.data.message
+    })
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
       throw e.response?.data.error
     }
   }

@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { RotateCcw } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { avatarName } from '@/helpers/avatarName'
 import { Controller } from 'react-hook-form'
@@ -35,6 +36,7 @@ import { ImageUpload } from '@/components/custom/ImageUpload'
 import { toPercentage } from '@/helpers/convertToPercent'
 import { isEqual } from 'lodash'
 import { toast } from 'sonner'
+import { updateLeaveCredits } from '@/services/leave_credits/leave_credits.services'
 
 interface EditUserDialog extends Omit<UpdateUser, 'avatar'> {
   avatar: File[] | string
@@ -44,6 +46,7 @@ interface EditUserDialog extends Omit<UpdateUser, 'avatar'> {
 export function EditUserDialog(): JSX.Element {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
+  const [isUpdateCredits, setUpdateCredits] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
 
   const { open, toggleOpen, type, data } = useUserDialog(
@@ -54,6 +57,8 @@ export function EditUserDialog(): JSX.Element {
       data: state.data
     }))
   )
+
+  const [newCredit, setNewCredit] = useState<number>(data?.credits as number)
 
   const oldData = {
     avatar: data?.avatar,
@@ -71,6 +76,17 @@ export function EditUserDialog(): JSX.Element {
     formState: { errors },
     control
   } = useForm<EditUserDialog>()
+
+  const toggleCreditsField = (): void => {
+    setUpdateCredits((prevState) => !prevState)
+  }
+
+  const updateCredits = (): void => {
+    startTransition(async () => {
+      await updateLeaveCredits({ id: data?.id as string, credits: newCredit })
+      setUpdateCredits(false)
+    })
+  }
 
   const resetVariable = (): void => {
     setMessage('')
@@ -127,7 +143,7 @@ export function EditUserDialog(): JSX.Element {
     >
       <DialogContent className='sm:max-w-[40rem] xl:max-h-[45rem] lg:max-h-[40rem] md:max-h-[30rem] sm:max-h-[20rem] overflow-auto'>
         <DialogHeader>
-          <DialogTitle>Edit New User</DialogTitle>
+          <DialogTitle>Edit User</DialogTitle>
 
           <div className='flex items-center gap-2'>
             <Avatar className='h-20 w-20 rounded-full'>
@@ -152,6 +168,25 @@ export function EditUserDialog(): JSX.Element {
               <Progress value={toPercentage(data?.credits as number, 10)} />
               <span className='text-sm'>{data?.credits}/10</span>
             </section>
+            {isUpdateCredits && (
+              <Input
+                type='number'
+                title='Credits'
+                value={newCredit}
+                onChange={(event) => setNewCredit(Number(event.target.value))}
+              />
+            )}
+
+            <div className='text-right'>
+              <CustomButton
+                onClick={isUpdateCredits ? updateCredits : toggleCreditsField}
+                disabled={isPending}
+                isLoading={isPending}
+              >
+                <RotateCcw />{' '}
+                {isUpdateCredits ? 'Save Credit' : ' Update Credit'}
+              </CustomButton>
+            </div>
           </div>
         </DialogHeader>
 
