@@ -125,9 +125,9 @@ export function EditUserDialog(): JSX.Element {
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className='sm:max-w-[40rem]'>
+      <DialogContent className='sm:max-w-[40rem] xl:max-h-[35rem] lg:max-h-[40rem] md:max-h-[30rem] sm:max-h-[20rem] overflow-auto'>
         <DialogHeader>
-          <DialogTitle>Edit New User</DialogTitle>
+          <DialogTitle>Edit User</DialogTitle>
 
           <div className='flex items-center gap-2'>
             <Avatar className='h-20 w-20 rounded-full'>

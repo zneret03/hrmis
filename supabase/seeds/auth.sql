@@ -59,7 +59,7 @@ SELECT
   'admin2@example.com',
   null,
   'admin',
-  'zneret03'
+  'hrmis_admin'
 FROM new_user
 ON CONFLICT (id)
 DO UPDATE SET
