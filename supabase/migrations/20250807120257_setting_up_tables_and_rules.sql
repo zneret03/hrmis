@@ -161,6 +161,7 @@ CREATE TABLE public.certificates (
     certificate_type TEXT NOT NULL CHECK (certificate_type IN ('coe', 'service_record', 'nosa', 'coec')),
     data JSONB,
     certificate_status TEXT NOT NULL CHECK (certificate_status IN('pending', 'approved', 'cancelled', 'disapproved')),
+    file TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,
     archived_at TIMESTAMP WITH TIME ZONE

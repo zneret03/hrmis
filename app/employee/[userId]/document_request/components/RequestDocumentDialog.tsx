@@ -109,7 +109,7 @@ export function RequestDocumentDialog({
                 onValueChange={(e) => onChange(e)}
               >
                 <SelectTrigger className='w-full'>
-                  <SelectValue placeholder='Select role' />
+                  <SelectValue placeholder='Select document' />
                 </SelectTrigger>
                 <SelectContent>
                   {certificateType.map((item) => (

@@ -18,6 +18,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       isActive: true
     },
     {
+      title: 'Requested Documents',
+      url: `/backend/${id}/requested_documents`,
+      icon: Files,
+      isActive: true
+    },
+    {
       title: 'Attendance',
       url: `/backend/${id}/attendance`,
       icon: FileText,

@@ -201,6 +201,7 @@ export type Database = {
           title: string | null
           reason: string | null
           data: Json
+          file: string
           id: string
           updated_at: string | null
           user_id: string | null
@@ -212,7 +213,8 @@ export type Database = {
           created_at?: string | null
           title?: string | null
           reason?: string | null
-          data: Json
+          data?: Json | null
+          file?: string
           id?: string
           updated_at?: string | null
           user_id?: string | null
@@ -225,6 +227,7 @@ export type Database = {
           title?: string | null
           reason?: string | null
           data?: Json
+          file?: string | null
           id?: string
           updated_at?: string | null
           user_id?: string | null

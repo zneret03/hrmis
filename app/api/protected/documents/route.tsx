@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
         tableName: 'certificates',
         supabase,
         columns:
-          'id, users!user_id!inner(email, username, id, employee_id), title, reason, certificate_type, data, certificate_status, created_at, updated_at, archived_at',
+          'id, file, users!user_id!inner(email, username, id, employee_id), title, reason, certificate_type, data, certificate_status, created_at, updated_at, archived_at',
         search: { column: 'title', query: search },
         page,
         perPage,
