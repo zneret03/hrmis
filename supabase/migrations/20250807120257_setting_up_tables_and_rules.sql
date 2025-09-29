@@ -557,6 +557,18 @@ CREATE POLICY admin_all_certificates ON public.certificates
             WHERE (users_1.id = auth.uid())) = 'admin'::text))
     );
 
+
+CREATE POLICY employee_all_certificates ON public.certificates
+    FOR ALL
+    TO authenticated
+    USING (
+     archived_at IS NULL AND user_id = auth.uid()
+  )
+    WITH CHECK (
+     archived_at IS NULL AND user_id = auth.uid()
+    );
+
+
 CREATE POLICY employee_own_certificates ON public.certificates
     FOR SELECT
     TO authenticated

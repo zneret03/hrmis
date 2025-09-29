@@ -196,7 +196,10 @@ export type Database = {
         Row: {
           archived_at: string | null
           certificate_type: string
+          certificate_status: string
           created_at: string | null
+          title: string | null
+          reason: string | null
           data: Json
           id: string
           updated_at: string | null
@@ -205,7 +208,10 @@ export type Database = {
         Insert: {
           archived_at?: string | null
           certificate_type: string
+          certificate_status: string
           created_at?: string | null
+          title?: string | null
+          reason?: string | null
           data: Json
           id?: string
           updated_at?: string | null
@@ -214,7 +220,10 @@ export type Database = {
         Update: {
           archived_at?: string | null
           certificate_type?: string
+          certificate_status?: string
           created_at?: string | null
+          title?: string | null
+          reason?: string | null
           data?: Json
           id?: string
           updated_at?: string | null

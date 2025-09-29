@@ -4,9 +4,12 @@ import { paginatedData } from '../../helpers/paginated-data'
 import {
   badRequestResponse,
   generalErrorResponse,
-  successResponse
+  successResponse,
+  validationErrorNextResponse
 } from '../../helpers/response'
+import { isEmpty } from 'lodash'
 import { AttendanceDB } from '@/lib/types/attendance'
+import { requestDocument } from '../model/certificates'
 
 export async function GET(req: NextRequest) {
   try {
@@ -49,5 +52,17 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     const newError = error as Error
     return generalErrorResponse({ error: newError.message })
+  }
+}
+
+export async function POST(req: NextRequest) {
+  const body = await req.json()
+
+  if (isEmpty(body)) {
+    return validationErrorNextResponse()
+  }
+
+  if (body.type === 'request-document') {
+    return requestDocument(body.data)
   }
 }

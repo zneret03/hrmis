@@ -161,12 +161,17 @@ export const signUp = async (body: SignUp) => {
       .maybeSingle()
 
     if (foundUserError) {
-      removeImageViaPath(supabase, getImagePath(body.avatar as string))
+      if (typeof body.avatar === 'string') {
+        removeImageViaPath(supabase, getImagePath(body.avatar as string))
+      }
+
       return unauthorizedResponse({ error: foundUserError?.message })
     }
 
     if (foundUser) {
-      removeImageViaPath(supabase, getImagePath(body.avatar as string))
+      if (typeof body.avatar === 'string') {
+        removeImageViaPath(supabase, getImagePath(body.avatar as string))
+      }
       return conflictRequestResponse({
         error: 'username already exist please try again.'
       })
@@ -184,7 +189,9 @@ export const signUp = async (body: SignUp) => {
     })
 
     if (error) {
-      removeImageViaPath(supabase, getImagePath(body.avatar as string))
+      if (typeof body.avatar === 'string') {
+        removeImageViaPath(supabase, getImagePath(body.avatar as string))
+      }
       return conflictRequestResponse({
         error: error?.message
       })
