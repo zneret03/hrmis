@@ -156,8 +156,11 @@ CREATE INDEX idx_attendance_archived_at ON public.attendance(archived_at);
 CREATE TABLE public.certificates (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    title TEXT NOT NULL,
+    reason TEXT NOT NULL,
     certificate_type TEXT NOT NULL CHECK (certificate_type IN ('coe', 'service_record', 'nosa', 'coec')),
-    data JSONB NOT NULL,
+    data JSONB,
+    certificate_status TEXT NOT NULL CHECK (certificate_status IN('pending', 'approved', 'cancelled', 'disapproved')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,
     archived_at TIMESTAMP WITH TIME ZONE
