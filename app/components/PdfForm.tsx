@@ -34,7 +34,7 @@ export function PdfForm({ file, isAdmin = false }: PdfForm): JSX.Element {
   const documentWidth = !isAdmin ? 1000 : 1300
 
   return (
-    <div className='relative'>
+    <div className='relative max-w-7xl mx-auto'>
       <Document
         file={pdfFile}
         noData={<EmptyPlaceholder />}
@@ -48,32 +48,33 @@ export function PdfForm({ file, isAdmin = false }: PdfForm): JSX.Element {
           renderAnnotationLayer={false}
           renderTextLayer={false}
         />
+
+        {numPages && (
+          <div className='text-right space-y-2'>
+            <p>
+              <strong>Page</strong> {pageNumber} of {numPages}
+            </p>
+            <section className='flex items-center justify-end gap-2'>
+              <Button
+                variant='outline'
+                disabled={pageNumber === 1}
+                onClick={() => setPageNumber((prev) => Math.max(1, prev - 1))}
+              >
+                Previous
+              </Button>
+              <Button
+                variant='outline'
+                disabled={pageNumber === numPages}
+                onClick={() =>
+                  setPageNumber((prev) => Math.min(numPages, prev + 1))
+                }
+              >
+                Next
+              </Button>
+            </section>
+          </div>
+        )}
       </Document>
-      {numPages && (
-        <div className='text-right space-y-2'>
-          <p>
-            <strong>Page</strong> {pageNumber} of {numPages}
-          </p>
-          <section className='flex items-center justify-end gap-2'>
-            <Button
-              variant='outline'
-              disabled={pageNumber === 1}
-              onClick={() => setPageNumber((prev) => Math.max(1, prev - 1))}
-            >
-              Previous
-            </Button>
-            <Button
-              variant='outline'
-              disabled={pageNumber === numPages}
-              onClick={() =>
-                setPageNumber((prev) => Math.min(numPages, prev + 1))
-              }
-            >
-              Next
-            </Button>
-          </section>
-        </div>
-      )}
     </div>
   )
 }

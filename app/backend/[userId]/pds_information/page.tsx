@@ -21,7 +21,7 @@ export default async function PDSInformation({
       <section className='flex gap-2'>
         <div className='flex-1'>
           <PDFAction isAdmin data={pdsInfo} />
-          <PdfForm file={pdsInfo.file} />
+          <PdfForm isAdmin file={pdsInfo.file} />
         </div>
       </section>
 
