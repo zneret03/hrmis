@@ -137,12 +137,15 @@ export function UsersTable({
         header: 'Leave Credits',
         cell: ({ row }) => {
           const creds = row.original.credits
-          const totalCreds = toPercentage(creds, 10)
+          const maxCreds = row.original.max_credits
+          const totalCreds = toPercentage(creds, maxCreds)
 
           return (
             <div className='flex items-center gap-2'>
               <Progress value={totalCreds} />
-              <span className='font-semibold text-sm'>{creds}/10</span>
+              <span className='font-semibold text-sm'>
+                {creds}/{maxCreds}
+              </span>
             </div>
           )
         }
@@ -238,7 +241,8 @@ export function UsersTable({
                   event.stopPropagation()
                   toggleOpen?.(true, 'edit', {
                     ...row.original?.users,
-                    credits: row.original.credits
+                    credits: row.original.credits,
+                    maxCredits: row.original.max_credits
                   })
                 }}
               >
@@ -358,9 +362,11 @@ export function UsersTable({
                   data-state={row.getIsSelected() && 'selected'}
                   className='cursor-pointer'
                   onClick={() =>
-                    onHandleUserDetails(
-                      row.original.users.employee_id as string
-                    )
+                    !row.original.users.employee_id
+                      ? {}
+                      : onHandleUserDetails(
+                          row.original.users.employee_id as string
+                        )
                   }
                 >
                   {row.getVisibleCells().map((cell) => (

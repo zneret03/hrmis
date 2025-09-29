@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
         tableName: 'leave_credits',
         supabase,
         columns:
-          'id, credits, users!inner(id, avatar, email, username, role, employee_id, created_at, updated_at, archived_at), created_at, updated_at, archived_at',
+          'id, credits, max_credits, users!inner(id, avatar, email, username, role, employee_id, created_at, updated_at, archived_at), created_at, updated_at, archived_at',
         search: { column: 'users.email', query: search },
         page,
         perPage,
@@ -61,6 +61,10 @@ export async function POST(req: NextRequest) {
   }
 
   if (body.type === 'update-credits') {
-    return updateCredits({ id: body.id, credits: Number(body.credits) })
+    return updateCredits({
+      id: body.id,
+      credits: Number(body.credits),
+      max_credits: Number(body.max_credits)
+    })
   }
 }

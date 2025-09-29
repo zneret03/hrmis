@@ -84,6 +84,7 @@ CREATE TABLE public.leave_credits (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     credits INTEGER NOT NULL DEFAULT 0,
+    max_credits INTEGER NOT NULL DEFAULT 10,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,
     archived_at TIMESTAMP WITH TIME ZONE
@@ -446,10 +447,8 @@ CREATE POLICY insert_leave_credits ON public.leave_credits
 CREATE POLICY update_leave_credits ON public.leave_credits
     FOR UPDATE
     TO authenticated
-    WITH CHECK (user_id = auth.uid() OR 
-      ((( SELECT users_1.role
-            FROM users users_1
-            WHERE (users_1.id = auth.uid())) = 'admin'::text))
+    USING (
+      true
     );
 
 CREATE POLICY employee_own_leave_credits ON public.leave_credits

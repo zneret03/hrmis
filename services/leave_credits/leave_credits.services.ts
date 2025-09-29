@@ -43,7 +43,7 @@ export const fetchUserWitHCredits = async (id: string) => {
 }
 
 export const updateLeaveCredits = async (
-  data: Pick<LeaveCredits, 'id' | 'credits'>
+  data: Pick<LeaveCredits, 'id' | 'credits' | 'max_credits'>
 ) => {
   try {
     const response = await axiosService.post('/api/protected/user_credits', {

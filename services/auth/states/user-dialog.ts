@@ -18,6 +18,7 @@ export type UserData = Pick<
   'username' | 'role' | 'employee_id' | 'avatar' | 'email' | 'id'
 > & {
   credits?: number
+  maxCredits?: number
 }
 
 export interface UserDialog {
@@ -39,7 +40,8 @@ const initialState: UserDialog = {
     role: '',
     employee_id: '',
     avatar: '',
-    credits: 0
+    credits: 0,
+    maxCredits: 0
   },
   open: false,
   type: null

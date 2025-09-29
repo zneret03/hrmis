@@ -3,7 +3,7 @@ import { createClient } from '@/config'
 import { LeaveCredits } from '@/lib/types/leave_credits'
 
 export const updateCredits = async (
-  data: Pick<LeaveCredits, 'id' | 'credits'>
+  data: Pick<LeaveCredits, 'id' | 'credits' | 'max_credits'>
 ) => {
   try {
     const supabase = await createClient()
@@ -11,7 +11,7 @@ export const updateCredits = async (
     const { error } = await supabase
       .from('leave_credits')
       .update(data)
-      .eq('id', data.id)
+      .eq('user_id', data.id)
 
     if (error) {
       return generalErrorResponse({ error: error.message })

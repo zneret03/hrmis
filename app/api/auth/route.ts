@@ -3,8 +3,6 @@ import { validationErrorNextResponse } from '../helpers/response'
 import { isEmpty } from 'lodash'
 import { signIn, signOut } from './model/auth'
 
-//test update
-
 export async function POST(req: NextRequest) {
   const body = await req.json()
 

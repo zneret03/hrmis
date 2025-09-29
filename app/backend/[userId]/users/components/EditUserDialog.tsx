@@ -1,6 +1,6 @@
 'use client'
 
-import { JSX, useState, useTransition, useEffect } from 'react'
+import { JSX, useState, useTransition, useEffect, ReactNode } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -43,11 +43,16 @@ interface EditUserDialog extends Omit<UpdateUser, 'avatar'> {
   oldAvatar: string
 }
 
+const errorMessage = (error: string): ReactNode => (
+  <p className='text-sm text-red-500'>{error}</p>
+)
+
 export function EditUserDialog(): JSX.Element {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [isUpdateCredits, setUpdateCredits] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
+  const [credsError, setCredsError] = useState<string>('')
 
   const { open, toggleOpen, type, data } = useUserDialog(
     useShallow((state) => ({
@@ -59,6 +64,9 @@ export function EditUserDialog(): JSX.Element {
   )
 
   const [newCredit, setNewCredit] = useState<number>(data?.credits as number)
+  const [newMaxCredits, setNewMaxCredits] = useState<number>(
+    data?.maxCredits as number
+  )
 
   const oldData = {
     avatar: data?.avatar,
@@ -81,17 +89,27 @@ export function EditUserDialog(): JSX.Element {
     setUpdateCredits((prevState) => !prevState)
   }
 
-  const updateCredits = (): void => {
-    startTransition(async () => {
-      await updateLeaveCredits({ id: data?.id as string, credits: newCredit })
-      setUpdateCredits(false)
-    })
-  }
-
   const resetVariable = (): void => {
     setMessage('')
     router.refresh()
     toggleOpen?.(false, null, null)
+    setUpdateCredits(false)
+  }
+
+  const updateCredits = (): void => {
+    startTransition(async () => {
+      if (newCredit > Number(data?.maxCredits)) {
+        setCredsError('Credits cant be greater that max credits')
+        return
+      }
+      await updateLeaveCredits({
+        id: data?.id as string,
+        credits: newCredit || (data?.credits as number),
+        max_credits: newMaxCredits || (data?.maxCredits as number)
+      })
+
+      resetVariable()
+    })
   }
 
   const onSubmit = async (editData: EditUserDialog): Promise<void> => {
@@ -131,6 +149,8 @@ export function EditUserDialog(): JSX.Element {
         oldAvatar: data.avatar as string,
         email: data.email as string
       })
+      setNewCredit(data?.credits as number)
+      setNewMaxCredits(data?.maxCredits as number)
     }
   }, [data, reset])
 
@@ -166,16 +186,30 @@ export function EditUserDialog(): JSX.Element {
             <h1 className='font-medium'>Leave Credits</h1>
             <section className='flex items-center gap-2'>
               <Progress value={toPercentage(data?.credits as number, 10)} />
-              <span className='text-sm'>{data?.credits}/10</span>
+              <span className='text-sm'>
+                {data?.credits}/{data?.maxCredits}
+              </span>
             </section>
             {isUpdateCredits && (
-              <Input
-                type='number'
-                title='Credits'
-                value={newCredit}
-                onChange={(event) => setNewCredit(Number(event.target.value))}
-              />
+              <div className='grid grid-cols-2 gap-2'>
+                <Input
+                  type='text'
+                  title='Credits'
+                  value={newCredit}
+                  onChange={(event) => setNewCredit(Number(event.target.value))}
+                />
+                <Input
+                  type='text'
+                  title='Max Credits'
+                  value={newMaxCredits}
+                  onChange={(event) =>
+                    setNewMaxCredits(Number(event.target.value))
+                  }
+                />
+              </div>
             )}
+
+            {!!credsError && errorMessage(credsError)}
 
             <div className='text-right'>
               <CustomButton
@@ -257,7 +291,7 @@ export function EditUserDialog(): JSX.Element {
             <h1 className='text-sm text-red-500'>{errors.avatar.message}</h1>
           )}
         </div>
-        {!!message && <p className='text-sm text-red-500'>{message}</p>}
+        {!!message && errorMessage(message)}
         <DialogFooter>
           <DialogClose asChild>
             <Button
