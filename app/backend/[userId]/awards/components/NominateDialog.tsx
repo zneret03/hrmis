@@ -45,7 +45,7 @@ export function NominateDialog(): JSX.Element {
 
   const onSubmit = async (data: AwardsForm): Promise<void> => {
     startTransition(async () => {
-      console.log(data)
+      console.info(data)
       resetVariables()
       // await addLeaveCategories(name as string)
       // resetVariables()

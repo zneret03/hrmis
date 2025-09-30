@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import type { ReactNode } from "react"
+import type { ReactNode } from 'react'
 import React, {
   createContext,
   forwardRef,
@@ -8,22 +8,22 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
-  useRef,
-} from "react"
+  useRef
+} from 'react'
 import type {
   GlobalOptions as ConfettiGlobalOptions,
   CreateTypes as ConfettiInstance,
-  Options as ConfettiOptions,
-} from "canvas-confetti"
-import confetti from "canvas-confetti"
+  Options as ConfettiOptions
+} from 'canvas-confetti'
+import confetti from 'canvas-confetti'
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 
 type Api = {
   fire: (options?: ConfettiOptions) => void
 }
 
-type Props = React.ComponentPropsWithRef<"canvas"> & {
+type Props = React.ComponentPropsWithRef<'canvas'> & {
   options?: ConfettiOptions
   globalOptions?: ConfettiGlobalOptions
   manualstart?: boolean
@@ -51,7 +51,7 @@ const ConfettiComponent = forwardRef<ConfettiRef, Props>((props, ref) => {
         if (instanceRef.current) return
         instanceRef.current = confetti.create(node, {
           ...globalOptions,
-          resize: true,
+          resize: true
         })
       } else {
         if (instanceRef.current) {
@@ -68,7 +68,7 @@ const ConfettiComponent = forwardRef<ConfettiRef, Props>((props, ref) => {
       try {
         await instanceRef.current?.({ ...options, ...opts })
       } catch (error) {
-        console.error("Confetti error:", error)
+        console.error('Confetti error:', error)
       }
     },
     [options]
@@ -76,7 +76,7 @@ const ConfettiComponent = forwardRef<ConfettiRef, Props>((props, ref) => {
 
   const api = useMemo(
     () => ({
-      fire,
+      fire
     }),
     [fire]
   )
@@ -89,7 +89,7 @@ const ConfettiComponent = forwardRef<ConfettiRef, Props>((props, ref) => {
         try {
           await fire()
         } catch (error) {
-          console.error("Confetti effect error:", error)
+          console.error('Confetti effect error:', error)
         }
       })()
     }
@@ -104,12 +104,12 @@ const ConfettiComponent = forwardRef<ConfettiRef, Props>((props, ref) => {
 })
 
 // Set display name immediately
-ConfettiComponent.displayName = "Confetti"
+ConfettiComponent.displayName = 'Confetti'
 
 // Export as Confetti
 export const Confetti = ConfettiComponent
 
-interface ConfettiButtonProps extends React.ComponentProps<"button"> {
+interface ConfettiButtonProps extends React.ComponentProps<'button'> {
   options?: ConfettiOptions &
     ConfettiGlobalOptions & { canvas?: HTMLCanvasElement }
 }
@@ -128,11 +128,11 @@ const ConfettiButtonComponent = ({
         ...options,
         origin: {
           x: x / window.innerWidth,
-          y: y / window.innerHeight,
-        },
+          y: y / window.innerHeight
+        }
       })
     } catch (error) {
-      console.error("Confetti button error:", error)
+      console.error('Confetti button error:', error)
     }
   }
 
@@ -143,6 +143,6 @@ const ConfettiButtonComponent = ({
   )
 }
 
-ConfettiButtonComponent.displayName = "ConfettiButton"
+ConfettiButtonComponent.displayName = 'ConfettiButton'
 
 export const ConfettiButton = ConfettiButtonComponent
