@@ -32,7 +32,7 @@ import {
 } from '@/components/ui/table'
 import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
-import { useLeaveCategoriesDialog } from '@/services/leave_categories/states/leave-categories-dialog'
+import { useAwards } from '@/services/awards/state/use-awards'
 import { useShallow } from 'zustand/shallow'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
@@ -58,7 +58,7 @@ export function EmployeeAwardsTable({
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const { toggleOpen } = useLeaveCategoriesDialog(
+  const { toggleOpen } = useAwards(
     useShallow((state) => ({ toggleOpen: state.toggleOpenDialog }))
   )
 
@@ -144,7 +144,7 @@ export function EmployeeAwardsTable({
         id: 'actions',
         header: 'Actions',
         enableHiding: false,
-        cell: () => (
+        cell: ({ row }) => (
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant='ghost' className='h-8 w-8 p-0'>
@@ -153,11 +153,17 @@ export function EmployeeAwardsTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => toggleOpen?.(true, 'edit', { ...row.original })}
+              >
                 <Pencil />
                 Edit info
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  toggleOpen?.(true, 'delete', { ...row.original })
+                }
+              >
                 <Trash />
                 Delete
               </DropdownMenuItem>

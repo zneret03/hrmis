@@ -1,5 +1,6 @@
 import { JSX } from 'react'
 import { EmployeeAwardsTable } from './components/AwardsTable'
+import { NominateDialog } from './components/NominateDialog'
 import { getAwards } from '@/services/awards/awards.service'
 import { Container } from '@/components/custom/Container'
 
@@ -21,12 +22,14 @@ export default async function Awards({
     >
       <EmployeeAwardsTable
         {...{
-          awards: response.certificates,
+          awards: response.awards,
           totalPages: response.totalPages,
           currentPage: response.currentPage,
           count: response.count
         }}
       />
+
+      <NominateDialog />
     </Container>
   )
 }
