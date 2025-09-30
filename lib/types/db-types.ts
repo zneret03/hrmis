@@ -141,6 +141,9 @@ export type Database = {
       }
       awards: {
         Row: {
+          title: string | null
+          description: string | null
+          read: string | Date | null
           archived_at: string | null
           award_type: string
           created_at: string | null
@@ -150,6 +153,9 @@ export type Database = {
           year: number
         }
         Insert: {
+          title?: string | null
+          description?: string | null
+          read?: string | Date | null
           archived_at?: string | null
           award_type: string
           created_at?: string | null
@@ -159,6 +165,9 @@ export type Database = {
           year: number
         }
         Update: {
+          title?: string | null
+          description?: string | null
+          read?: string | Date | null
           archived_at?: string | null
           award_type?: string
           created_at?: string | null

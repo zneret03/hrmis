@@ -13,7 +13,7 @@ export default async function Awards({
     `?page=${page || 1}&perPage=10&search=${search}&sortBy=created_at`
   )
 
-  console.log(response)
+  console.info(response)
 
   return (
     <Container title='Awards' description='All your awards can be seen here'>
