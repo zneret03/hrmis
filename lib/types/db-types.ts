@@ -144,7 +144,7 @@ export type Database = {
           title: string | null
           description: string | null
           read: string | Date | null
-          archived_at: string | null
+          archived_at: string | Date | null
           award_type: string
           created_at: string | null
           id: string
@@ -156,7 +156,7 @@ export type Database = {
           title?: string | null
           description?: string | null
           read?: string | Date | null
-          archived_at?: string | null
+          archived_at?: string | Date | null
           award_type: string
           created_at?: string | null
           id?: string
@@ -168,7 +168,7 @@ export type Database = {
           title?: string | null
           description?: string | null
           read?: string | Date | null
-          archived_at?: string | null
+          archived_at?: string | Date | null
           award_type?: string
           created_at?: string | null
           id?: string

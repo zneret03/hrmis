@@ -49,11 +49,12 @@ export function NominateDialog({ users }: NominateDialog): JSX.Element {
 
   const router = useRouter()
 
-  const { open, toggleOpen, type } = useAwards(
+  const { open, toggleOpen, type, data } = useAwards(
     useShallow((state) => ({
       open: state.open,
       type: state.type,
-      toggleOpen: state.toggleOpenDialog
+      toggleOpen: state.toggleOpenDialog,
+      data: state.data
     }))
   )
 

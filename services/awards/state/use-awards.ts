@@ -3,7 +3,7 @@ import { createJSONStorage } from 'zustand/middleware'
 import { create } from 'zustand'
 import { Awards } from '@/lib/types/awards'
 
-type AwardsDialogType = 'add' | 'edit' | 'delete' | null
+type AwardsDialogType = 'add' | 'edit' | 'delete' | 'read' | null
 
 export type AwardsData = Omit<
   Awards,

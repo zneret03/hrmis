@@ -30,6 +30,8 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
+import { awardTypeCast } from '@/app/helpers/constants'
 import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { useAwards } from '@/services/awards/state/use-awards'
@@ -100,7 +102,22 @@ export function EmployeeAwardsTable({
         accessorKey: 'awards_type',
         header: 'Awards Type',
         cell: function ({ row }) {
-          return <div>{row.original.award_type}</div>
+          return (
+            <Badge variant='outline'>
+              {awardTypeCast[row.original.award_type]}
+            </Badge>
+          )
+        }
+      },
+      {
+        accessorKey: 'read',
+        header: 'Status',
+        cell: function ({ row }) {
+          return (
+            <Badge variant='outline' className='capitalize'>
+              {!row.original.read ? 'unread' : 'read'}
+            </Badge>
+          )
         }
       },
       {

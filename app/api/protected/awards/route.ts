@@ -4,9 +4,12 @@ import { paginatedData } from '../../helpers/paginated-data'
 import {
   badRequestResponse,
   generalErrorResponse,
-  successResponse
+  successResponse,
+  validationErrorNextResponse
 } from '../../helpers/response'
 import { AttendanceDB } from '@/lib/types/attendance'
+import { isEmpty } from 'lodash'
+import { addAwards } from '../model/awards'
 
 export async function GET(req: NextRequest) {
   try {
@@ -25,8 +28,8 @@ export async function GET(req: NextRequest) {
         tableName: 'awards',
         supabase,
         columns:
-          'id, users!user_id!inner(email, username, id, employee_id), award_type, year, created_at, updated_at, archived_at',
-        search: { column: 'users.email', query: search },
+          'id, title, description, read, users!user_id!inner(email, username, id, employee_id), award_type, year, created_at, updated_at, archived_at',
+        search: { column: 'title', query: search },
         page,
         perPage,
         sortBy,
@@ -49,5 +52,17 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     const newError = error as Error
     return generalErrorResponse({ error: newError.message })
+  }
+}
+
+export async function POST(req: NextRequest) {
+  const body = await req.json()
+
+  if (isEmpty(body)) {
+    return validationErrorNextResponse()
+  }
+
+  if (body.type === 'add-award') {
+    return addAwards(body.data)
   }
 }

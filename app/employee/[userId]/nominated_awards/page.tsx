@@ -1,6 +1,8 @@
 import { JSX } from 'react'
 import { Container } from '@/components/custom/Container'
 import { getAwards } from '@/services/awards/awards.service'
+import { Awards as AwardsContainer } from './components/Awards'
+import { AwardDialog } from '@/app/components/AwardDialog'
 
 export default async function Awards({
   searchParams
@@ -13,11 +15,18 @@ export default async function Awards({
     `?page=${page || 1}&perPage=10&search=${search}&sortBy=created_at`
   )
 
-  console.info(response)
-
   return (
     <Container title='Awards' description='All your awards can be seen here'>
-      awards
+      <AwardsContainer
+        {...{
+          awards: response.awards,
+          totalPages: response.totalPages,
+          currentPage: response.currentPage,
+          count: response.count
+        }}
+      />
+
+      <AwardDialog />
     </Container>
   )
 }

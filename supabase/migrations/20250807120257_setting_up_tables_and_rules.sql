@@ -620,12 +620,21 @@ CREATE POLICY admin_all_awards ON public.awards
     USING (
       ((( SELECT users_1.role
             FROM users users_1
-            WHERE (users_1.id = auth.uid())) = 'admin'::text))
-      AND archived_at IS NULL)
+            WHERE (users_1.id = auth.uid())) = 'admin'::text)))
     WITH CHECK (
       ((( SELECT users_1.role
             FROM users users_1
             WHERE (users_1.id = auth.uid())) = 'admin'::text))
+    );
+
+CREATE POLICY employee_update_awards ON public.awards
+    FOR UPDATE
+    TO authenticated
+    USING (
+      user_id = auth.uid() AND archived_at IS NULL
+    )
+    WITH CHECK (
+      user_id = auth.uid() AND archived_at IS NULL
     );
 
 CREATE POLICY employee_own_awards ON public.awards
