@@ -50,6 +50,8 @@ const errorMessage = (error: string): ReactNode => (
 export function EditUserDialog(): JSX.Element {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
+  const [isPendingCredits, startCreditTransition] = useTransition()
+
   const [isUpdateCredits, setUpdateCredits] = useState<boolean>(false)
   const [message, setMessage] = useState<string>('')
   const [credsError, setCredsError] = useState<string>('')
@@ -97,7 +99,7 @@ export function EditUserDialog(): JSX.Element {
   }
 
   const updateCredits = (): void => {
-    startTransition(async () => {
+    startCreditTransition(async () => {
       if (newCredit > Number(data?.maxCredits)) {
         setCredsError('Credits cant be greater that max credits')
         return
@@ -214,8 +216,8 @@ export function EditUserDialog(): JSX.Element {
             <div className='text-right'>
               <CustomButton
                 onClick={isUpdateCredits ? updateCredits : toggleCreditsField}
-                disabled={isPending}
-                isLoading={isPending}
+                disabled={isPendingCredits}
+                isLoading={isPendingCredits}
               >
                 <RotateCcw />{' '}
                 {isUpdateCredits ? 'Save Credit' : ' Update Credit'}

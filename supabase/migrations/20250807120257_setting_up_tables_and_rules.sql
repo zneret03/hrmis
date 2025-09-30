@@ -647,11 +647,18 @@ CREATE OR REPLACE FUNCTION update_attendance_on_logout()
 RETURNS TRIGGER AS $$
 DECLARE
     login_time TIMESTAMP WITH TIME ZONE;
-    total_days_in_month INTEGER;
+    total_workdays_in_month INTEGER;
     days_present_count INTEGER;
     v_tardiness_count INTEGER;
 BEGIN
-    SELECT EXTRACT(DAY FROM (DATE_TRUNC('month', NEW.timestamp) + INTERVAL '1 month - 1 day')) INTO total_days_in_month;
+  SELECT COUNT(*)
+    INTO total_workdays_in_month
+    FROM generate_series(
+        DATE_TRUNC('month', NEW.timestamp)::date,
+        (DATE_TRUNC('month', NEW.timestamp) + INTERVAL '1 month - 1 day')::date,
+        '1 day'::interval
+    ) AS calendar_day
+    WHERE EXTRACT(ISODOW FROM calendar_day) < 6; -- Monday=1, Friday=5, Saturday=6
 
     IF NEW.type IN (1, 15) THEN
         SELECT timestamp INTO login_time
@@ -680,36 +687,34 @@ BEGIN
                     AND b2.timestamp > b.timestamp
               );
 
-            -- **REWRITTEN: A more robust tardiness calculation.**
             WITH daily_stats AS (
                 SELECT
-                    MIN(timestamp AT TIME ZONE 'Asia/Manila') as first_punch,
+                    MIN(timestamp) as first_punch,
                     COUNT(*) as punch_count
                 FROM biometrics
                 WHERE employee_id = NEW.employee_id
                   AND DATE_TRUNC('month', timestamp) = DATE_TRUNC('month', NEW.timestamp)
-                GROUP BY DATE(timestamp AT TIME ZONE 'Asia/Manila')
+                GROUP BY DATE(timestamp)
             )
             SELECT COUNT(*)
             INTO v_tardiness_count
             FROM daily_stats
             WHERE
-                punch_count > 1 -- Rule 1: It must be a "present" day.
-                AND first_punch::time > '08:00:00'; -- Rule 2: The first punch must be late.
+                punch_count > 1 
+                AND first_punch::time > '08:00:00'; 
 
-            -- Insert or update the attendance record.
             INSERT INTO attendance (employee_id, user_id, month, days_present, days_absent, tardiness_count)
             VALUES (
                 NEW.employee_id,
                 (SELECT id FROM users WHERE employee_id = NEW.employee_id),
                 DATE_TRUNC('month', NEW.timestamp),
                 days_present_count,
-                total_days_in_month - days_present_count,
+                total_workdays_in_month - days_present_count,
                 v_tardiness_count
             )
             ON CONFLICT (employee_id, month) DO UPDATE
             SET days_present = days_present_count,
-                days_absent = total_days_in_month - days_present_count,
+                days_absent = total_workdays_in_month - days_present_count,
                 tardiness_count = v_tardiness_count,
                 updated_at = CURRENT_TIMESTAMP;
         END IF;
