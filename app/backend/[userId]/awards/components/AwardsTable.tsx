@@ -287,7 +287,9 @@ export function EmployeeAwardsTable({
           </TableBody>
         </Table>
       </div>
-      <Pagination {...{ totalPages, currentPage, count }} />
+      {data.length > 0 && (
+        <Pagination {...{ totalPages, currentPage, count }} />
+      )}
     </div>
   )
 }
