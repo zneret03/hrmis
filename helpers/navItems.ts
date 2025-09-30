@@ -5,7 +5,8 @@ import {
   TowerControl,
   Plane,
   FileText,
-  FileStack
+  FileStack,
+  Files
 } from 'lucide-react'
 
 export const adminMenus = (id: string): SideMenu[] => {
@@ -14,6 +15,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       title: 'Dashboard',
       url: `/backend/${id}/dashboard`,
       icon: LayoutDashboard,
+      isActive: true
+    },
+    {
+      title: 'Requested Documents',
+      url: `/backend/${id}/requested_documents`,
+      icon: Files,
       isActive: true
     },
     {
@@ -55,6 +62,12 @@ export const employeeMenus = (id: string): SideMenu[] => {
       title: 'Attendance',
       url: `/employee/${id}/attendance`,
       icon: FileText,
+      isActive: true
+    },
+    {
+      title: 'Documents Request',
+      url: `/employee/${id}/document_request?page=1`,
+      icon: Files,
       isActive: true
     }
   ]

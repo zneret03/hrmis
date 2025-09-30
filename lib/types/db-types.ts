@@ -194,28 +194,40 @@ export type Database = {
       }
       certificates: {
         Row: {
-          archived_at: string | null
+          archived_at: string | Date | null
           certificate_type: string
+          certificate_status: string
           created_at: string | null
+          title: string | null
+          reason: string | null
           data: Json
+          file: string
           id: string
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          archived_at?: string | null
+          archived_at?: string | Date | null
           certificate_type: string
+          certificate_status: string
           created_at?: string | null
-          data: Json
+          title?: string | null
+          reason?: string | null
+          data?: Json | null
+          file?: string
           id?: string
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
-          archived_at?: string | null
+          archived_at?: string | Date | null
           certificate_type?: string
+          certificate_status?: string
           created_at?: string | null
+          title?: string | null
+          reason?: string | null
           data?: Json
+          file?: string | null
           id?: string
           updated_at?: string | null
           user_id?: string | null
