@@ -2,6 +2,7 @@ import { JSX } from 'react'
 import { getCertificates } from '@/services/certificates/certificates.service'
 import { Container } from '@/components/custom/Container'
 import { CertificatesTable } from './components/RequestedDocumentsTable'
+import { DeleteDocumentDialog } from './components/DeleteDocumentDialog'
 
 export default async function RequestedDocuments({
   searchParams
@@ -27,6 +28,8 @@ export default async function RequestedDocuments({
           count: response.count
         }}
       />
+
+      <DeleteDocumentDialog />
     </Container>
   )
 }

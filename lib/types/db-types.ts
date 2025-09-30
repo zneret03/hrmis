@@ -194,7 +194,7 @@ export type Database = {
       }
       certificates: {
         Row: {
-          archived_at: string | null
+          archived_at: string | Date | null
           certificate_type: string
           certificate_status: string
           created_at: string | null
@@ -207,7 +207,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          archived_at?: string | null
+          archived_at?: string | Date | null
           certificate_type: string
           certificate_status: string
           created_at?: string | null
@@ -220,7 +220,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
-          archived_at?: string | null
+          archived_at?: string | Date | null
           certificate_type?: string
           certificate_status?: string
           created_at?: string | null

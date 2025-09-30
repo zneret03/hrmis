@@ -13,13 +13,7 @@ import {
   useReactTable,
   VisibilityState
 } from '@tanstack/react-table'
-import {
-  ChevronDown,
-  Plus,
-  MoreHorizontal,
-  CheckCircle,
-  Trash
-} from 'lucide-react'
+import { ChevronDown, MoreHorizontal, CheckCircle, Trash } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -36,6 +30,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { Badge } from '@/components/ui/badge'
 import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { useCertificates } from '@/services/certificates/state/use-certificate'
@@ -96,11 +91,7 @@ export function CertificatesTable({
         header: 'Email',
         cell: function ({ row }) {
           return (
-            <div className='flex items-center gap-2'>
-              <div className='capitalize font-semibold'>
-                {row.original.users?.email}
-              </div>
-            </div>
+            <div className='font-semibold'>{row.original.users?.email}</div>
           )
         }
       },
@@ -117,6 +108,15 @@ export function CertificatesTable({
         cell: function ({ row }) {
           return (
             <div className='uppercase'>{row.original.certificate_type}</div>
+          )
+        }
+      },
+      {
+        accessorKey: 'certificated_status',
+        header: 'Status',
+        cell: function ({ row }) {
+          return (
+            <Badge variant='outline'>{row.original.certificate_status}</Badge>
           )
         }
       },
@@ -154,7 +154,7 @@ export function CertificatesTable({
         id: 'actions',
         header: 'Actions',
         enableHiding: false,
-        cell: () => (
+        cell: ({ row }) => (
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant='ghost' className='h-8 w-8 p-0'>
@@ -167,7 +167,13 @@ export function CertificatesTable({
                 <CheckCircle />
                 Approve
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  toggleOpen?.(true, 'delete', {
+                    ...(row.original as Certificates)
+                  })
+                }
+              >
                 <Trash />
                 Delete
               </DropdownMenuItem>
@@ -202,7 +208,7 @@ export function CertificatesTable({
     <div className='w-full'>
       <div className='flex items-center py-4'>
         <Input
-          placeholder='Search categories...'
+          placeholder='Search document by title...'
           onChange={(event) => onSearch(event)}
           className='max-w-sm'
         />
@@ -234,11 +240,6 @@ export function CertificatesTable({
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <Button onClick={() => toggleOpen?.(true, 'add', null)}>
-            <Plus className='w-5 h-5' />
-            Add Leave Categories
-          </Button>
         </div>
       </div>
       <div className='rounded-md border'>
