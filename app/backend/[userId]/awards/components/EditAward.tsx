@@ -1,6 +1,6 @@
 'use client'
 
-import { JSX, useTransition } from 'react'
+import { JSX, useTransition, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -29,21 +29,22 @@ import { Awards } from '@/lib/types/awards'
 import { useAwards } from '@/services/awards/state/use-awards'
 import { awardsType } from '../helpers/constants'
 import { Users } from '@/lib/types/users'
-import { addAward } from '@/services/awards/awards.service'
+import { updateAward } from '@/services/awards/awards.service'
 
 type AwardsForm = Partial<Awards>
 
-interface NominateDialog {
+interface EditAwardDialog {
   users: Users[]
 }
 
-export function NominateDialog({ users }: NominateDialog): JSX.Element {
+export function EditAward({ users }: EditAwardDialog): JSX.Element {
   const [isPending, startTransition] = useTransition()
   const {
     register,
     handleSubmit,
     formState: { errors },
-    control
+    control,
+    reset
   } = useForm<AwardsForm>()
   const today = new Date()
 
@@ -63,14 +64,28 @@ export function NominateDialog({ users }: NominateDialog): JSX.Element {
     router.refresh()
   }
 
-  const onSubmit = async (data: AwardsForm): Promise<void> => {
+  const onSubmit = async (awardData: AwardsForm): Promise<void> => {
     startTransition(async () => {
-      await addAward({ ...data, year: today.getFullYear() })
+      await updateAward(
+        { ...awardData, year: today.getFullYear() },
+        data?.id as string
+      )
       resetVariables()
     })
   }
 
-  const isOpenDialog = open && type === 'add'
+  useEffect(() => {
+    if (!!data) {
+      reset({
+        title: data.title,
+        award_type: data.award_type,
+        user_id: data.users?.id,
+        description: data.description
+      })
+    }
+  }, [data, reset])
+
+  const isOpenDialog = open && type === 'edit'
 
   return (
     <Dialog
@@ -79,12 +94,12 @@ export function NominateDialog({ users }: NominateDialog): JSX.Element {
     >
       <DialogContent className='sm:max-w-[40rem]'>
         <DialogHeader>
-          <DialogTitle>Nominate User</DialogTitle>
+          <DialogTitle>Edit Award</DialogTitle>
         </DialogHeader>
 
         <div className='grid grid-cols-2 gap-2'>
           <Input
-            title='Name'
+            title='Title'
             {...register('title', {
               required: 'Required field.'
             })}

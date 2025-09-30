@@ -14,6 +14,7 @@ import {
   VisibilityState
 } from '@tanstack/react-table'
 import { ChevronDown, Plus, MoreHorizontal, Pencil, Trash } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -30,6 +31,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
+import { TooltipComponent } from '@/components/custom/Tooltip'
 import { Badge } from '@/components/ui/badge'
 import { awardTypeCast } from '@/app/helpers/constants'
 import { format, subHours } from 'date-fns'
@@ -40,6 +42,7 @@ import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
 import { useRouter, usePathname } from 'next/navigation'
 import { debounce } from 'lodash'
+import { avatarName } from '@/helpers/avatarName'
 import { Awards } from '@/lib/types/awards'
 
 interface AwardsData extends PaginationType {
@@ -92,9 +95,41 @@ export function EmployeeAwardsTable({
         header: 'User',
         cell: function ({ row }) {
           return (
-            <div className='capitalize font-semibold'>
-              {row.original.users?.email}
+            <div className='flex items-center gap-2'>
+              <Avatar>
+                <AvatarImage
+                  className='object-cover'
+                  src={row.original?.users.avatar ?? ''}
+                  alt={row.original?.users?.email}
+                />
+                <AvatarFallback className='rounded-lg fill-blue-500 bg-blue-400 text-white font-semibold capitalize'>
+                  {avatarName(row.original?.users?.email)}
+                </AvatarFallback>
+              </Avatar>
+              <div>{row.original.users?.email}</div>
             </div>
+          )
+        }
+      },
+      {
+        accessorKey: 'title',
+        header: 'Award Title',
+        cell: function ({ row }) {
+          return (
+            <div className='font-medium capitalize'>{row.original.title}</div>
+          )
+        }
+      },
+      {
+        accessorKey: 'description',
+        header: 'Description',
+        cell: function ({ row }) {
+          return (
+            <TooltipComponent value={row.original.description as string}>
+              <div className='capitalize line-clamp-1 text-ellipsis w-30'>
+                {row.original.description}
+              </div>
+            </TooltipComponent>
           )
         }
       },

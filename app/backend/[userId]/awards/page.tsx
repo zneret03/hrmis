@@ -4,7 +4,8 @@ import { NominateDialog } from './components/NominateDialog'
 import { getAwards } from '@/services/awards/awards.service'
 import { Container } from '@/components/custom/Container'
 import { fetchAllUsers } from '@/services/users/users.services'
-import { DeleteAward } from './components/DeleteDialog'
+import { DeleteAward } from './components/DeleteAward'
+import { EditAward } from './components/EditAward'
 
 export default async function Awards({
   searchParams
@@ -34,6 +35,7 @@ export default async function Awards({
       />
 
       <NominateDialog users={allUser.users} />
+      <EditAward users={allUser.users} />
       <DeleteAward />
     </Container>
   )

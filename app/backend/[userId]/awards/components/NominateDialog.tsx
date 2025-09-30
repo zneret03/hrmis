@@ -83,7 +83,7 @@ export function NominateDialog({ users }: NominateDialog): JSX.Element {
 
         <div className='grid grid-cols-2 gap-2'>
           <Input
-            title='Name'
+            title='Title'
             {...register('title', {
               required: 'Required field.'
             })}
