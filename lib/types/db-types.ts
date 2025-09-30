@@ -90,6 +90,26 @@ export type Database = {
           }
         ]
       }
+      employee_loyalty_threshold: {
+        Row: {
+          id: string
+          year_threshold: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string | null
+          year_threshold?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string | null
+          year_threshold?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
       attendance_summary: {
         Row: {
           id: string

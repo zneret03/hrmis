@@ -20,6 +20,13 @@ CREATE INDEX idx_users_email ON public.users(email);
 CREATE INDEX idx_users_role ON public.users(role);
 CREATE INDEX idx_users_archived_at ON public.users(archived_at);
 
+CREATE TABLE public.employee_loyalty_threshold (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    year_threshold INTEGER,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE
+);
+
 -- Biometrics table for raw attendance logs
 CREATE TABLE public.biometrics (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -261,6 +268,10 @@ CREATE TRIGGER update_awards_updated_at
     BEFORE UPDATE ON public.awards
     FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+CREATE TRIGGER update_employee_loyalty_threshold_updated_at
+    BEFORE UPDATE ON public.employee_loyalty_threshold
+    FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
 -- Function to calculate leave credits based on attendance
 CREATE OR REPLACE FUNCTION public.calculate_monthly_leave_credits()
 RETURNS TRIGGER AS $$
@@ -316,6 +327,21 @@ ALTER TABLE public.attendance ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.certificates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.awards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.attendance_summary ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.employee_loyalty_threshold ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY admin_all_employee_loyalty_threshold ON public.employee_loyalty_threshold
+    FOR ALL
+    TO authenticated
+    USING (
+      ((( SELECT users_1.role
+            FROM users users_1
+            WHERE (users_1.id = auth.uid())) = 'admin'::text))
+    )
+    WITH CHECK (
+      ((( SELECT users_1.role
+            FROM users users_1
+            WHERE (users_1.id = auth.uid())) = 'admin'::text))
+    );
 
 -- Users table policies
 CREATE POLICY admin_all_users ON public.users
@@ -808,3 +834,93 @@ CREATE TRIGGER trigger_update_attendance_summary
 AFTER INSERT ON biometrics
 FOR EACH ROW
 EXECUTE FUNCTION update_attendance_summary();
+
+
+CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA extensions;
+
+CREATE OR REPLACE FUNCTION public.calculate_year_end_awards(award_year INTEGER)
+RETURNS VOID AS $$
+DECLARE
+    loyalty_threshold INTEGER;
+BEGIN
+    -- Fetch the most recent loyalty year threshold from the configuration table.
+    SELECT year_threshold INTO loyalty_threshold
+    FROM public.employee_loyalty_threshold
+    ORDER BY created_at DESC
+    LIMIT 1;
+
+    IF loyalty_threshold IS NULL THEN
+        RAISE NOTICE 'No loyalty year threshold found. Skipping loyalty awards.';
+    END IF;
+
+    DELETE FROM public.awards WHERE year = award_year;
+
+    CREATE TEMP TABLE yearly_attendance_summary ON COMMIT DROP AS
+    SELECT
+        u.id AS user_id,
+        u.employee_id,
+        COALESCE(SUM(a.days_present), 0) AS total_present,
+        COALESCE(SUM(a.days_absent), 0) AS total_absent,
+        COALESCE(SUM(a.tardiness_count), 0) AS total_tardy
+    FROM
+        public.users u
+    LEFT JOIN
+        public.attendance a ON u.id = a.user_id AND EXTRACT(YEAR FROM a.month) = award_year
+    WHERE
+        u.role IN ('employee', 'staff')
+    GROUP BY
+        u.id, u.employee_id;
+
+    -- Award 1: Perfect Attendance
+    INSERT INTO public.awards (user_id, award_type, year)
+    SELECT user_id, 'Perfect Attendance', award_year
+    FROM yearly_attendance_summary
+    WHERE total_absent = 0 AND total_tardy = 0;
+
+    -- Award 2: Lowest Absent
+    WITH min_absent AS (
+        SELECT MIN(total_absent) AS min_val FROM yearly_attendance_summary WHERE total_absent > 0
+    )
+    INSERT INTO public.awards (user_id, award_type, year)
+    SELECT yas.user_id, 'Lowest Absent', award_year
+    FROM yearly_attendance_summary yas, min_absent
+    WHERE yas.total_absent = min_absent.min_val;
+
+    -- Award 3: Lowest Tardy
+    WITH min_tardy AS (
+        SELECT MIN(total_tardy) AS min_val FROM yearly_attendance_summary WHERE total_tardy > 0
+    )
+    INSERT INTO public.awards (user_id, award_type, year)
+    SELECT yas.user_id, 'Lowest Tardy', award_year
+    FROM yearly_attendance_summary yas, min_tardy
+    WHERE yas.total_tardy = min_tardy.min_val;
+
+    -- Award 4: Loyalty Award (only if a threshold was found)
+    IF loyalty_threshold IS NOT NULL THEN
+        INSERT INTO public.awards (user_id, award_type, year)
+        SELECT id, 'Loyalty Award', award_year
+        FROM public.users
+        WHERE DATE_PART('year', AGE(TO_DATE(award_year || '-12-31', 'YYYY-MM-DD'), created_at)) >= loyalty_threshold;
+    END IF;
+
+END;
+$$ LANGUAGE plpgsql;
+
+GRANT USAGE ON SCHEMA cron TO postgres;
+GRANT EXECUTE ON FUNCTION public.calculate_year_end_awards(INTEGER) TO postgres;
+
+DO $$
+BEGIN
+    -- Safely unschedule the job if it exists
+    IF EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'yearly-award-calculation') THEN
+        PERFORM cron.unschedule('yearly-award-calculation');
+    END IF;
+
+    -- Schedule new job
+    PERFORM cron.schedule(
+        'yearly-award-calculation',
+        '0 0 1 1 *', -- Runs at 00:00 on January 1st
+        'SELECT public.calculate_year_end_awards(EXTRACT(YEAR FROM CURRENT_DATE)::INTEGER - 1)'
+    );
+END;
+$$;
