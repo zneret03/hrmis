@@ -184,8 +184,11 @@ CREATE INDEX idx_certificates_data ON public.certificates USING GIN (data);
 CREATE TABLE public.awards (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    title TEXT,
+    description TEXT,
     award_type TEXT NOT NULL,
     year INTEGER NOT NULL,
+    read TIMESTAMP,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,
     archived_at TIMESTAMP WITH TIME ZONE
