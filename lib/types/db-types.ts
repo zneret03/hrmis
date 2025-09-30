@@ -90,6 +90,26 @@ export type Database = {
           }
         ]
       }
+      employee_loyalty_threshold: {
+        Row: {
+          id: string
+          year_threshold: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string | null
+          year_threshold?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string | null
+          year_threshold?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
       attendance_summary: {
         Row: {
           id: string
@@ -121,7 +141,10 @@ export type Database = {
       }
       awards: {
         Row: {
-          archived_at: string | null
+          title: string | null
+          description: string | null
+          read: string | Date | null
+          archived_at: string | Date | null
           award_type: string
           created_at: string | null
           id: string
@@ -130,7 +153,10 @@ export type Database = {
           year: number
         }
         Insert: {
-          archived_at?: string | null
+          title?: string | null
+          description?: string | null
+          read?: string | Date | null
+          archived_at?: string | Date | null
           award_type: string
           created_at?: string | null
           id?: string
@@ -139,7 +165,10 @@ export type Database = {
           year: number
         }
         Update: {
-          archived_at?: string | null
+          title?: string | null
+          description?: string | null
+          read?: string | Date | null
+          archived_at?: string | Date | null
           award_type?: string
           created_at?: string | null
           id?: string

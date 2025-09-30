@@ -6,7 +6,9 @@ import {
   Plane,
   FileText,
   FileStack,
-  Files
+  Files,
+  Award,
+  Medal
 } from 'lucide-react'
 
 export const adminMenus = (id: string): SideMenu[] => {
@@ -15,6 +17,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       title: 'Dashboard',
       url: `/backend/${id}/dashboard`,
       icon: LayoutDashboard,
+      isActive: true
+    },
+    {
+      title: 'Awards',
+      url: `/backend/${id}/awards`,
+      icon: Award,
       isActive: true
     },
     {
@@ -56,6 +64,12 @@ export const employeeMenus = (id: string): SideMenu[] => {
       title: 'Personal Management',
       url: `/employee/${id}/personal_management`,
       icon: FileStack,
+      isActive: true
+    },
+    {
+      title: 'Nominated Awards',
+      url: `/employee/${id}/nominated_awards`,
+      icon: Medal,
       isActive: true
     },
     {

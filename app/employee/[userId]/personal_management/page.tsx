@@ -16,6 +16,9 @@ import { PDFAction } from '@/app/components/PDFAction'
 import { UpdatePDFDialog } from '@/app/components/PDFDialog'
 import { PdfForm } from '@/app/components/PdfForm'
 import { fetchUserPds } from '@/services/pds/pds.service'
+import { AwardDialog } from '@/app/components/AwardDialog'
+import { unreadAwards } from '@/services/awards/awards.service'
+import { Banner } from '@/app/components/Banner'
 
 export default async function PersonalManagement({
   params
@@ -32,6 +35,8 @@ export default async function PersonalManagement({
 
   const pdsInfo = await fetchUserPds(userId)
 
+  const unopenAwards = await unreadAwards()
+
   const attendanceResponse = await getAttendanceSummary(
     employeeId,
     `?page=1&perPage=31&sortBy=created_at&month=${formatted}&year=${today.getFullYear()}`
@@ -42,12 +47,19 @@ export default async function PersonalManagement({
   )
 
   const category = await getLeaveCategories('')
+  const unreadRewards = unopenAwards.awards.length
 
   return (
     <Container
       title='Personal Data Management'
       description='You can update your PDS here'
     >
+      {unreadRewards > 0 && (
+        <Banner
+          path={`/employee/${userId}/nominated_awards`}
+          rewardCount={unreadRewards}
+        />
+      )}
       <UserDetails
         {...{
           users: attendanceResponse.users,
@@ -84,6 +96,7 @@ export default async function PersonalManagement({
       <FileLeaveDialog category={category.leave_categories} />
       <CancelLeaveDialog />
       <UpdatePDFDialog userId={userId} />
+      <AwardDialog />
     </Container>
   )
 }

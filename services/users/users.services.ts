@@ -23,6 +23,18 @@ export interface UpdateUserInfo
   oldAvatar: string
 }
 
+export const fetchAllUsers = async () => {
+  try {
+    const response = await axiosService.get(`/api/protected/users/all`)
+
+    return response.data.data
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error
+    }
+  }
+}
+
 export const fetchUser = async (id: string) => {
   try {
     const response = await axiosService.get(`/api/protected/users/${id}`)
