@@ -186,7 +186,7 @@ CREATE TABLE public.awards (
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     title TEXT,
     description TEXT,
-    award_type TEXT NOT NULL,
+    award_type TEXT NOT NULL CHECK(award_type IN('perfect_attendance', 'lowest_absent', 'lowest_tardy', 'loyalty_award')),
     year INTEGER NOT NULL,
     read TIMESTAMP,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -875,8 +875,8 @@ BEGIN
         u.id, u.employee_id;
 
     -- Award 1: Perfect Attendance
-    INSERT INTO public.awards (user_id, award_type, year)
-    SELECT user_id, 'Perfect Attendance', award_year
+    INSERT INTO public.awards (user_id, award_type, year, title, description)
+    SELECT user_id, 'perfect_attendance', award_year, 'Perfect Attendance of the year', 'Please claim your prize/certificate with your supervisor/manager, thank you for your service'
     FROM yearly_attendance_summary
     WHERE total_absent = 0 AND total_tardy = 0;
 
@@ -884,8 +884,8 @@ BEGIN
     WITH min_absent AS (
         SELECT MIN(total_absent) AS min_val FROM yearly_attendance_summary WHERE total_absent > 0
     )
-    INSERT INTO public.awards (user_id, award_type, year)
-    SELECT yas.user_id, 'Lowest Absent', award_year
+    INSERT INTO public.awards (user_id, award_type, year, title, description)
+    SELECT yas.user_id, 'lowest_absent', award_year, 'Lowest Absent of the year', 'Please claim your prize/certificate with your supervisor/manager, thank you for your service'
     FROM yearly_attendance_summary yas, min_absent
     WHERE yas.total_absent = min_absent.min_val;
 
@@ -893,15 +893,15 @@ BEGIN
     WITH min_tardy AS (
         SELECT MIN(total_tardy) AS min_val FROM yearly_attendance_summary WHERE total_tardy > 0
     )
-    INSERT INTO public.awards (user_id, award_type, year)
-    SELECT yas.user_id, 'Lowest Tardy', award_year
+    INSERT INTO public.awards (user_id, award_type, year, title, description)
+    SELECT yas.user_id, 'lowest_tardy', award_year, 'Lowest Late of the year', 'Please claim your prize/certificate with your supervisor/manager, thank you for your service'
     FROM yearly_attendance_summary yas, min_tardy
     WHERE yas.total_tardy = min_tardy.min_val;
 
     -- Award 4: Loyalty Award (only if a threshold was found)
     IF loyalty_threshold IS NOT NULL THEN
-        INSERT INTO public.awards (user_id, award_type, year)
-        SELECT id, 'Loyalty Award', award_year
+        INSERT INTO public.awards (user_id, award_type, year, title, description)
+        SELECT id, 'loyalty_award', award_year, 'Loyalty Award of the year', 'Please claim your prize/certificate with your supervisor/manager, thank you for your service'
         FROM public.users
         WHERE DATE_PART('year', AGE(TO_DATE(award_year || '-12-31', 'YYYY-MM-DD'), created_at)) >= loyalty_threshold;
     END IF;
