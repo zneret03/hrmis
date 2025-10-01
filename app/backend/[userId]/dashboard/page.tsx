@@ -76,9 +76,7 @@ export default async function Dashboard({
               ))}
 
               {leaveApplications.length <= 0 && (
-                <div className='text-center'>
-                  <EmptyPlaceholder />
-                </div>
+                <div className='text-gray-500'>No leave requests</div>
               )}
             </div>
           </section>
