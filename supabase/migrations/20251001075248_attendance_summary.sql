@@ -1,3 +1,4 @@
+
 CREATE TABLE public.attendance_summary (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     employee_id TEXT REFERENCES users(employee_id) ON DELETE CASCADE,

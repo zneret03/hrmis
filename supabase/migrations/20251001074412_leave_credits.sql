@@ -123,15 +123,11 @@ DECLARE
     v_latest_month DATE;
     updated_count INTEGER;
 BEGIN
-    -- Step 1: Find the most recent month from the attendance table.
-    -- The result is stored in the 'v_latest_month' variable.
     SELECT DATE_TRUNC('month', MAX(month))
     INTO v_latest_month
     FROM public.attendance;
 
-    -- Step 2: Check if any records were found.
     IF v_latest_month IS NOT NULL THEN
-        -- Step 3: Update credits for users with perfect attendance for that latest month.
         UPDATE public.leave_credits AS lc
         SET
             credits = lc.credits + 3,
@@ -142,15 +138,12 @@ BEGIN
         WHERE
             lc.user_id = a.user_id
             AND a.days_absent = 0
-            -- The condition now uses the automatically detected month
             AND DATE_TRUNC('month', a.month) = v_latest_month;
 
         GET DIAGNOSTICS updated_count = ROW_COUNT;
 
-        -- Step 4: Return a specific success message.
         RETURN 'Processing complete for ' || TO_CHAR(v_latest_month, 'FMMonth YYYY') || '. Updated credits for ' || updated_count || ' users.';
     ELSE
-        -- This message is returned if the attendance table is empty.
         RETURN 'No attendance records found. Nothing to process.';
     END IF;
 END;
@@ -164,15 +157,13 @@ GRANT EXECUTE ON FUNCTION public.update_credits_for_latest_month() TO postgres;
 
 DO $$
 BEGIN
-    -- Safely unschedule the job if it exists
     IF EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'update-credits-for-latest-month') THEN
         PERFORM cron.unschedule('update-credits-for-latest-month');
     END IF;
 
-    -- Schedule new job
     PERFORM cron.schedule(
         'update-credits-for-latest-month',
-        '0 0 1 1 *', -- Runs at 00:00 on January 1st
+        '59 15 1 * *', 
         'SELECT public.update_credits_for_latest_month()'
     );
 END;
