@@ -1,6 +1,6 @@
 'use client'
 
-import { JSX, useTransition, useEffect } from 'react'
+import { JSX, useTransition, useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -31,24 +31,54 @@ import { awardsType } from '../helpers/constants'
 import { Users } from '@/lib/types/users'
 import { updateAward } from '@/services/awards/awards.service'
 
-type AwardsForm = Partial<Awards>
+type AwardsForm = Partial<Awards> & {
+  yearThreshold: number
+}
 
 interface EditAwardDialog {
   users: Users[]
 }
 
 export function EditAward({ users }: EditAwardDialog): JSX.Element {
+  const [isUpdateThreshold, setUpdateThreshold] = useState<boolean>(false)
   const [isPending, startTransition] = useTransition()
+  const [isPendingThreshold, startThresholdTransition] = useTransition()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset
+    reset,
+    watch
   } = useForm<AwardsForm>()
   const today = new Date()
 
   const router = useRouter()
+
+  const threshold = watch('yearThreshold')
+
+  const resetVariables = (): void => {
+    toggleOpen?.(false, null, null)
+    router.refresh()
+    setUpdateThreshold(false)
+  }
+
+  const onUpdateThreshold = (): void => {
+    setUpdateThreshold((prevState) => !prevState)
+  }
+
+  const onUpdateYearThreshold = (): void => {
+    startThresholdTransition(async () => {
+      await updateAward(
+        { value: threshold },
+        data?.yearThreshold?.id as string,
+        'update-threshold'
+      )
+
+      resetVariables()
+    })
+  }
 
   const { open, toggleOpen, type, data } = useAwards(
     useShallow((state) => ({
@@ -58,11 +88,6 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
       data: state.data
     }))
   )
-
-  const resetVariables = (): void => {
-    toggleOpen?.(false, null, null)
-    router.refresh()
-  }
 
   const onSubmit = async (awardData: AwardsForm): Promise<void> => {
     startTransition(async () => {
@@ -80,12 +105,16 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
         title: data.title,
         award_type: data.award_type,
         user_id: data.users?.id,
-        description: data.description
+        description: data.description,
+        yearThreshold: Number(data.yearThreshold?.year_threshold) as number
       })
     }
   }, [data, reset])
 
   const isOpenDialog = open && type === 'edit'
+  const thresholdText = isUpdateThreshold
+    ? 'Save Threshold'
+    : 'Update Threshold'
 
   return (
     <Dialog
@@ -96,6 +125,31 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
         <DialogHeader>
           <DialogTitle>Edit Award</DialogTitle>
         </DialogHeader>
+
+        <div className='space-y-2'>
+          <Input
+            type='number'
+            title='Year Threshold'
+            disabled={!isUpdateThreshold}
+            {...register('yearThreshold', {
+              required: 'Required field'
+            })}
+          />
+
+          <section className='text-right'>
+            <CustomButton
+              disabled={isPendingThreshold}
+              isLoading={isPendingThreshold}
+              onClick={() =>
+                isUpdateThreshold
+                  ? onUpdateYearThreshold()
+                  : onUpdateThreshold()
+              }
+            >
+              {thresholdText}
+            </CustomButton>
+          </section>
+        </div>
 
         <div className='grid grid-cols-2 gap-2'>
           <Input

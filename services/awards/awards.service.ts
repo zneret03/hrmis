@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { axiosService } from '@/app/api/axios-client'
 import { Awards } from '@/lib/types/awards'
+import { toast } from 'sonner'
 
 export const getAwards = async (params: string) => {
   try {
@@ -29,12 +30,22 @@ export const addAward = async (data: Partial<Awards>) => {
   }
 }
 
-export const updateAward = async (data: Partial<Awards>, id: string) => {
+export const updateAward = async (
+  data: Partial<Awards> | { value: number },
+  id: string,
+  type = 'update-award'
+) => {
   try {
     await axiosService.put(`/api/protected/awards/${id}`, {
       data,
-      type: 'update-award'
+      type
     })
+
+    if (type === 'update-threshold') {
+      toast('Successfully', {
+        description: 'Successfully updated threshold'
+      })
+    }
   } catch (e) {
     if (axios.isAxiosError(e)) {
       throw e.response?.data.error

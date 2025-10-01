@@ -30,7 +30,8 @@ export default async function Awards({
           awards: response.awards,
           totalPages: response.totalPages,
           currentPage: response.currentPage,
-          count: response.count
+          count: response.count,
+          yearThreshold: response.yearThreshold
         }}
       />
 

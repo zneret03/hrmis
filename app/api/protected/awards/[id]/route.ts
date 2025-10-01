@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { isEmpty } from 'lodash'
 import { validationErrorNextResponse } from '@/app/api/helpers/response'
-import { updateAward } from '../../model/awards'
+import { updateAward, updateThreshold } from '../../model/awards'
 
 export async function PUT(
   req: NextRequest,
@@ -16,5 +16,9 @@ export async function PUT(
 
   if (body.type === 'update-award') {
     return updateAward(body.data, id)
+  }
+
+  if (body.type === 'update-threshold') {
+    return updateThreshold(body.data.value, id)
   }
 }
