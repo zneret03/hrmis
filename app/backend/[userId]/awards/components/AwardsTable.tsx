@@ -43,11 +43,11 @@ import { Pagination as PaginationType } from '@/lib/types/pagination'
 import { useRouter, usePathname } from 'next/navigation'
 import { debounce } from 'lodash'
 import { avatarName } from '@/helpers/avatarName'
-import { Awards } from '@/lib/types/awards'
+import { Awards, YearThreshold } from '@/lib/types/awards'
 
 interface AwardsData extends PaginationType {
   awards: Awards[]
-  yearThreshold: number
+  yearThreshold?: YearThreshold
 }
 
 export function EmployeeAwardsTable({
@@ -214,14 +214,22 @@ export function EmployeeAwardsTable({
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
               <DropdownMenuItem
-                onClick={() => toggleOpen?.(true, 'edit', { ...row.original })}
+                onClick={() =>
+                  toggleOpen?.(true, 'edit', {
+                    ...row.original,
+                    yearThreshold: yearThreshold as YearThreshold
+                  })
+                }
               >
                 <Pencil />
                 Edit info
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
-                  toggleOpen?.(true, 'delete', { ...row.original })
+                  toggleOpen?.(true, 'delete', {
+                    ...row.original,
+                    yearThreshold: yearThreshold as YearThreshold
+                  })
                 }
               >
                 <Trash />
@@ -232,7 +240,7 @@ export function EmployeeAwardsTable({
         )
       }
     ],
-    [toggleOpen]
+    [toggleOpen, yearThreshold]
   )
 
   const table = useReactTable({
@@ -264,8 +272,6 @@ export function EmployeeAwardsTable({
             className='max-w-sm'
           />
         )}
-
-        <span>Year Threshold: {yearThreshold}</span>
 
         <div className='flex items-center gap-2'>
           <DropdownMenu>
@@ -310,6 +316,7 @@ export function EmployeeAwardsTable({
           )}
         </div>
       </div>
+
       <div className='rounded-md border'>
         <Table>
           <TableHeader>
@@ -360,6 +367,7 @@ export function EmployeeAwardsTable({
           </TableBody>
         </Table>
       </div>
+
       {data.length > 0 && (
         <Pagination {...{ totalPages, currentPage, count }} />
       )}

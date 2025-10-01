@@ -31,7 +31,9 @@ import { awardsType } from '../helpers/constants'
 import { Users } from '@/lib/types/users'
 import { addAward } from '@/services/awards/awards.service'
 
-type AwardsForm = Partial<Awards>
+type AwardsForm = Partial<Awards> & {
+  yearThreshold: number
+}
 
 interface NominateDialog {
   users: Users[]

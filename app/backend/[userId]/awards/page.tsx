@@ -20,8 +20,6 @@ export default async function Awards({
     `?page=${page || 1}&perPage=10&search=${search}&sortBy=created_at`
   )
 
-  console.log(response)
-
   return (
     <Container
       title='Employee Awards'
@@ -32,7 +30,8 @@ export default async function Awards({
           awards: response.awards,
           totalPages: response.totalPages,
           currentPage: response.currentPage,
-          count: response.count
+          count: response.count,
+          yearThreshold: response.yearThreshold
         }}
       />
 

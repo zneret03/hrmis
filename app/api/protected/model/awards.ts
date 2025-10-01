@@ -39,3 +39,27 @@ export const updateAward = async (data: Partial<Awards>, id: string) => {
     return generalErrorResponse({ error: newError.message })
   }
 }
+
+export const updateThreshold = async (value: number, id: string) => {
+  try {
+    const supabase = await createClient()
+
+    const { error } = await supabase
+      .from('employee_loyalty_threshold')
+      .update({
+        year_threshold: value
+      })
+      .eq('id', id)
+
+    if (error) {
+      return generalErrorResponse({ error: error.message })
+    }
+
+    return successResponse({
+      message: 'Successfuly updated award'
+    })
+  } catch (error) {
+    const newError = error as Error
+    return generalErrorResponse({ error: newError.message })
+  }
+}
