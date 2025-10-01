@@ -14,6 +14,7 @@ import { Chart } from './components/Barchart'
 import { FormattedYear } from '@/lib/types/attendance'
 import { getAwards } from '@/services/awards/awards.service'
 import { EmployeeAwardsTable } from '../awards/components/AwardsTable'
+import { CancelLeaveDialog } from '@/app/employee/[userId]/personal_management/components/CancelLeave'
 
 export default async function Dashboard({
   searchParams
@@ -94,6 +95,7 @@ export default async function Dashboard({
       </main>
 
       <FileLeaveDialog category={category.leave_categories} />
+      <CancelLeaveDialog />
     </Container>
   )
 }

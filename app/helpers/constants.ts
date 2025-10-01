@@ -11,8 +11,8 @@ export const awardTypeCast: { [key: string]: string } = {
 }
 
 export const cardStatus: { [key: string]: string } = {
-  pending: 'bg-blue-500',
-  approved: 'bg-green-500',
-  disapproved: 'bg-red-500',
-  cancelled: 'bg-red-500'
+  approved: 'bg-blue-600',
+  pending: 'bg-blue-400',
+  disapproved: 'bg-blue-200',
+  cancelled: 'bg-blue-200'
 }
