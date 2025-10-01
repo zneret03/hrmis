@@ -54,10 +54,10 @@ export default async function Dashboard({
       <main className='space-y-4'>
         <AnalyticsCards
           {...{
-            users: analytics.users,
-            leaves: analytics.leaves,
-            awards: analytics.awards,
-            certificates: analytics.certificates
+            users: analytics.users || 0,
+            leaves: analytics.leaves || 0,
+            awards: analytics.awards || 0,
+            certificates: analytics.certificates || 0
           }}
         />
         <div className='flex gap-4'>
