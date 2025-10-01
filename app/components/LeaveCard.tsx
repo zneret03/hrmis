@@ -27,17 +27,15 @@ export function LeaveCard(args: LeaveApplicationsForm): JSX.Element {
             {leave_categories.name}
           </section>
 
-          <Badge variant='outline' className='text-white'>
+          <Badge variant='outline' className='text-white capitalize'>
             {status}
           </Badge>
         </CardTitle>
         {remarks}
 
         <div>
-          <span>
-            {format(start_date as string, "MMMM dd, yyyy hh:mm aaaaa'm'")}
-          </span>{' '}
-          - <span>{format(end_date as string, 'MMMM dd, yyyy')}</span>
+          <span>{format(start_date as string, 'MMMM dd, yyyy')}</span> -{' '}
+          <span>{format(end_date as string, 'MMMM dd, yyyy')}</span>
         </div>
 
         {!['cancelled', 'disapproved', 'approved'].includes(status) && (

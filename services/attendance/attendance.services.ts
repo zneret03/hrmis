@@ -54,6 +54,20 @@ export const getAttendance = async (params: string) => {
   }
 }
 
+export const getAttendanceAnalytics = async (params: string) => {
+  try {
+    const response = await axiosService.get(
+      `/api/protected/attendance/analytics${params}`
+    )
+
+    return response.data.data
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error
+    }
+  }
+}
+
 export const getAttendanceSummary = async (userId: string, params: string) => {
   try {
     const response = await axiosService.get(

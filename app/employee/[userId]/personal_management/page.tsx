@@ -4,7 +4,7 @@ import { AttendanceLeaves } from './components/AttendanceLeave'
 import { UserDetails } from '@/app/components/UserDetails'
 import { fetchUserWitHCredits } from '@/services/leave_credits/leave_credits.services'
 import { Container } from '@/components/custom/Container'
-import { LeaveCard } from './components/LeaveCard'
+import { LeaveCard } from '@/app/components/LeaveCard'
 
 import { getAttendanceSummary } from '@/services/attendance/attendance.services'
 import { getLeaveCategories } from '@/services/leave_categories/leave-categories.services'
