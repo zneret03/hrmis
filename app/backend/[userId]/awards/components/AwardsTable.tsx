@@ -47,10 +47,12 @@ import { Awards } from '@/lib/types/awards'
 
 interface AwardsData extends PaginationType {
   awards: Awards[]
+  yearThreshold: number
 }
 
 export function EmployeeAwardsTable({
   awards: data,
+  yearThreshold,
   totalPages,
   currentPage,
   count
@@ -262,6 +264,8 @@ export function EmployeeAwardsTable({
             className='max-w-sm'
           />
         )}
+
+        <span>Year Threshold: {yearThreshold}</span>
 
         <div className='flex items-center gap-2'>
           <DropdownMenu>
