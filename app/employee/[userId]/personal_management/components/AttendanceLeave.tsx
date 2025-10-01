@@ -13,22 +13,28 @@ export function AttendanceLeaves(): JSX.Element {
   const router = useRouter()
 
   const parentPathname = parentPath(pathname)
+  const isAdmin = pathname.startsWith('/backend')
+  const path = isAdmin ? 'leaves?page=1' : 'leave_summary'
 
   const { toggleOpen } = useLeaveApplicationDialog(
     useShallow((state) => ({ toggleOpen: state.toggleOpenDialog }))
   )
 
   const onShowMore = (): void => {
-    router.replace(`${parentPathname}/leave_summary`)
+    router.replace(`${parentPathname}/${path}`)
   }
 
   return (
     <div>
-      <section className='flex items-center justify-between'>
-        <div>
-          <h1 className='text-2xl font-bold'>File leave</h1>
-          <span className='text-gray-500'>You can file your leaves here</span>
-        </div>
+      <section
+        className={`flex items-center ${isAdmin ? 'justify-end' : 'justify-between'}`}
+      >
+        {!isAdmin && (
+          <div>
+            <h1 className='text-2xl font-bold'>File leave</h1>
+            <span className='text-gray-500'>You can file your leaves here</span>
+          </div>
+        )}
 
         <div className='flex items-center gap-2'>
           <Button variant='outline' onClick={onShowMore}>

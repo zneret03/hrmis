@@ -70,6 +70,8 @@ export function EmployeeAwardsTable({
   const pathname = usePathname()
   const router = useRouter()
 
+  const isDashboard = pathname.endsWith('/dashboard')
+
   const onDebounce = React.useMemo(
     () =>
       debounce((value) => {
@@ -86,6 +88,10 @@ export function EmployeeAwardsTable({
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.target
     onDebounce(value)
+  }
+
+  const showMoreAwards = (): void => {
+    router.replace(`${pathname}/awards`)
   }
 
   const columns: ColumnDef<Awards>[] = React.useMemo(
@@ -248,12 +254,14 @@ export function EmployeeAwardsTable({
 
   return (
     <div className='w-full'>
-      <div className='flex items-center py-4'>
-        <Input
-          placeholder='Search user by email...'
-          onChange={(event) => onSearch(event)}
-          className='max-w-sm'
-        />
+      <div className='flex items-center justify-end py-4'>
+        {!isDashboard && (
+          <Input
+            placeholder='Search user by email...'
+            onChange={(event) => onSearch(event)}
+            className='max-w-sm'
+          />
+        )}
 
         <div className='flex items-center gap-2'>
           <DropdownMenu>
@@ -283,10 +291,19 @@ export function EmployeeAwardsTable({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button onClick={() => toggleOpen?.(true, 'add', null)}>
-            <Plus className='w-5 h-5' />
-            Nominate
-          </Button>
+          {isDashboard && data.length >= 5 && (
+            <Button variant='outline' onClick={() => showMoreAwards()}>
+              <Plus className='w-5 h-5' />
+              Show more
+            </Button>
+          )}
+
+          {!isDashboard && (
+            <Button onClick={() => toggleOpen?.(true, 'add', null)}>
+              <Plus className='w-5 h-5' />
+              Nominate
+            </Button>
+          )}
         </div>
       </div>
       <div className='rounded-md border'>

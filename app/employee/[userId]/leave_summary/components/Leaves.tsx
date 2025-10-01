@@ -2,7 +2,7 @@
 
 import { JSX } from 'react'
 import { LeaveApplicationsForm } from '@/lib/types/leave_application'
-import { LeaveCard } from '../../personal_management/components/LeaveCard'
+import { LeaveCard } from '@/app/components/LeaveCard'
 
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationTypes } from '@/lib/types/pagination'
