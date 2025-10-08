@@ -57,7 +57,7 @@ export function Certificates({
           onChange={(event) => onSearch(event)}
           className='max-w-sm'
         />
-        <Button onClick={() => toggleDialog?.(true, 'add', null)}>
+        <Button onClick={() => toggleDialog?.(true, 'add', null, null)}>
           <PlusIcon /> Request Document
         </Button>
       </div>

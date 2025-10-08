@@ -34,7 +34,7 @@ export function CertificateCard(args: Certificates): JSX.Element {
         {reason}
 
         <div className='mt-4 text-right'>
-          {!!file && (
+          {!!file && ['approved'].includes(certificate_status) && (
             <Link href={file || ''} target='_blank'>
               <Button className='bg-transparent hover:bg-transparent cursor-pointer underline shadow-none'>
                 Download
@@ -46,7 +46,7 @@ export function CertificateCard(args: Certificates): JSX.Element {
           ) && (
             <Button
               className='bg-transparent hover:bg-transparent cursor-pointer underline shadow-none'
-              onClick={() => toggleDialog?.(true, 'cancel', { ...args })}
+              onClick={() => toggleDialog?.(true, 'cancel', null, { ...args })}
             >
               Cancel
             </Button>

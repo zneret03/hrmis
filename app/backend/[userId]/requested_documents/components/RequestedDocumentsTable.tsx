@@ -13,7 +13,13 @@ import {
   useReactTable,
   VisibilityState
 } from '@tanstack/react-table'
-import { ChevronDown, MoreHorizontal, CheckCircle, Trash } from 'lucide-react'
+import {
+  ChevronDown,
+  MoreHorizontal,
+  CheckCircle,
+  Trash,
+  CircleX
+} from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -33,7 +39,10 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
-import { useCertificates } from '@/services/certificates/state/use-certificate'
+import {
+  CertificateType,
+  useCertificates
+} from '@/services/certificates/state/use-certificate'
 import { useShallow } from 'zustand/shallow'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
@@ -43,6 +52,13 @@ import { Certificates } from '@/lib/types/certificates'
 
 interface RequestedDocumentsTableData extends PaginationType {
   certificates: Partial<Certificates>[]
+}
+
+const certificateType: { [key: string]: string } = {
+  service_record: 'Service Record',
+  coe: 'Certificate of Employment',
+  nosa: 'NOSA',
+  coec: 'Certificate of Employment with Compensation'
 }
 
 export function CertificatesTable({
@@ -107,7 +123,9 @@ export function CertificatesTable({
         header: 'Requested Document',
         cell: function ({ row }) {
           return (
-            <div className='uppercase'>{row.original.certificate_type}</div>
+            <Badge variant='outline'>
+              {certificateType[row.original.certificate_type as string]}
+            </Badge>
           )
         }
       },
@@ -116,7 +134,9 @@ export function CertificatesTable({
         header: 'Status',
         cell: function ({ row }) {
           return (
-            <Badge variant='outline'>{row.original.certificate_status}</Badge>
+            <Badge variant='outline' className='capitalize'>
+              {row.original.certificate_status}
+            </Badge>
           )
         }
       },
@@ -163,13 +183,44 @@ export function CertificatesTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
-              <DropdownMenuItem>
-                <CheckCircle />
-                Approve
+              {['pending', 'disapproved'].includes(
+                row?.original?.certificate_status as string
+              ) && (
+                <DropdownMenuItem
+                  onClick={() =>
+                    toggleOpen?.(
+                      true,
+                      'approve',
+                      row.original.certificate_type as CertificateType,
+                      {
+                        ...(row.original as Certificates)
+                      }
+                    )
+                  }
+                >
+                  <CheckCircle />
+                  Approve
+                </DropdownMenuItem>
+              )}
+
+              <DropdownMenuItem
+                onClick={() =>
+                  toggleOpen?.(
+                    true,
+                    'disapprove',
+                    row.original.certificate_type as CertificateType,
+                    {
+                      ...(row.original as Certificates)
+                    }
+                  )
+                }
+              >
+                <CircleX />
+                Disapprove
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
-                  toggleOpen?.(true, 'delete', {
+                  toggleOpen?.(true, 'delete', null, {
                     ...(row.original as Certificates)
                   })
                 }

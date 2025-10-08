@@ -3,6 +3,8 @@ import { getCertificates } from '@/services/certificates/certificates.service'
 import { Container } from '@/components/custom/Container'
 import { CertificatesTable } from './components/RequestedDocumentsTable'
 import { DeleteDocumentDialog } from './components/DeleteDocumentDialog'
+import { ServiceRecordDialog } from '@/app/components/service-record/ServiceRecordDialog'
+import { DisapproveRequestDialog } from './components/DisapprovedRequestDialog'
 
 export default async function RequestedDocuments({
   searchParams
@@ -30,6 +32,8 @@ export default async function RequestedDocuments({
       />
 
       <DeleteDocumentDialog />
+      <ServiceRecordDialog />
+      <DisapproveRequestDialog />
     </Container>
   )
 }

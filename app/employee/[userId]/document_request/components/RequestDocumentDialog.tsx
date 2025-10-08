@@ -58,7 +58,7 @@ export function RequestDocumentDialog({
   } = useForm<CertificatesRequestForm>()
 
   const resetVariables = (): void => {
-    toggleDialog?.(false, null, null)
+    toggleDialog?.(false, null, null, null)
     reset({
       title: '',
       certificate_type: '',
@@ -79,7 +79,7 @@ export function RequestDocumentDialog({
   return (
     <Dialog
       open={isOpenDialog}
-      onOpenChange={() => toggleDialog?.(false, null, null)}
+      onOpenChange={() => toggleDialog?.(false, null, null, null)}
     >
       <DialogContent className='sm:max-w-[40rem]'>
         <DialogHeader>

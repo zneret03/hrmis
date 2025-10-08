@@ -77,6 +77,19 @@ CREATE TABLE public.certificates (
     archived_at TIMESTAMP WITH TIME ZONE
 );
 
+
+INSERT INTO storage.buckets (id, name, public, file_size_limit)
+VALUES ('certificates', 'certificates', TRUE, 5242880); -- 5MB limit
+
+CREATE POLICY "Upload Select certificates documents" ON storage.objects
+    FOR SELECT TO public USING (bucket_id = 'certificates');
+CREATE POLICY "Upload Insert certificates documents" ON storage.objects
+    FOR INSERT TO public WITH CHECK (bucket_id = 'certificates');
+CREATE POLICY "Upload Update certificates documents" ON storage.objects
+    FOR UPDATE TO public USING (bucket_id = 'certificates');
+CREATE POLICY "Upload Delete certificates documents" ON storage.objects
+    FOR DELETE TO public USING (bucket_id = 'certificates');
+
 -- Indexes for certificates table
 CREATE INDEX idx_certificates_user_id ON public.certificates(user_id);
 CREATE INDEX idx_certificates_certificate_type ON public.certificates(certificate_type);

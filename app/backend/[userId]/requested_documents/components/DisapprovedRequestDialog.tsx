@@ -4,10 +4,10 @@ import { JSX, useTransition } from 'react'
 import { DialogAlert } from '@/components/custom/DialogAlert'
 import { useRouter } from 'next/navigation'
 import { useShallow } from 'zustand/shallow'
-import { useCertificates } from '@/services/certificates/state/use-certificate'
 import { updateDocument } from '@/services/certificates/certificates.service'
+import { useCertificates } from '@/services/certificates/state/use-certificate'
 
-export function CancelDocumentDialog(): JSX.Element {
+export function DisapproveRequestDialog(): JSX.Element {
   const [isPending, startTransition] = useTransition()
   const { open, type, toggleOpen, data } = useCertificates(
     useShallow((state) => ({
@@ -25,19 +25,22 @@ export function CancelDocumentDialog(): JSX.Element {
     router.refresh()
   }
 
-  const onCancelDocument = async (): Promise<void> => {
+  const onDisapproveLeaveRequest = async (): Promise<void> => {
     startTransition(async () => {
-      updateDocument({ certificate_status: 'cancelled' }, data?.id as string)
+      await updateDocument(
+        { certificate_status: 'disapproved' },
+        data?.id as string
+      )
       resetVariables()
     })
   }
 
   return (
     <DialogAlert
-      open={open && type === 'cancel'}
-      title={`Cancel document request?`}
-      description='Do you want to cancel this request?'
-      callback={onCancelDocument}
+      open={open && type === 'disapprove'}
+      title={`Disapproved Certificate Request?`}
+      description='Would you like to disapproved this request?'
+      callback={onDisapproveLeaveRequest}
       cancel={() => toggleOpen?.(false, null, null, null)}
       isLoading={isPending}
       type='error'
