@@ -4,16 +4,14 @@ import { Container } from '@/components/custom/Container'
 import { CertificatesTable } from './components/RequestedDocumentsTable'
 import { DeleteDocumentDialog } from './components/DeleteDocumentDialog'
 import { ServiceRecordDialog } from '@/app/components/service-record/ServiceRecordDialog'
+import { DisapproveRequestDialog } from './components/DisapprovedRequestDialog'
 
 export default async function RequestedDocuments({
-  searchParams,
-  params
+  searchParams
 }: {
   searchParams: Promise<{ page: string; search: string }>
-  params: Promise<{ userId: string }>
 }): Promise<JSX.Element> {
   const { page, search } = await searchParams
-  const { userId } = await params
 
   const response = await getCertificates(
     `?page=${page || 1}&perPage=10&search=${search}&sortBy=created_at`
@@ -34,7 +32,8 @@ export default async function RequestedDocuments({
       />
 
       <DeleteDocumentDialog />
-      <ServiceRecordDialog userId={userId} />
+      <ServiceRecordDialog />
+      <DisapproveRequestDialog />
     </Container>
   )
 }

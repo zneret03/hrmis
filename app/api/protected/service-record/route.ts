@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   try {
     const supabase = await createClient()
 
-    const { formValuesSR, initialState, userId, fileBucketPath } = body
+    const { formValuesSR, initialState, certificateId, fileBucketPath } = body
 
     const pdfPath = path.join(
       process.cwd(),
@@ -26,6 +26,7 @@ export async function POST(request: Request) {
       'documents',
       'service-record.pdf'
     )
+
     const pdfBytes = await fs.readFile(pdfPath)
     const pdfDoc = await PDFDocument.load(pdfBytes)
     const pages = pdfDoc.getPages()
@@ -80,7 +81,7 @@ export async function POST(request: Request) {
     drawDynamicRows(serviceRecordFieldTemplate, initialState)
     const filledPdfBytes = await pdfDoc.save()
 
-    const filePath = `${userId}/service-record-${new Date().toISOString()}.pdf`
+    const filePath = `${certificateId}/service-record-${new Date().toISOString()}.pdf`
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('certificates')
@@ -107,15 +108,16 @@ export async function POST(request: Request) {
     const toDb = {
       data: {
         formFields,
-        service_record: { ...initialState }
+        service_record: initialState
       },
-      file: publicUrl
+      file: publicUrl,
+      certificate_status: 'approved'
     }
 
     const { error } = await supabase
       .from('certificates')
       .update(toDb)
-      .eq('user_id', userId)
+      .eq('id', certificateId)
 
     if (error) {
       removeImageViaPath(supabase, fileBucketPath, 'certificates')

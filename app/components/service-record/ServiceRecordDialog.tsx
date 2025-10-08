@@ -1,6 +1,6 @@
 'use client'
 
-import { JSX, useState, useCallback, Fragment } from 'react'
+import { JSX, useState, useCallback, Fragment, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -29,10 +29,6 @@ import { toast } from 'sonner'
 import { Json } from '@/lib/types/db-types'
 import { useCertificates } from '@/services/certificates/state/use-certificate'
 
-interface UpdatePDFDialog {
-  userId: string
-}
-
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url
@@ -53,7 +49,7 @@ const initialStateServiceRecord = {
   cause: ''
 }
 
-export function ServiceRecordDialog({ userId }: UpdatePDFDialog): JSX.Element {
+export function ServiceRecordDialog(): JSX.Element {
   const [numPages, setNumPages] = useState<number | null>(null)
   const [scale, setScale] = useState(1.0)
 
@@ -70,13 +66,20 @@ export function ServiceRecordDialog({ userId }: UpdatePDFDialog): JSX.Element {
   const router = useRouter()
 
   const [formValuesSR, setFormValues] = useState<Json>(
-    (data?.data as Json) ?? {}
+    (data?.data?.formFields as Json) ?? {}
   )
 
   // --- STATES FOR DYNAMIC DATA ---
-  const [initialState, setInitialState] = useState<Json[]>([
-    initialStateServiceRecord
-  ])
+  const [initialState, setInitialState] = useState<Json[]>(
+    (data?.data?.service_record as Json[]) || [initialStateServiceRecord]
+  )
+
+  useEffect(() => {
+    if (data) {
+      setFormValues(data?.data?.formFields as Json)
+      setInitialState(data?.data?.service_record as Json[])
+    }
+  }, [data])
 
   const resetVariables = (): void => {
     toggleOpen?.(false, null, null, null)
@@ -273,22 +276,24 @@ export function ServiceRecordDialog({ userId }: UpdatePDFDialog): JSX.Element {
   // --- Save Handler ---
   const handleSave = async () => {
     try {
-      await fetch('/api/protected/service-record', {
+      const response = await fetch('/api/protected/service-record', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           formValuesSR,
           initialState,
-          userId,
+          certificateId: data?.id,
           fileBucketPath: data?.file?.split('certificates/')[1]
         })
       })
 
-      toast('Successfully', {
-        description: 'Successfully updated PDS file'
-      })
+      if (response.ok) {
+        toast('Successfully', {
+          description: 'Successfully updated Service Record file'
+        })
 
-      resetVariables()
+        resetVariables()
+      }
     } catch (error) {
       console.error('Failed to generate and download PDF:', error)
     }
@@ -367,7 +372,7 @@ export function ServiceRecordDialog({ userId }: UpdatePDFDialog): JSX.Element {
             </Button>
           </DialogClose>
           <CustomButton type='button' onClick={handleSave}>
-            Update Form
+            Approved Form
           </CustomButton>
         </DialogFooter>
       </DialogContent>
