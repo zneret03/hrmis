@@ -1,7 +1,6 @@
 import { JSX } from 'react'
 import { Container } from '@/components/custom/Container'
 import { getDashboardAnalytics } from '@/services/dashboard/dashboard.service'
-import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder'
 import { LeaveApplicationsForm } from '@/lib/types/leave_application'
 import { LeaveCard } from '@/app/components/LeaveCard'
 import { AnalyticsCards } from './components/AnalyticsCards'

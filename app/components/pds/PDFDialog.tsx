@@ -33,7 +33,7 @@ import {
   type References,
   type FormField,
   DynamicFieldTemplate
-} from '../helpers/pds-form-fields'
+} from '../../helpers/pds/pds-form-fields'
 import { usePDS } from '@/services/pds/state/use-pds'
 import { useRouter } from 'next/navigation'
 import type { PDFDocumentProxy } from 'pdfjs-dist'

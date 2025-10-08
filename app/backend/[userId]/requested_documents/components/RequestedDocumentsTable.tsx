@@ -33,7 +33,10 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { format, subHours } from 'date-fns'
 import { Button } from '@/components/ui/button'
-import { useCertificates } from '@/services/certificates/state/use-certificate'
+import {
+  CertificateType,
+  useCertificates
+} from '@/services/certificates/state/use-certificate'
 import { useShallow } from 'zustand/shallow'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
@@ -163,13 +166,24 @@ export function CertificatesTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  toggleOpen?.(
+                    true,
+                    'approve',
+                    row.original.certificate_type as CertificateType,
+                    {
+                      ...(row.original as Certificates)
+                    }
+                  )
+                }
+              >
                 <CheckCircle />
                 Approve
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
-                  toggleOpen?.(true, 'delete', {
+                  toggleOpen?.(true, 'delete', null, {
                     ...(row.original as Certificates)
                   })
                 }

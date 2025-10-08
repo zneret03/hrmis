@@ -21,7 +21,7 @@ export function CancelDocumentDialog(): JSX.Element {
   const router = useRouter()
 
   const resetVariables = (): void => {
-    toggleOpen?.(false, null, null)
+    toggleOpen?.(false, null, null, null)
     router.refresh()
   }
 
@@ -38,7 +38,7 @@ export function CancelDocumentDialog(): JSX.Element {
       title={`Cancel document request?`}
       description='Do you want to cancel this request?'
       callback={onCancelDocument}
-      cancel={() => toggleOpen?.(false, null, null)}
+      cancel={() => toggleOpen?.(false, null, null, null)}
       isLoading={isPending}
       type='error'
     />

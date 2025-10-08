@@ -20,7 +20,7 @@ import {
   type LearningAndDevelopment,
   type OtherInformation,
   type References
-} from '@/app/helpers/pds-form-fields'
+} from '@/app/helpers/pds/pds-form-fields'
 import { createClient } from '@/config'
 import { generalErrorResponse } from '../../helpers/response'
 import { removeImageViaPath } from '../../helpers/image/image'
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
         if (field.type === 'checkbox' && value === true) {
           drawCheckmark(page, {
             x: field.x - field.marginWidth,
-            y: field.y - field.marginHeight,
+            y: field.y + field.marginHeight,
             size: field.height
           })
         } else if (field.type === 'text' && typeof value === 'string') {

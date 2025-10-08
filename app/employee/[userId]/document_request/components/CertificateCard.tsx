@@ -46,7 +46,7 @@ export function CertificateCard(args: Certificates): JSX.Element {
           ) && (
             <Button
               className='bg-transparent hover:bg-transparent cursor-pointer underline shadow-none'
-              onClick={() => toggleDialog?.(true, 'cancel', { ...args })}
+              onClick={() => toggleDialog?.(true, 'cancel', null, { ...args })}
             >
               Cancel
             </Button>

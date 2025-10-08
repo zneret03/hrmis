@@ -1,9 +1,9 @@
 import { JSX } from 'react'
 import { Container } from '@/components/custom/Container'
-import { PDFAction } from '@/app/components/PDFAction'
-import { PdfForm } from '@/app/components/PdfForm'
+import { PDFAction } from '@/app/components/pds/PDFAction'
+import { PdfForm } from '@/app/components/pds/PdfForm'
 import { fetchUserPds } from '@/services/pds/pds.service'
-import { UpdatePDFDialog } from '@/app/components/PDFDialog'
+import { UpdatePDFDialog } from '@/app/components/pds/PDFDialog'
 
 export default async function PDSInformation({
   params

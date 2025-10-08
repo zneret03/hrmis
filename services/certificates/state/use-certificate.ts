@@ -12,6 +12,8 @@ type CertificatesDialogType =
   | 'cancel'
   | null
 
+export type CertificateType = 'ceo' | 'service_record' | 'nosa' | 'coec' | null
+
 export type CertificatesData = Omit<
   Certificates,
   'created_at' | 'updated_at' | 'archived_at'
@@ -20,10 +22,12 @@ export type CertificatesData = Omit<
 export interface CertificatesDialog {
   open: boolean
   type: CertificatesDialogType
+  certificateType: CertificateType
   data: Partial<CertificatesData> | null
   toggleOpenDialog?: (
     isOpen: boolean,
     type: CertificatesDialogType,
+    certificateType: CertificateType,
     data: CertificatesData | null
   ) => void
 }
@@ -31,7 +35,8 @@ export interface CertificatesDialog {
 const initialState: CertificatesDialog = {
   data: null,
   open: false,
-  type: null
+  type: null,
+  certificateType: null
 }
 
 export const useCertificates = create<CertificatesDialog>()(
@@ -41,12 +46,14 @@ export const useCertificates = create<CertificatesDialog>()(
       toggleOpenDialog: (
         isOpen: boolean,
         type: CertificatesDialogType,
+        certificateType: CertificateType,
         data: CertificatesData | null
       ) => {
         set((state) => ({
           ...state,
           open: isOpen,
           type,
+          certificateType,
           data
         }))
       }

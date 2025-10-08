@@ -21,7 +21,7 @@ export function DeleteDocumentDialog(): JSX.Element {
   const router = useRouter()
 
   const resetVariables = (): void => {
-    toggleOpen?.(false, null, null)
+    toggleOpen?.(false, null, null, null)
     router.refresh()
   }
 
@@ -39,7 +39,7 @@ export function DeleteDocumentDialog(): JSX.Element {
       title='Delete Document Request?'
       description='Do you want to delete this request document?'
       callback={onDeleteDocument}
-      cancel={() => toggleOpen?.(false, null, null)}
+      cancel={() => toggleOpen?.(false, null, null, null)}
       isLoading={isPending}
       type='error'
     />
