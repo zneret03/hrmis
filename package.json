@@ -11,6 +11,8 @@
     "stop:db": "yarn supabase stop"
   },
   "dependencies": {
+    "@harbour-enterprises/superdoc": "^0.23.0",
+    "@hocuspocus/provider": "^3.2.5",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-collapsible": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.14",
@@ -51,7 +53,9 @@
     "shadcn-ui": "^0.9.5",
     "sonner": "^2.0.7",
     "supabase": "^2.33.9",
+    "superdoc": "^0.23.0",
     "tailwind-merge": "^3.3.1",
+    "yjs": "^13.6.27",
     "zustand": "^5.0.7"
   },
   "devDependencies": {
