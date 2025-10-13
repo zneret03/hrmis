@@ -6,6 +6,9 @@ import { Input } from '@/components/ui/input'
 
 interface SuperDocEditor {
   export: () => void
+  setHeader?: (content: string) => void
+  setFooter?: (content: string) => void
+  insertPageNumber?: (position: 'header' | 'footer') => void
 }
 
 interface SuperDocInstance {
@@ -19,6 +22,11 @@ interface SuperDocConfig {
     toolbar?: {
       selector: string
       toolbarGroups?: string[]
+    }
+    headersAndFooters?: {
+      enabled: boolean
+      differentFirstPage?: boolean
+      oddEvenPages?: boolean
     }
   }
   pagination?: boolean
@@ -34,42 +42,60 @@ export default function SuperDocEditor(): JSX.Element {
   const editor = useRef<SuperDocEditor | null>(null)
   const fileUploadRef = useRef<HTMLInputElement | null>(null)
 
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+
   const onReady = useCallback(() => {
     editor.current = superdoc.current?.activeEditor ?? null
-    console.log('SuperDoc is ready')
-  }, [])
 
-  const initSuperDoc = useCallback(async (fileToLoad: File | null = null) => {
-    // Skip initialization on the server
-    if (typeof window === 'undefined') return
-
-    try {
-      const { SuperDoc } = await import('superdoc')
-      const config: SuperDocConfig = {
-        selector: superdocContainerRef.current,
-        modules: {
-          toolbar: {
-            selector: '#toolbar',
-            toolbarGroups: ['center']
-          }
-        },
-        pagination: true,
-        rulers: true,
-        onReady,
-        onEditorCreate: (event: unknown) => {
-          console.log('Editor is created', event)
-        }
-      }
-
-      if (fileToLoad) {
-        config.document = { data: fileToLoad }
-      }
-
-      superdoc.current = new SuperDoc(config)
-    } catch (error) {
-      console.error('Failed to initialize SuperDoc:', error)
+    if (editor.current) {
+      editor.current.setHeader?.(`Document - ${currentDate}`)
+      editor.current.setFooter?.('Page {PAGE} | © 2025')
+      editor.current.insertPageNumber?.('footer')
     }
-  }, [])
+  }, [currentDate])
+
+  const initSuperDoc = useCallback(
+    async (fileToLoad: File | null = null) => {
+      if (typeof window === 'undefined') return
+
+      try {
+        const { SuperDoc } = await import('superdoc')
+        const config: SuperDocConfig = {
+          selector: superdocContainerRef.current,
+          modules: {
+            toolbar: {
+              selector: '#toolbar',
+              toolbarGroups: ['center', 'headersFooters'] // Add headers/footers toolbar group
+            },
+            headersAndFooters: {
+              enabled: true,
+              differentFirstPage: true, // Optional: unique first page header/footer
+              oddEvenPages: false
+            }
+          },
+          pagination: true,
+          rulers: true,
+          onReady,
+          onEditorCreate: (event: unknown) => {
+            console.log('Editor is created', event)
+          }
+        }
+
+        if (fileToLoad) {
+          config.document = { data: fileToLoad }
+        }
+
+        superdoc.current = new SuperDoc(config)
+      } catch (error) {
+        console.error('Failed to initialize SuperDoc:', error)
+      }
+    },
+    [onReady]
+  )
 
   useEffect(() => {
     initSuperDoc()
@@ -109,7 +135,6 @@ export default function SuperDocEditor(): JSX.Element {
               size='20'
               onClick={handleImport}
             />
-
             <FolderUp
               size='20'
               color='#47484A'
