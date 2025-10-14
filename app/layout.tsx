@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Toaster } from 'sonner'
 import { Geist, Geist_Mono } from 'next/font/google'
-import 'superdoc/style.css'
 import './globals.css'
 
 const geistSans = Geist({
