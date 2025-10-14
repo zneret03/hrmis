@@ -27,16 +27,16 @@ CREATE INDEX idx_pds_personal_information ON public.pds USING GIN (personal_info
 
 
 INSERT INTO storage.buckets (id, name, public, file_size_limit)
-VALUES ('pds_documents', 'pds_documents', TRUE, 5242880); -- 5MB limit
+VALUES ('documents', 'documents', TRUE, 5242880); -- 5MB limit
 
-CREATE POLICY "Upload Select pds documents" ON storage.objects
-    FOR SELECT TO public USING (bucket_id = 'pds_documents');
-CREATE POLICY "Upload Insert pds documents" ON storage.objects
-    FOR INSERT TO public WITH CHECK (bucket_id = 'pds_documents');
-CREATE POLICY "Upload Update pds documents" ON storage.objects
-    FOR UPDATE TO public USING (bucket_id = 'pds_documents');
-CREATE POLICY "Upload Delete pds documents" ON storage.objects
-    FOR DELETE TO public USING (bucket_id = 'pds_documents');
+CREATE POLICY "Upload Select documents" ON storage.objects
+    FOR SELECT TO public USING (bucket_id = 'documents');
+CREATE POLICY "Upload Insert documents" ON storage.objects
+    FOR INSERT TO public WITH CHECK (bucket_id = 'documents');
+CREATE POLICY "Upload Update documents" ON storage.objects
+    FOR UPDATE TO public USING (bucket_id = 'documents');
+CREATE POLICY "Upload Delete documents" ON storage.objects
+    FOR DELETE TO public USING (bucket_id = 'documents');
 
 -- Trigger function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION public.update_updated_at_column()

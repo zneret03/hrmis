@@ -546,7 +546,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   // --- Save Handler ---
   const handleSave = async () => {
     try {
-      await fetch('/api/protected/pds', {
+      await fetch('/api/protected/document_request/pds', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

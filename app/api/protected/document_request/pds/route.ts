@@ -22,8 +22,8 @@ import {
   type References
 } from '@/app/helpers/pds/pds-form-fields'
 import { createClient } from '@/config'
-import { generalErrorResponse } from '../../helpers/response'
-import { removeImageViaPath } from '../../helpers/image/image'
+import { generalErrorResponse } from '../../../helpers/response'
+import { removeImageViaPath } from '../../../helpers/image/image'
 
 const drawCheckmark = (
   page: PDFPage,

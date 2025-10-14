@@ -38,7 +38,15 @@ export function DocumentEditor() {
 
     try {
       if (editor.current) {
-        const docxBlob = editorInstance.save('MyDocument', 'Docx')
+        const docxBlob = await editorInstance.saveAsBlob('Docx')
+
+        const formData = new FormData()
+        formData.append('docx', docxBlob, 'Document.docx')
+
+        await fetch('/api/protected/docx/save', {
+          method: 'POST',
+          body: formData
+        })
       }
     } catch (error) {
       let errorMessage = 'Could not save the document.'
