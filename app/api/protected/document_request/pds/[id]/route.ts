@@ -5,8 +5,12 @@ import {
   generalErrorResponse,
   successResponse
 } from '@/app/api/helpers/response'
+import { NextRequest } from 'next/server'
 
-export async function GET({ params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const supabase = await createClient()
 

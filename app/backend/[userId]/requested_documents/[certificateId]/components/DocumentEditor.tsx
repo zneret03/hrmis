@@ -6,6 +6,7 @@ import {
   Toolbar,
   Inject
 } from '@syncfusion/ej2-react-documenteditor'
+import { Plus } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { registerLicense } from '@syncfusion/ej2-base'
 import { Button } from '@/components/ui/button'
@@ -59,18 +60,22 @@ export function DocumentEditor() {
   }
 
   return (
-    <>
-      <Button onClick={onSave}>Save</Button>
+    <main className='space-y-4'>
+      <section className='text-right'>
+        <Button onClick={onSave}>
+          <Plus /> Approve Document
+        </Button>
+      </section>
       <DocumentEditorContainerComponentSSR
         ref={editor}
         id='container'
         height={'800px'}
-        width={'98%'}
+        width={'100%'}
         serviceUrl='/api/docx'
         enableToolbar={true}
       >
         <Inject services={[Toolbar]}></Inject>
       </DocumentEditorContainerComponentSSR>
-    </>
+    </main>
   )
 }
