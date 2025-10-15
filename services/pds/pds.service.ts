@@ -3,7 +3,9 @@ import axios from 'axios'
 
 export const fetchUserPds = async (id: string) => {
   try {
-    const response = await axiosService.get(`/api/protected/pds/${id}`)
+    const response = await axiosService.get(
+      `/api/protected/document_request/pds/${id}`
+    )
 
     return response.data.data
   } catch (e) {

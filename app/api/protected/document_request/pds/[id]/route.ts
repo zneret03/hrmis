@@ -1,10 +1,11 @@
-import { NextRequest } from 'next/server'
 import { createClient } from '@/config'
 import {
   badRequestResponse,
+  conflictRequestResponse,
   generalErrorResponse,
   successResponse
 } from '@/app/api/helpers/response'
+import { NextRequest } from 'next/server'
 
 export async function GET(
   req: NextRequest,
@@ -12,7 +13,12 @@ export async function GET(
 ) {
   try {
     const supabase = await createClient()
+
     const { id: userId } = await params
+
+    if (!userId) {
+      return conflictRequestResponse({ error: 'User Id is undefined' })
+    }
 
     const { error, data } = await supabase
       .from('pds')

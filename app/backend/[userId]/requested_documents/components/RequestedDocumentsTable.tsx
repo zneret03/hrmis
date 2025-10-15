@@ -48,6 +48,7 @@ import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
 import { useRouter, usePathname } from 'next/navigation'
 import { debounce } from 'lodash'
+import Link from 'next/link'
 import { Certificates } from '@/lib/types/certificates'
 
 interface RequestedDocumentsTableData extends PaginationType {
@@ -100,6 +101,21 @@ export function CertificatesTable({
     onDebounce(value)
   }
 
+  const onApprove = React.useCallback(
+    (type: CertificateType, data: Certificates) => {
+      if (type === 'service_record') {
+        toggleOpen?.(true, 'approve', type as CertificateType, {
+          ...(data as Certificates)
+        })
+
+        return
+      }
+
+      router.replace(`${pathname}/${data.id}`)
+    },
+    [pathname, router, toggleOpen]
+  )
+
   const columns: ColumnDef<Partial<Certificates>>[] = React.useMemo(
     () => [
       {
@@ -137,6 +153,27 @@ export function CertificatesTable({
             <Badge variant='outline' className='capitalize'>
               {row.original.certificate_status}
             </Badge>
+          )
+        }
+      },
+      {
+        accessorKey: 'file',
+        header: 'Requested File',
+        cell: function ({ row }) {
+          return (
+            <div>
+              {!!row.original.file ? (
+                <Link
+                  href={row.original.file || ''}
+                  className='text-primary underline font-semibold'
+                  target='_blank'
+                >
+                  Download
+                </Link>
+              ) : (
+                'N/A'
+              )}
+            </div>
           )
         }
       },
@@ -188,13 +225,11 @@ export function CertificatesTable({
               ) && (
                 <DropdownMenuItem
                   onClick={() =>
-                    toggleOpen?.(
-                      true,
-                      'approve',
-                      row.original.certificate_type as CertificateType,
+                    onApprove(
+                      row?.original?.certificate_type as CertificateType,
                       {
-                        ...(row.original as Certificates)
-                      }
+                        ...row.original
+                      } as Certificates
                     )
                   }
                 >
@@ -233,7 +268,7 @@ export function CertificatesTable({
         )
       }
     ],
-    [toggleOpen]
+    [toggleOpen, onApprove]
   )
 
   const table = useReactTable({

@@ -75,11 +75,11 @@ export function ServiceRecordDialog(): JSX.Element {
   )
 
   useEffect(() => {
-    if (data) {
+    if (data?.data) {
       setFormValues(data?.data?.formFields as Json)
       setInitialState(data?.data?.service_record as Json[])
     }
-  }, [data])
+  }, [data?.data])
 
   const resetVariables = (): void => {
     toggleOpen?.(false, null, null, null)

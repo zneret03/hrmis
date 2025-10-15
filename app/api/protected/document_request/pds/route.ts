@@ -22,8 +22,8 @@ import {
   type References
 } from '@/app/helpers/pds/pds-form-fields'
 import { createClient } from '@/config'
-import { generalErrorResponse } from '../../helpers/response'
-import { removeImageViaPath } from '../../helpers/image/image'
+import { generalErrorResponse } from '../../../helpers/response'
+import { removeImageViaPath } from '../../../helpers/image/image'
 
 const drawCheckmark = (
   page: PDFPage,
@@ -178,24 +178,24 @@ export async function POST(request: Request) {
     const filePath = `${userId}/pds-form-${new Date().toISOString()}.pdf`
 
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('pds_documents')
+      .from('documents')
       .upload(filePath, filledPdfBytes, {
         contentType: 'application/pdf',
         upsert: true
       })
 
     if (typeof fileBucketPath === 'string') {
-      removeImageViaPath(supabase, fileBucketPath, 'pds_documents')
+      removeImageViaPath(supabase, fileBucketPath, 'documents')
     }
 
     const {
       data: { publicUrl }
     } = supabase.storage
-      .from('pds_documents')
+      .from('documents')
       .getPublicUrl(uploadData?.path as string)
 
     if (uploadError) {
-      removeImageViaPath(supabase, fileBucketPath, 'pds_documents')
+      removeImageViaPath(supabase, fileBucketPath, 'documents')
       return generalErrorResponse({ error: uploadError.message })
     }
 
@@ -219,7 +219,7 @@ export async function POST(request: Request) {
       .eq('user_id', userId)
 
     if (error) {
-      removeImageViaPath(supabase, fileBucketPath, 'pds_documents')
+      removeImageViaPath(supabase, fileBucketPath, 'documents')
       return generalErrorResponse({ error: error.message })
     }
 
