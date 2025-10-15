@@ -561,7 +561,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
           otherInformation,
           references,
           userId,
-          fileBucketPath: data?.file?.split('pds_documents/')[1]
+          fileBucketPath: data?.file?.split('documents/')[1]
         })
       })
 

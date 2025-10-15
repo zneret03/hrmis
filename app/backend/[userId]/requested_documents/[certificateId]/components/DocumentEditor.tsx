@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { JSX, useRef } from 'react'
 import {
   DocumentEditorContainerComponent,
   Toolbar,
@@ -10,7 +10,11 @@ import { Plus } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { registerLicense } from '@syncfusion/ej2-base'
 import { Button } from '@/components/ui/button'
+import { useRouter, usePathname } from 'next/navigation'
+import { approveCustomDocument } from '@/services/certificates/certificates.service'
+import { parentPath } from '@/helpers/parentPath'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const DocumentEditorContainerComponentSSR = dynamic(
   () =>
     import('@syncfusion/ej2-react-documenteditor').then(
@@ -21,8 +25,15 @@ const DocumentEditorContainerComponentSSR = dynamic(
 
 registerLicense(process.env.NEXT_PUBLIC_SYNCFUSION_KEY as string)
 
-export function DocumentEditor() {
+interface DocumentEditor {
+  certificateId: string
+}
+
+export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
   const editor = useRef<DocumentEditorContainerComponent | null>(null)
+
+  const router = useRouter()
+  const pathname = usePathname()
 
   const onSave = async (): Promise<void> => {
     if (!editor.current?.documentEditor) {
@@ -40,14 +51,8 @@ export function DocumentEditor() {
     try {
       if (editor.current) {
         const docxBlob = await editorInstance.saveAsBlob('Docx')
-
-        const formData = new FormData()
-        formData.append('docx', docxBlob, 'Document.docx')
-
-        await fetch('/api/protected/docx/save', {
-          method: 'POST',
-          body: formData
-        })
+        await approveCustomDocument(docxBlob, certificateId)
+        router.replace(parentPath(pathname))
       }
     } catch (error) {
       let errorMessage = 'Could not save the document.'

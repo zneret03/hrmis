@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     const formData = await req.formData()
     const file = formData.get('docx') as File | null
-    const id = formData.get('id') as string
+    const id = formData.get('certificateId') as string
 
     if (!file) {
       return conflictRequestResponse({ error: 'No Document Provided' })
@@ -21,10 +21,10 @@ export async function POST(req: NextRequest) {
 
     const fileBuffer = Buffer.from(await file.arrayBuffer())
 
-    const fileName = `documents/${Date.now()}-${file.name}`
+    const fileName = `${id}/${Date.now()}-${file.name}`
 
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('pds_documents')
+      .from('certificates')
       .upload(fileName, fileBuffer, {
         contentType:
           file.type ||
@@ -39,10 +39,13 @@ export async function POST(req: NextRequest) {
     const {
       data: { publicUrl }
     } = supabase.storage
-      .from('pds_documents')
+      .from('certificates')
       .getPublicUrl(uploadData?.path as string)
 
-    await updateDocument({ file: publicUrl }, id)
+    await updateDocument(
+      { file: publicUrl, certificate_status: 'approved' },
+      id
+    )
 
     return successResponse({ message: 'Successfully added document' })
   } catch (error) {
