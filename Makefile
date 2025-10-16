@@ -33,6 +33,7 @@ setup-supabase: init-log
 		echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$$(grep 'anon key' supabase_output.txt | awk -F': ' '{print $$2}' | tr -d '\r')" >> .env; \
 		echo "NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY=$$(grep 'service_role key' supabase_output.txt | awk -F': ' '{print $$2}' | tr -d '\r')" >> .env; \
 		echo "NEXT_PUBLIC_SUPABASE_DB_URL=$$(grep 'DB URL' supabase_output.txt | awk -F': ' '{print $$2}' | tr -d '\r')" >> .env; \
+		echo "NEXT_PUBLIC_SYNCFUSION_KEY=SYNCFUSION_KEY" >> .env; \
 		echo "[$(TIMESTAMP)] .env file created successfully" | tee -a $(LOG_FILE); \
 	else \
 		echo "[$(TIMESTAMP)] Error: Supabase output is empty. Check Supabase CLI or Docker setup." | tee -a $(LOG_FILE); \
