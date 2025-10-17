@@ -118,7 +118,7 @@ export function CertificatesTable({
 
       setTimeout(() => {
         setOpenEditor(false)
-      }, 3000)
+      }, 8000)
     },
     [pathname, router, toggleOpen]
   )
@@ -128,7 +128,7 @@ export function CertificatesTable({
       {
         accessorKey: 'user.email',
         header: 'Email',
-        cell: function ({ row }) {
+        cell: function({ row }) {
           return (
             <div className='font-semibold'>{row.original.users?.email}</div>
           )
@@ -137,14 +137,14 @@ export function CertificatesTable({
       {
         accessorKey: 'title',
         header: 'Request Title',
-        cell: function ({ row }) {
+        cell: function({ row }) {
           return <div>{row.original.title}</div>
         }
       },
       {
         accessorKey: 'certificated_type',
         header: 'Requested Document',
-        cell: function ({ row }) {
+        cell: function({ row }) {
           return (
             <Badge variant='outline'>
               {certificateType[row.original.certificate_type as string]}
@@ -155,7 +155,7 @@ export function CertificatesTable({
       {
         accessorKey: 'certificated_status',
         header: 'Status',
-        cell: function ({ row }) {
+        cell: function({ row }) {
           return (
             <Badge variant='outline' className='capitalize'>
               {row.original.certificate_status}
@@ -166,7 +166,7 @@ export function CertificatesTable({
       {
         accessorKey: 'file',
         header: 'Requested File',
-        cell: function ({ row }) {
+        cell: function({ row }) {
           return (
             <div>
               {!!row.original.file ? (
@@ -187,7 +187,7 @@ export function CertificatesTable({
       {
         accessorKey: 'created_at',
         header: 'Created At',
-        cell: function ({ row }) {
+        cell: function({ row }) {
           return (
             <div className='capitalize'>
               {format(
@@ -201,14 +201,14 @@ export function CertificatesTable({
       {
         accessorKey: 'updated_at',
         header: 'Updated At',
-        cell: function ({ row }) {
+        cell: function({ row }) {
           return (
             <div className='capitalize'>
               {row.getValue('updated_at')
                 ? format(
-                    row.getValue('updated_at'),
-                    "MMMM dd, yyyy hh:mm aaaaa'm'"
-                  )
+                  row.getValue('updated_at'),
+                  "MMMM dd, yyyy hh:mm aaaaa'm'"
+                )
                 : 'N/A'}
             </div>
           )
@@ -230,20 +230,20 @@ export function CertificatesTable({
               {['pending', 'disapproved'].includes(
                 row?.original?.certificate_status as string
               ) && (
-                <DropdownMenuItem
-                  onClick={() =>
-                    onApprove(
-                      row?.original?.certificate_type as CertificateType,
-                      {
-                        ...row.original
-                      } as Certificates
-                    )
-                  }
-                >
-                  <CheckCircle />
-                  Approve
-                </DropdownMenuItem>
-              )}
+                  <DropdownMenuItem
+                    onClick={() =>
+                      onApprove(
+                        row?.original?.certificate_type as CertificateType,
+                        {
+                          ...row.original
+                        } as Certificates
+                      )
+                    }
+                  >
+                    <CheckCircle />
+                    Approve
+                  </DropdownMenuItem>
+                )}
 
               <DropdownMenuItem
                 onClick={() =>
@@ -325,7 +325,7 @@ export function CertificatesTable({
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
-                .map(function (column) {
+                .map(function(column) {
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
@@ -348,15 +348,15 @@ export function CertificatesTable({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(function (header) {
+                {headerGroup.headers.map(function(header) {
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}
