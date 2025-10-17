@@ -43,6 +43,7 @@ import {
   CertificateType,
   useCertificates
 } from '@/services/certificates/state/use-certificate'
+import { Spinner } from '@/components/custom/Spinner'
 import { useShallow } from 'zustand/shallow'
 import { Pagination } from '@/components/custom/Pagination'
 import { Pagination as PaginationType } from '@/lib/types/pagination'
@@ -75,6 +76,7 @@ export function CertificatesTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [isOpenEditor, setOpenEditor] = React.useState<boolean>(false)
 
   const { toggleOpen } = useCertificates(
     useShallow((state) => ({ toggleOpen: state.toggleOpenDialog }))
@@ -103,6 +105,7 @@ export function CertificatesTable({
 
   const onApprove = React.useCallback(
     (type: CertificateType, data: Certificates) => {
+      setOpenEditor(true)
       if (type === 'service_record') {
         toggleOpen?.(true, 'approve', type as CertificateType, {
           ...(data as Certificates)
@@ -111,7 +114,11 @@ export function CertificatesTable({
         return
       }
 
-      router.replace(`${pathname}/${data.id}`)
+      router.push(`${pathname}/${data.id}`)
+
+      setTimeout(() => {
+        setOpenEditor(false)
+      }, 3000)
     },
     [pathname, router, toggleOpen]
   )
@@ -289,6 +296,14 @@ export function CertificatesTable({
       rowSelection
     }
   })
+
+  if (isOpenEditor) {
+    return (
+      <div className='flex items-center justify-center h-[85vh]'>
+        <Spinner />
+      </div>
+    )
+  }
 
   return (
     <div className='w-full'>

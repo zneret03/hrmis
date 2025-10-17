@@ -8,6 +8,7 @@ import {
 } from '@syncfusion/ej2-react-documenteditor'
 import { Plus } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import { Spinner } from '@/components/custom/Spinner'
 import { registerLicense } from '@syncfusion/ej2-base'
 import { Button } from '@/components/ui/button'
 import { useRouter, usePathname } from 'next/navigation'
@@ -62,6 +63,14 @@ export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
       console.error('Save error:', errorMessage)
       alert(`Error: ${errorMessage}`)
     }
+  }
+
+  if (!!editor.current) {
+    return (
+      <div className='flex items-center justify-center h-[85vh]'>
+        <Spinner />
+      </div>
+    )
   }
 
   return (
