@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "start:db": "yarn supabase start",
-    "stop:db": "yarn supabase stop",
-    "format": "prettier --write ."
+    "stop:db": "yarn supabase stop"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
