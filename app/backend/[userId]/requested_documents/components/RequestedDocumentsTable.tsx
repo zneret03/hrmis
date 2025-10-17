@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import * as React from 'react'
+import * as React from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,117 +11,117 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
-  VisibilityState
-} from '@tanstack/react-table'
+  VisibilityState,
+} from '@tanstack/react-table';
 import {
   ChevronDown,
   MoreHorizontal,
   CheckCircle,
   Trash,
-  CircleX
-} from 'lucide-react'
+  CircleX,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-  DropdownMenuItem
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
-} from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
-import { format, subHours } from 'date-fns'
-import { Button } from '@/components/ui/button'
+  TableRow,
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { format, subHours } from 'date-fns';
+import { Button } from '@/components/ui/button';
 import {
   CertificateType,
-  useCertificates
-} from '@/services/certificates/state/use-certificate'
-import { Spinner } from '@/components/custom/Spinner'
-import { useShallow } from 'zustand/shallow'
-import { Pagination } from '@/components/custom/Pagination'
-import { Pagination as PaginationType } from '@/lib/types/pagination'
-import { useRouter, usePathname } from 'next/navigation'
-import { debounce } from 'lodash'
-import Link from 'next/link'
-import { Certificates } from '@/lib/types/certificates'
+  useCertificates,
+} from '@/services/certificates/state/use-certificate';
+import { Spinner } from '@/components/custom/Spinner';
+import { useShallow } from 'zustand/shallow';
+import { Pagination } from '@/components/custom/Pagination';
+import { Pagination as PaginationType } from '@/lib/types/pagination';
+import { useRouter, usePathname } from 'next/navigation';
+import { debounce } from 'lodash';
+import Link from 'next/link';
+import { Certificates } from '@/lib/types/certificates';
 
 interface RequestedDocumentsTableData extends PaginationType {
-  certificates: Partial<Certificates>[]
+  certificates: Partial<Certificates>[];
 }
 
 const certificateType: { [key: string]: string } = {
   service_record: 'Service Record',
   coe: 'Certificate of Employment',
   nosa: 'NOSA',
-  coec: 'Certificate of Employment with Compensation'
-}
+  coec: 'Certificate of Employment with Compensation',
+};
 
 export function CertificatesTable({
   certificates: data,
   totalPages,
   currentPage,
-  count
+  count,
 }: RequestedDocumentsTableData) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+    [],
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [isOpenEditor, setOpenEditor] = React.useState<boolean>(false)
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [isOpenEditor, setOpenEditor] = React.useState<boolean>(false);
 
   const { toggleOpen } = useCertificates(
-    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog }))
-  )
+    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
+  );
 
-  const pathname = usePathname()
-  const router = useRouter()
+  const pathname = usePathname();
+  const router = useRouter();
 
   const onDebounce = React.useMemo(
     () =>
       debounce((value) => {
         if (!!value) {
-          router.replace(`${pathname}?page=${currentPage}&search=${value}`)
-          return
+          router.replace(`${pathname}?page=${currentPage}&search=${value}`);
+          return;
         }
 
-        router.replace(`${pathname}?page=${currentPage}`)
+        router.replace(`${pathname}?page=${currentPage}`);
       }, 500),
-    [pathname, router, currentPage]
-  )
+    [pathname, router, currentPage],
+  );
 
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { value } = event.target
-    onDebounce(value)
-  }
+    const { value } = event.target;
+    onDebounce(value);
+  };
 
   const onApprove = React.useCallback(
     (type: CertificateType, data: Certificates) => {
-      setOpenEditor(true)
+      setOpenEditor(true);
       if (type === 'service_record') {
         toggleOpen?.(true, 'approve', type as CertificateType, {
-          ...(data as Certificates)
-        })
+          ...(data as Certificates),
+        });
 
-        return
+        return;
       }
 
-      router.push(`${pathname}/${data.id}`)
+      router.push(`${pathname}/${data.id}`);
 
       setTimeout(() => {
-        setOpenEditor(false)
-      }, 3000)
+        setOpenEditor(false);
+      }, 8000);
     },
-    [pathname, router, toggleOpen]
-  )
+    [pathname, router, toggleOpen],
+  );
 
   const columns: ColumnDef<Partial<Certificates>>[] = React.useMemo(
     () => [
@@ -130,38 +130,38 @@ export function CertificatesTable({
         header: 'Email',
         cell: function ({ row }) {
           return (
-            <div className='font-semibold'>{row.original.users?.email}</div>
-          )
-        }
+            <div className="font-semibold">{row.original.users?.email}</div>
+          );
+        },
       },
       {
         accessorKey: 'title',
         header: 'Request Title',
         cell: function ({ row }) {
-          return <div>{row.original.title}</div>
-        }
+          return <div>{row.original.title}</div>;
+        },
       },
       {
         accessorKey: 'certificated_type',
         header: 'Requested Document',
         cell: function ({ row }) {
           return (
-            <Badge variant='outline'>
+            <Badge variant="outline">
               {certificateType[row.original.certificate_type as string]}
             </Badge>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'certificated_status',
         header: 'Status',
         cell: function ({ row }) {
           return (
-            <Badge variant='outline' className='capitalize'>
+            <Badge variant="outline" className="capitalize">
               {row.original.certificate_status}
             </Badge>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'file',
@@ -172,8 +172,8 @@ export function CertificatesTable({
               {!!row.original.file ? (
                 <Link
                   href={row.original.file || ''}
-                  className='text-primary underline font-semibold'
-                  target='_blank'
+                  className="text-primary font-semibold underline"
+                  target="_blank"
                 >
                   Download
                 </Link>
@@ -181,38 +181,38 @@ export function CertificatesTable({
                 'N/A'
               )}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'created_at',
         header: 'Created At',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>
+            <div className="capitalize">
               {format(
                 subHours(row.getValue('created_at'), 8),
-                'MMMM d, yyyy, h:mm:ss a'
+                'MMMM d, yyyy, h:mm:ss a',
               )}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'updated_at',
         header: 'Updated At',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>
+            <div className="capitalize">
               {row.getValue('updated_at')
                 ? format(
                     row.getValue('updated_at'),
-                    "MMMM dd, yyyy hh:mm aaaaa'm'"
+                    "MMMM dd, yyyy hh:mm aaaaa'm'",
                   )
                 : 'N/A'}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         id: 'actions',
@@ -221,22 +221,22 @@ export function CertificatesTable({
         cell: ({ row }) => (
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
-              <Button variant='ghost' className='h-8 w-8 p-0'>
-                <span className='sr-only'>Open menu</span>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
+            <DropdownMenuContent align="end">
               {['pending', 'disapproved'].includes(
-                row?.original?.certificate_status as string
+                row?.original?.certificate_status as string,
               ) && (
                 <DropdownMenuItem
                   onClick={() =>
                     onApprove(
                       row?.original?.certificate_type as CertificateType,
                       {
-                        ...row.original
-                      } as Certificates
+                        ...row.original,
+                      } as Certificates,
                     )
                   }
                 >
@@ -252,8 +252,8 @@ export function CertificatesTable({
                     'disapprove',
                     row.original.certificate_type as CertificateType,
                     {
-                      ...(row.original as Certificates)
-                    }
+                      ...(row.original as Certificates),
+                    },
                   )
                 }
               >
@@ -263,7 +263,7 @@ export function CertificatesTable({
               <DropdownMenuItem
                 onClick={() =>
                   toggleOpen?.(true, 'delete', null, {
-                    ...(row.original as Certificates)
+                    ...(row.original as Certificates),
                   })
                 }
               >
@@ -272,11 +272,11 @@ export function CertificatesTable({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
-      }
+        ),
+      },
     ],
-    [toggleOpen, onApprove]
-  )
+    [toggleOpen, onApprove],
+  );
 
   const table = useReactTable({
     data,
@@ -293,35 +293,35 @@ export function CertificatesTable({
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
-    }
-  })
+      rowSelection,
+    },
+  });
 
   if (isOpenEditor) {
     return (
-      <div className='flex items-center justify-center h-[85vh]'>
+      <div className="flex h-[85vh] items-center justify-center">
         <Spinner />
       </div>
-    )
+    );
   }
 
   return (
-    <div className='w-full'>
-      <div className='flex items-center py-4'>
+    <div className="w-full">
+      <div className="flex items-center py-4">
         <Input
-          placeholder='Search document by title...'
+          placeholder="Search document by title..."
           onChange={(event) => onSearch(event)}
-          className='max-w-sm'
+          className="max-w-sm"
         />
 
-        <div className='flex items-center gap-2'>
+        <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='outline' className='ml-auto'>
+              <Button variant="outline" className="ml-auto">
                 Columns <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
+            <DropdownMenuContent align="end">
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
@@ -329,7 +329,7 @@ export function CertificatesTable({
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
-                      className='capitalize'
+                      className="capitalize"
                       checked={column.getIsVisible()}
                       onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
@@ -337,13 +337,13 @@ export function CertificatesTable({
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  )
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
-      <div className='rounded-md border'>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -355,10 +355,10 @@ export function CertificatesTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -374,7 +374,7 @@ export function CertificatesTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -384,7 +384,7 @@ export function CertificatesTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className='h-24 text-center'
+                  className="h-24 text-center"
                 >
                   No results.
                 </TableCell>
@@ -395,5 +395,5 @@ export function CertificatesTable({
       </div>
       <Pagination {...{ totalPages, currentPage, count }} />
     </div>
-  )
+  );
 }
