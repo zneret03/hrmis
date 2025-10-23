@@ -257,39 +257,29 @@ const PdfPageDroppable: React.FC<{
  * The primary Next.js page component that orchestrates the entire application.
  */
 const PdfEditorPage: NextPage = () => {
-  // --- State ---
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageDimensions, setPageDimensions] = useState<
     { width: number; height: number }[]
   >([]);
 
-  // This is the single source of truth for all placed fields
   const [fields, setFields] = useState<PlacedField[]>([]);
 
-  // A ref to the canvas container to calculate relative drop coordinates
   const pdfCanvasContainerRef = useRef<HTMLDivElement>(null);
 
-  // dnd-kit sensors
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      // This is the key:
-      // We're telling the sensor to only "activate" (start a drag)
-      // after the pointer has moved at least 5 pixels.
-      // A simple click (to type) will not meet this constraint.
       activationConstraint: {
         distance: 5,
       },
     }),
   );
 
-  // --- Handlers ---
-
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setPdfFile(file);
-      setFields([]); // Clear fields on new file
+      setFields([]);
       setNumPages(0);
       setPageDimensions([]);
     }
@@ -347,11 +337,7 @@ const PdfEditorPage: NextPage = () => {
             return field;
           }),
         );
-      }
-      // --- (NEW) DELETE CASE ---
-      // If 'over' is null or not a PDF page, it was dropped "off-canvas".
-      // We will remove the field.
-      else {
+      } else {
         setFields((prevFields) =>
           prevFields.filter((field) => field.id !== fieldId),
         );
@@ -502,7 +488,7 @@ const PdfEditorPage: NextPage = () => {
             />
             <button
               onClick={handleSave}
-              disabled={!pdfFile || fields.length === 0}
+              disabled={fields.length === 0}
               style={{
                 marginLeft: '10px',
                 padding: '8px 15px',
@@ -532,10 +518,7 @@ const PdfEditorPage: NextPage = () => {
               backgroundColor: '#e9e9e9',
             }}
           >
-            <Document
-              file="/documents/pds-form.pdf"
-              onLoadSuccess={onDocumentLoadSuccess}
-            >
+            <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
               {Array.from(new Array(numPages), (el, index) => (
                 <PdfPageDroppable
                   key={`page_${index + 1}`}
