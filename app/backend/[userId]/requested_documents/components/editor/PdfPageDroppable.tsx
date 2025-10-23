@@ -36,7 +36,7 @@ export function PdfPageDroppable({
 
   return (
     <div ref={setNodeRef} className={classes}>
-      <Page pageNumber={pageNumber} onLoadSuccess={onPageLoad} height={1500} />
+      <Page pageNumber={pageNumber} onLoadSuccess={onPageLoad} />
 
       {/* Render all fields for this page */}
       {fieldsOnThisPage.map((field) => (
