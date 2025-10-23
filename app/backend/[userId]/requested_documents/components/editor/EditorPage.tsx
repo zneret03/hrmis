@@ -148,29 +148,28 @@ export function PdfEditorPage(): JSX.Element {
         const page = pages[field.page - 1];
         if (!page) continue;
 
-        const pageDims = pageDimensions[field.page - 1];
-        const pageHeight = pageDims.height || page.getHeight();
+        const pageHeight = page.getHeight();
+        const nativeWidth = page.getWidth();
 
-        const pdfY = pageHeight - field.y - field.height;
-        const pdfX = field.x;
+        const renderWidth = 1200;
+
+        const scale = nativeWidth / renderWidth;
+
+        const scaledX = field.x * scale;
+        const scaledY_topDown = field.y * scale;
+        const scaledHeight = field.height * scale;
+
+        const pdfY = pageHeight - scaledY_topDown - scaledHeight;
+
+        const pdfX = scaledX;
 
         page.drawText(field.value || '', {
-          x: pdfX + 5,
-          y: pdfY + field.height / 2 - 6,
-          size: 12,
+          x: pdfX + 5, // 5 points of padding (native-space)
+          y: pdfY + 3, // 5 points up from the bottom of the box (native-space)
+          size: 12, // Font size is already in points, so no scaling
           font,
           color: rgb(0, 0, 0),
         });
-
-        // page.drawRectangle({
-        //   x: pdfX,
-        //   y: pdfY,
-        //   width: field.width,
-        //   height: field.height,
-        //   borderWidth: 1,
-        //   borderColor: rgb(0.5, 0.5, 0.5),
-        //   opacity: 0.5,
-        // });
       }
 
       const pdfBytes = await pdfDoc.save();

@@ -30,15 +30,14 @@ export function PdfPageDroppable({
     'shadow-lg',
     'mb-5',
     isOver
-      ? 'border-2 border-dashed border-blue-500' // Drop active
-      : 'border border-gray-300', // Default
+      ? 'border-2 border-dashed border-blue-500'
+      : 'border border-gray-300',
   ].join(' ');
 
   return (
     <div ref={setNodeRef} className={classes}>
-      <Page pageNumber={pageNumber} onLoadSuccess={onPageLoad} />
+      <Page pageNumber={pageNumber} onLoadSuccess={onPageLoad} width={1200} />
 
-      {/* Render all fields for this page */}
       {fieldsOnThisPage.map((field) => (
         <DraggablePlacedField
           key={field.id}
