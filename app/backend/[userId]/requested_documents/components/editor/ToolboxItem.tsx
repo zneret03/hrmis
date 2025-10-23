@@ -22,7 +22,6 @@ export function ToolboxItem({ type, width, height }: ToolboxItemProps) {
       } as ToolboxDragData,
     });
 
-  // Dynamic transform style must stay inline
   const style = transform
     ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
     : undefined;
@@ -37,7 +36,7 @@ export function ToolboxItem({ type, width, height }: ToolboxItemProps) {
     'cursor-grab',
     'select-none',
     'my-1',
-    isDragging ? 'z-50 opacity-80 shadow-lg' : 'opacity-100', // Conditional classes
+    isDragging ? 'z-50 opacity-80 shadow-lg' : 'opacity-100',
   ].join(' ');
 
   return (

@@ -79,7 +79,10 @@ export function PdfEditorPage(): JSX.Element {
       | PlacedFieldDragData
       | ToolboxDragData;
 
-    if (dragData.isPlacedField) {
+    const placedFieldDragData = dragData as PlacedFieldDragData;
+    const toolboxDragData = dragData as ToolboxDragData;
+
+    if (placedFieldDragData.isPlacedField) {
       const fieldId = active.id;
       if (over && over.id.toString().startsWith('pdf-page-')) {
         const pageNumber = parseInt(over.id.toString().split('-')[2], 10);
@@ -104,7 +107,7 @@ export function PdfEditorPage(): JSX.Element {
       return;
     }
 
-    if (dragData.isToolboxItem && over) {
+    if (toolboxDragData.isToolboxItem && over) {
       const pageId = over.id.toString();
       if (!pageId.startsWith('pdf-page-')) return;
 
@@ -115,17 +118,17 @@ export function PdfEditorPage(): JSX.Element {
 
       let x = dropX - pageRect.left;
       let y = dropY - pageRect.top;
-      x -= dragData.width / 2;
-      y -= dragData.height / 2;
+      x -= toolboxDragData.width / 2;
+      y -= toolboxDragData.height / 2;
 
       const newField: PlacedField = {
         id: uuidv4(),
-        type: dragData.type,
+        type: toolboxDragData.type,
         page: pageNumber,
         x: Math.max(0, x),
         y: Math.max(0, y),
-        width: dragData.width,
-        height: dragData.height,
+        width: toolboxDragData.width,
+        height: toolboxDragData.height,
         value: '',
       };
       setFields((prevFields) => [...prevFields, newField]);
@@ -164,16 +167,18 @@ export function PdfEditorPage(): JSX.Element {
         const pdfX = scaledX;
 
         page.drawText(field.value || '', {
-          x: pdfX + 5, // 5 points of padding (native-space)
-          y: pdfY + 3, // 5 points up from the bottom of the box (native-space)
-          size: 12, // Font size is already in points, so no scaling
+          x: pdfX + 5,
+          y: pdfY + 3,
+          size: 12,
           font,
           color: rgb(0, 0, 0),
         });
       }
 
       const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const blob = new Blob([pdfBytes as BlobPart], {
+        type: 'application/pdf',
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -184,6 +189,7 @@ export function PdfEditorPage(): JSX.Element {
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Error saving PDF:', err);
+      console.info(pageDimensions);
       alert('An error occurred while saving the PDF.');
     }
   };

@@ -21,7 +21,6 @@ export function DraggablePlacedField({
     } as PlacedFieldDragData,
   });
 
-  // This style prop IS REQUIRED for dynamic positioning and dragging.
   const style = {
     position: 'absolute' as const,
     left: field.x,
@@ -31,7 +30,7 @@ export function DraggablePlacedField({
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
-    zIndex: 10, // Keep z-index to stay above the PDF canvas
+    zIndex: 10,
   };
 
   const renderFieldType = () => {
