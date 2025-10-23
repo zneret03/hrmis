@@ -48,6 +48,11 @@ run-dev:
 	yarn dev
 	@echo "running dev with supabase"
 
+run-start:
+	yarn supabase start
+	yarn start
+	@echo "Running prod with supabase"
+
 start-app:
 	yarn start
 	@echo "Starting the app"

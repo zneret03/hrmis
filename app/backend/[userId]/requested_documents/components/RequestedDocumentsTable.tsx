@@ -118,7 +118,7 @@ export function CertificatesTable({
 
       setTimeout(() => {
         setOpenEditor(false);
-      }, 8000);
+      }, 10000);
     },
     [pathname, router, toggleOpen],
   );

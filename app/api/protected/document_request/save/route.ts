@@ -1,27 +1,27 @@
 import {
   generalErrorResponse,
   conflictRequestResponse,
-  successResponse
-} from '@/app/api/helpers/response'
-import { createClient } from '@/config'
-import { NextRequest } from 'next/server'
-import { updateDocument } from '../../model/certificates'
+  successResponse,
+} from '@/app/api/helpers/response';
+import { createClient } from '@/config';
+import { NextRequest } from 'next/server';
+import { updateDocument } from '../../model/certificates';
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
-    const formData = await req.formData()
-    const file = formData.get('docx') as File | null
-    const id = formData.get('certificateId') as string
+    const formData = await req.formData();
+    const file = formData.get('docx') as File | null;
+    const id = formData.get('certificateId') as string;
 
     if (!file) {
-      return conflictRequestResponse({ error: 'No Document Provided' })
+      return conflictRequestResponse({ error: 'No Document Provided' });
     }
 
-    const fileBuffer = Buffer.from(await file.arrayBuffer())
+    const fileBuffer = Buffer.from(await file.arrayBuffer());
 
-    const fileName = `${id}/${Date.now()}-${file.name}`
+    const fileName = `${id}/${Date.now()}-${file.name}`;
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('certificates')
@@ -29,26 +29,26 @@ export async function POST(req: NextRequest) {
         contentType:
           file.type ||
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        upsert: false
-      })
+        upsert: false,
+      });
 
     if (uploadError) {
-      return generalErrorResponse({ error: uploadError.message })
+      return generalErrorResponse({ error: uploadError.message });
     }
 
     const {
-      data: { publicUrl }
+      data: { publicUrl },
     } = supabase.storage
       .from('certificates')
-      .getPublicUrl(uploadData?.path as string)
+      .getPublicUrl(uploadData?.path as string);
 
     await updateDocument(
       { file: publicUrl, certificate_status: 'approved' },
-      id
-    )
+      id,
+    );
 
-    return successResponse({ message: 'Successfully added document' })
+    return successResponse({ message: 'Successfully added document' });
   } catch (error) {
-    return generalErrorResponse({ error: error })
+    return generalErrorResponse({ error: error });
   }
 }

@@ -1,95 +1,115 @@
-'use client'
+'use client';
 
-import { JSX, useRef } from 'react'
+import { JSX, useRef } from 'react';
 import {
   DocumentEditorContainerComponent,
   Toolbar,
-  Inject
-} from '@syncfusion/ej2-react-documenteditor'
-import { Plus } from 'lucide-react'
-import dynamic from 'next/dynamic'
-import { Spinner } from '@/components/custom/Spinner'
-import { registerLicense } from '@syncfusion/ej2-base'
-import { Button } from '@/components/ui/button'
-import { useRouter, usePathname } from 'next/navigation'
-import { approveCustomDocument } from '@/services/certificates/certificates.service'
-import { parentPath } from '@/helpers/parentPath'
+  Inject,
+} from '@syncfusion/ej2-react-documenteditor';
+import { Plus } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { registerLicense } from '@syncfusion/ej2-base';
+import { Button } from '@/components/ui/button';
+import { useRouter, usePathname } from 'next/navigation';
+import { approveCustomDocument } from '@/services/certificates/certificates.service';
+import { parentPath } from '@/helpers/parentPath';
+
+const customToolbarItem = {
+  prefixIcon: 'e-de-ctnr-open',
+  tooltipText: 'Import SFDT', // Updated tooltip
+  id: 'custom_import',
+  disabled: true, // Start as disabled
+};
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const DocumentEditorContainerComponentSSR = dynamic(
   () =>
     import('@syncfusion/ej2-react-documenteditor').then(
-      (mod) => mod.DocumentEditorContainerComponent
+      (mod) => mod.DocumentEditorContainerComponent,
     ),
-  { ssr: false }
-)
+  { ssr: false },
+);
 
-registerLicense(process.env.NEXT_PUBLIC_SYNCFUSION_KEY as string)
+registerLicense(process.env.NEXT_PUBLIC_SYNCFUSION_KEY as string);
 
 interface DocumentEditor {
-  certificateId: string
+  certificateId: string;
 }
 
 export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
-  const editor = useRef<DocumentEditorContainerComponent | null>(null)
+  const editor = useRef<DocumentEditorContainerComponent | null>(null);
 
-  const router = useRouter()
-  const pathname = usePathname()
+  const router = useRouter();
+  const pathname = usePathname();
 
   const onSave = async (): Promise<void> => {
     if (!editor.current?.documentEditor) {
-      console.error('Document editor is not available.')
-      return
+      console.error('Document editor is not available.');
+      return;
     }
 
-    const editorInstance = editor.current.documentEditor
+    const editorInstance = editor.current.documentEditor;
 
     if (!editorInstance) {
-      alert('The document editor instance is not ready.')
-      return
+      alert('The document editor instance is not ready.');
+      return;
     }
 
     try {
       if (editor.current) {
-        const docxBlob = await editorInstance.saveAsBlob('Docx')
-        await approveCustomDocument(docxBlob, certificateId)
-        router.replace(parentPath(pathname))
+        const docxBlob = await editorInstance.saveAsBlob('Docx');
+        await approveCustomDocument(docxBlob, certificateId);
+        router.replace(parentPath(pathname));
       }
     } catch (error) {
-      let errorMessage = 'Could not save the document.'
+      let errorMessage = 'Could not save the document.';
       if (error instanceof Error) {
-        errorMessage = error.message
+        errorMessage = error.message;
       }
-      console.error('Save error:', errorMessage)
-      alert(`Error: ${errorMessage}`)
+      console.error('Save error:', errorMessage);
+      alert(`Error: ${errorMessage}`);
     }
-  }
-
-  if (!!editor.current) {
-    return (
-      <div className='flex items-center justify-center h-[85vh]'>
-        <Spinner />
-      </div>
-    )
-  }
+  };
 
   return (
-    <main className='space-y-4'>
-      <section className='text-right'>
+    <main className="space-y-4">
+      <section className="text-right">
         <Button onClick={onSave}>
           <Plus /> Approve Document
         </Button>
       </section>
       <DocumentEditorContainerComponentSSR
         ref={editor}
-        id='container'
-        height={'800px'}
-        width={'100%'}
-        serviceUrl='/api/docx'
+        id="container"
+        height="800px"
+        width="100%"
+        serviceUrl="/api/protected/document_request/"
+        toolbarItems={[
+          customToolbarItem,
+          'Separator',
+          'Undo',
+          'Redo',
+          'Separator',
+          'Image',
+          'Table',
+          'Hyperlink',
+          'Bookmark',
+          'TableOfContents',
+          'Separator',
+          'Header',
+          'Footer',
+          'PageNumber',
+          'Break',
+          'Separator',
+          'Find',
+          'Separator',
+          'TrackChanges',
+          'Separator',
+        ]}
         enableToolbar={true}
       >
         <Inject services={[Toolbar]}></Inject>
       </DocumentEditorContainerComponentSSR>
     </main>
-  )
+  );
 }
