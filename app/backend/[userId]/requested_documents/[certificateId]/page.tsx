@@ -1,4 +1,5 @@
 import { JSX } from 'react';
+import { PdfEditorPage } from '../components/editor/EditorPage';
 import { DocumentEditor } from './components/DocumentEditor';
 import { Container } from '@/components/custom/Container';
 
@@ -14,7 +15,8 @@ export default async function EditorPage({
       title="Document Editor"
       description="You can edit a document here"
     >
-      <DocumentEditor certificateId={certificateId} />
+      <PdfEditorPage />
+      {/* <DocumentEditor certificateId={certificateId} /> */}
     </Container>
   );
 }
