@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
 
-    console.log(formData);
+    console.info(formData);
   } catch (error) {
     return generalErrorResponse({ error: error });
   }
