@@ -133,7 +133,11 @@ export function PdfEditorPage(): JSX.Element {
   };
 
   const handleSave = async () => {
-    if (!pdfFile) return;
+    if (!pdfFile) {
+      alert('Please load a PDF first.');
+      return;
+    }
+
     try {
       const existingPdfBytes = await pdfFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
@@ -141,32 +145,59 @@ export function PdfEditorPage(): JSX.Element {
       const pages = pdfDoc.getPages();
 
       for (const field of fields) {
-        const page = pages[field.page - 1];
+        const page = pages[field.page - 1]; // pageNumber is 1-based
         if (!page) continue;
+
+        // --- THIS IS THE CORRECTED SCALING LOGIC ---
+
+        // 1. Get native page dimensions from pdf-lib
         const pageDims = pageDimensions[field.page - 1];
         const pageHeight = pageDims.height || page.getHeight();
-        const pdfY = pageHeight - field.y - field.height;
-        const pdfX = field.x;
+        const nativeWidth = pageDims.width || page.getWidth();
+
+        // 2. Define our render width
+        const renderWidth = 1500;
+
+        // 3. Calculate the scale factor
+        //    (e.g., native 612pt / render 1500px = 0.408)
+        const scale = nativeWidth / renderWidth;
+
+        // 4. Scale all our render-space coordinates (from dnd-kit)
+        //    back into native PDF-space (points).
+        const pdfX = field.x * scale;
+        const pdfY_topDown = field.y * scale;
+        const pdfFieldHeight = field.height * scale;
+        const pdfFieldWidth = field.width * scale;
+
+        // 5. Convert Y-coordinate from top-left (React)
+        //    to bottom-left (PDF).
+        const pdfY = pageHeight - pdfY_topDown - pdfFieldHeight;
+
+        const fontSize = 50; // Our target font size
 
         page.drawText(field.value || '', {
-          x: pdfX + 5,
-          y: pdfY + field.height / 2 - 6,
-          size: 12,
+          x: pdfX + 5 * scale,
+          y: pdfY + pdfFieldHeight / 2 - fontSize / 2,
+          size: fontSize,
           font,
           color: rgb(0, 0, 0),
         });
 
-        // page.drawRectangle({
-        //   x: pdfX,
-        //   y: pdfY,
-        //   width: field.width,
-        //   height: field.height,
-        //   borderWidth: 1,
-        //   borderColor: rgb(0.5, 0.5, 0.5),
-        //   opacity: 0.5,
-        // });
+        // --- END OF FIX ---
+
+        // Draw the box (also in scaled, native coordinates)
+        page.drawRectangle({
+          x: pdfX,
+          y: pdfY,
+          width: pdfFieldWidth,
+          height: pdfFieldHeight,
+          borderWidth: 1,
+          borderColor: rgb(0.5, 0.5, 0.5),
+          opacity: 0.5,
+        });
       }
 
+      // Save and download
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
@@ -179,10 +210,9 @@ export function PdfEditorPage(): JSX.Element {
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Error saving PDF:', err);
+      alert('An error occurred while saving the PDF.');
     }
   };
-
-  // --- Render ---
 
   return (
     <DndContext
