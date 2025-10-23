@@ -1,12 +1,14 @@
-[2025-09-05 08:15:42] Initializing setup process
-[2025-09-05 08:15:42] Supabase config found, proceeding with setup
-[2025-09-05 08:15:42] Starting Supabase setup...
-[2025-09-05 08:15:42] Docker is running, executing 'yarn supabase start'...
-Started supabase local development setup.
+[2025-10-23 18:43:21] Initializing setup process
+[2025-10-23 18:43:21] Supabase config found, proceeding with setup
+[2025-10-23 18:43:21] Starting Supabase setup...
+[2025-10-23 18:43:21] Docker is running, executing 'yarn supabase start'...
+supabase start is already running.
+Stopped services: [supabase_imgproxy_hrmis supabase_pooler_hrmis]
+supabase local development setup is running.
 
-A new version of Supabase CLI is available: v2.39.2 (currently installed v2.33.9)
+A new version of Supabase CLI is available: v2.53.6 (currently installed v2.51.0)
 We recommend updating regularly for new features and bug fixes: https://supabase.com/docs/guides/cli/getting-started#updating-the-supabase-cli
-[2025-09-05 08:15:42] Supabase started successfully
-[2025-09-05 08:15:42] Creating .env file with Supabase configurations...
-[2025-09-05 08:15:42] .env file created successfully
-[2025-09-05 08:15:42] Temporary output file cleaned up
+[2025-10-23 18:43:21] Supabase started successfully
+[2025-10-23 18:43:21] Creating .env file with Supabase configurations...
+[2025-10-23 18:43:21] .env file created successfully
+[2025-10-23 18:43:21] Temporary output file cleaned up
