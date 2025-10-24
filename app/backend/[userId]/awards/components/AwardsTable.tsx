@@ -264,7 +264,10 @@ export function EmployeeAwardsTable({
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-end py-4">
+      <div className="flex items-center justify-between py-4">
+        {isDashboard && (
+          <h1 className="text-2xl font-semibold">Awards Summary</h1>
+        )}
         {!isDashboard && (
           <Input
             placeholder="Search user by email..."
