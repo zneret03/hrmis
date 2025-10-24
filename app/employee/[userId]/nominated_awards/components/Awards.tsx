@@ -60,7 +60,9 @@ export function Awards({
         ))}
       </div>
 
-      <Pagination {...{ totalPages, currentPage, count }} />
+      {awards?.length > 0 && (
+        <Pagination {...{ totalPages, currentPage, count }} />
+      )}
     </main>
   );
 }

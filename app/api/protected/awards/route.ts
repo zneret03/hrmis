@@ -42,8 +42,7 @@ export async function GET(req: NextRequest) {
 
     const { data: yearThreshold, error: errorThreshold } = await supabase
       .from('employee_loyalty_threshold')
-      .select('id, year_threshold')
-      .single();
+      .select('id, year_threshold');
 
     if (errorThreshold) {
       return badRequestResponse({ error: errorThreshold.message });
@@ -52,7 +51,7 @@ export async function GET(req: NextRequest) {
     return successResponse({
       message: 'Successfully fetch awards',
       data: {
-        yearThreshold,
+        yearThreshold: yearThreshold[0],
         awards: data || null,
         count,
         totalPages,
