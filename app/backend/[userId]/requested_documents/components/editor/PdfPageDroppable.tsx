@@ -3,12 +3,13 @@ import { useDroppable } from '@dnd-kit/core';
 import { Page } from 'react-pdf';
 import { PlacedField } from '@/lib/types/DraggableTypes';
 import { DraggablePlacedField } from './DraggablePlacedField';
+import { PageCallback } from 'react-pdf/dist/shared/types.js';
 
 interface PdfPageDroppableProps {
   pageNumber: number;
   fields: PlacedField[];
-  onFieldUpdate: (id: string, value: string) => void;
-  onPageLoad: (page: any) => void;
+  onFieldUpdate: (id: string, newProps: Partial<PlacedField> | string) => void;
+  onPageLoad: (page: PageCallback) => void;
 }
 
 export function PdfPageDroppable({

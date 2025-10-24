@@ -6,7 +6,7 @@ import { PlacedField, PlacedFieldDragData } from '@/lib/types/DraggableTypes';
 
 interface DraggablePlacedFieldProps {
   field: PlacedField;
-  onUpdate: (id: string, value: string) => void;
+  onUpdate: (id: string, value: Partial<PlacedField> | string) => void;
 }
 
 export function DraggablePlacedField({
@@ -45,12 +45,42 @@ export function DraggablePlacedField({
             placeholder="Text Field"
           />
         );
-      case 'signature':
+
+      case 'textarea':
         return (
-          <div className="box-border flex h-full w-full cursor-pointer items-center justify-center border border-dashed border-blue-600 bg-blue-500/5 text-xs text-blue-600">
-            {field.value ? `Signed` : 'Click to Sign'}
+          <textarea
+            value={field.value || ''}
+            onChange={(e) => onUpdate(field.id, e.target.value)}
+            className="box-border h-full w-full resize-none border border-dashed border-gray-400 p-1 focus:border-blue-500 focus:outline-none"
+            placeholder="Text Area"
+          />
+        );
+
+      case 'checkbox':
+        return (
+          <div className="box-border flex h-full w-full items-center justify-center border border-dashed border-gray-400">
+            <input
+              type="checkbox"
+              checked={field.checked || false}
+              onChange={(e) =>
+                onUpdate(field.id, { checked: e.target.checked })
+              }
+              className="h-4/5 w-4/5" // Make checkbox fill most of the box
+            />
           </div>
         );
+      // case 'signature':
+      //   return (
+      //     <div
+      //       onClick={() =>
+      //         onUpdate(field.id, { value: field.value ? '' : 'Signed' })
+      //       }
+      //       onPointerDown={(e) => e.stopPropagation()}
+      //       className="box-border flex h-full w-full cursor-pointer items-center justify-center border border-dashed border-blue-600 bg-blue-500/5 text-xs text-blue-600"
+      //     >
+      //       {field.value ? `Signed` : 'Click to Sign'}
+      //     </div>
+      //   );
       default:
         return null;
     }

@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useDraggable } from '@dnd-kit/core';
+import { Pencil, Check, PencilLine } from 'lucide-react';
 import { FieldType, ToolboxDragData } from '@/lib/types/DraggableTypes';
 
 interface ToolboxItemProps {
@@ -9,6 +10,27 @@ interface ToolboxItemProps {
   width: number;
   height: number;
 }
+
+const tooltBoxItems: { [key: string]: ReactNode } = {
+  text: (
+    <div className="flex items-center gap-2">
+      <Pencil className="h-4 w-4" />
+      <span className="font-medium">Text Field</span>
+    </div>
+  ),
+  textarea: (
+    <div className="flex items-center gap-2">
+      <PencilLine className="h-4 w-4" />
+      <span className="font-medium">Text Area</span>
+    </div>
+  ),
+  checkbox: (
+    <div className="flex items-center gap-2">
+      <Check className="h-4 w-4" />
+      <span className="font-medium">Checkbox</span>
+    </div>
+  ),
+};
 
 export function ToolboxItem({ type, width, height }: ToolboxItemProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -31,7 +53,7 @@ export function ToolboxItem({ type, width, height }: ToolboxItemProps) {
     'px-4',
     'bg-gray-100',
     'border',
-    'border-gray-300',
+    'border-blue-300',
     'rounded',
     'cursor-grab',
     'select-none',
@@ -47,7 +69,7 @@ export function ToolboxItem({ type, width, height }: ToolboxItemProps) {
       {...listeners}
       {...attributes}
     >
-      Drag: {type}
+      {tooltBoxItems[type]}
     </div>
   );
 }

@@ -2,8 +2,11 @@
 
 import React, { useState, useRef, JSX } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
 import { Document, pdfjs } from 'react-pdf';
+import { Plus, UploadCloud, FileText } from 'lucide-react';
+import { drawCheckmark } from '@/helpers/drawCheckBox';
+import { useCertificates } from '@/services/certificates/state/use-certificate';
+import { toast } from 'sonner';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -18,7 +21,6 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
-
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 import { Toolbox } from './Toolbox';
@@ -28,15 +30,29 @@ import {
   PlacedFieldDragData,
   ToolboxDragData,
 } from '@/lib/types/DraggableTypes';
+import { Button } from '@/components/ui/button';
+import { PageCallback } from 'react-pdf/dist/shared/types.js';
+import { useShallow } from 'zustand/shallow';
+import { TemplateDB } from '@/lib/types/template';
 
-export function PdfEditorPage(): JSX.Element {
+interface PdfEditorPage {
+  templates: TemplateDB[];
+}
+
+export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageDimensions, setPageDimensions] = useState<
     { width: number; height: number }[]
   >([]);
   const [fields, setFields] = useState<PlacedField[]>([]);
+
   const pdfCanvasContainerRef = useRef<HTMLDivElement>(null);
+  const uploadPdfRef = useRef<HTMLInputElement>(null);
+
+  const { toggleOpen } = useCertificates(
+    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -61,7 +77,7 @@ export function PdfEditorPage(): JSX.Element {
     setPageDimensions(Array(numPages).fill({ width: 0, height: 0 }));
   };
 
-  const onPageLoadSuccess = (pageIndex: number, page: any) => {
+  const onPageLoadSuccess = (pageIndex: number, page: PageCallback) => {
     setPageDimensions((prev) => {
       const newDims = [...prev];
       newDims[pageIndex] = { width: page.width, height: page.height };
@@ -69,7 +85,10 @@ export function PdfEditorPage(): JSX.Element {
     });
   };
 
-  const handleFieldUpdate = (id: string, value: string) => {
+  const handleFieldUpdate = (
+    id: string,
+    value: Partial<PlacedField> | string,
+  ) => {
     setFields((prev) => prev.map((f) => (f.id === id ? { ...f, value } : f)));
   };
 
@@ -159,20 +178,48 @@ export function PdfEditorPage(): JSX.Element {
         const scale = nativeWidth / renderWidth;
 
         const scaledX = field.x * scale;
-        const scaledY_topDown = field.y * scale;
+        const scaledYTopDown = field.y * scale;
         const scaledHeight = field.height * scale;
 
-        const pdfY = pageHeight - scaledY_topDown - scaledHeight;
+        const pdfY = pageHeight - scaledYTopDown - scaledHeight;
 
         const pdfX = scaledX;
 
-        page.drawText(field.value || '', {
-          x: pdfX + 5,
-          y: pdfY + 3,
-          size: 12,
-          font,
-          color: rgb(0, 0, 0),
-        });
+        switch (field.type) {
+          case 'text':
+            page.drawText(field.value || '', {
+              x: pdfX + 2,
+              y: pdfY + 3,
+              size: 10,
+              font,
+              color: rgb(0, 0, 0),
+            });
+            break;
+
+          case 'textarea':
+            page.drawText(field.value || '', {
+              x: pdfX + 5,
+              y: pdfY + 28,
+              size: 9,
+              font,
+              color: rgb(0, 0, 0),
+              lineHeight: 10,
+            });
+            break;
+
+          case 'checkbox':
+            if (field.checked) {
+              const checkX = pdfX + scaledYTopDown / 4;
+              const checkY = pdfY + scaledHeight / 4;
+
+              drawCheckmark(page, {
+                x: checkX,
+                y: checkY,
+                size: 12,
+              });
+            }
+            break;
+        }
       }
 
       const pdfBytes = await pdfDoc.save();
@@ -194,6 +241,12 @@ export function PdfEditorPage(): JSX.Element {
     }
   };
 
+  const onError = (error: string): void => {
+    toast.error('Error!!', {
+      description: error,
+    });
+  };
+
   return (
     <DndContext
       sensors={sensors}
@@ -203,19 +256,28 @@ export function PdfEditorPage(): JSX.Element {
       <div className="flex h-screen flex-col">
         {/* Top Bar */}
         <div className="flex flex-shrink-0 items-center justify-end border-b border-gray-300 bg-white px-4 py-3">
-          <div>
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              onClick={() => toggleOpen?.(true, 'upload-existing', null, null)}
+            >
+              <UploadCloud /> Upload existing pdf
+            </Button>
             <input
+              ref={uploadPdfRef}
+              onChange={onFileChange}
               type="file"
               accept="application/pdf"
-              onChange={onFileChange}
+              hidden
             />
-            <button
+            <Button
+              variant="outline"
               onClick={handleSave}
               disabled={!pdfFile || fields.length === 0}
-              className="ml-3 cursor-pointer rounded bg-blue-600 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
             >
+              <Plus />
               Save PDF
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -228,7 +290,11 @@ export function PdfEditorPage(): JSX.Element {
             className="flex-grow overflow-auto bg-gray-200 p-5"
           >
             {pdfFile ? (
-              <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
+              <Document
+                file={pdfFile}
+                onLoadSuccess={onDocumentLoadSuccess}
+                onLoadError={(error) => onError(error.message)}
+              >
                 {Array.from(new Array(numPages), (el, index) => (
                   <PdfPageDroppable
                     key={`page_${index + 1}`}
@@ -242,6 +308,11 @@ export function PdfEditorPage(): JSX.Element {
             ) : (
               <div className="p-5 text-center text-gray-600">
                 Please select a PDF file to begin.
+                {templates.map((item) => (
+                  <div key={item.file}>
+                    <FileText />
+                  </div>
+                ))}
               </div>
             )}
           </div>

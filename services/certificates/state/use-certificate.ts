@@ -1,7 +1,7 @@
-import { persist } from 'zustand/middleware'
-import { createJSONStorage } from 'zustand/middleware'
-import { create } from 'zustand'
-import { Certificates } from '@/lib/types/certificates'
+import { persist } from 'zustand/middleware';
+import { createJSONStorage } from 'zustand/middleware';
+import { create } from 'zustand';
+import { Certificates } from '@/lib/types/certificates';
 
 type CertificatesDialogType =
   | 'add'
@@ -10,34 +10,35 @@ type CertificatesDialogType =
   | 'disapprove'
   | 'delete'
   | 'cancel'
-  | null
+  | 'upload-existing'
+  | null;
 
-export type CertificateType = 'ceo' | 'service_record' | 'nosa' | 'coec' | null
+export type CertificateType = 'ceo' | 'service_record' | 'nosa' | 'coec' | null;
 
 export type CertificatesData = Omit<
   Certificates,
   'created_at' | 'updated_at' | 'archived_at'
->
+>;
 
 export interface CertificatesDialog {
-  open: boolean
-  type: CertificatesDialogType
-  certificateType: CertificateType
-  data: Partial<CertificatesData> | null
+  open: boolean;
+  type: CertificatesDialogType;
+  certificateType: CertificateType;
+  data: Partial<CertificatesData> | null;
   toggleOpenDialog?: (
     isOpen: boolean,
     type: CertificatesDialogType,
     certificateType: CertificateType,
-    data: CertificatesData | null
-  ) => void
+    data: CertificatesData | null,
+  ) => void;
 }
 
 const initialState: CertificatesDialog = {
   data: null,
   open: false,
   type: null,
-  certificateType: null
-}
+  certificateType: null,
+};
 
 export const useCertificates = create<CertificatesDialog>()(
   persist(
@@ -47,20 +48,20 @@ export const useCertificates = create<CertificatesDialog>()(
         isOpen: boolean,
         type: CertificatesDialogType,
         certificateType: CertificateType,
-        data: CertificatesData | null
+        data: CertificatesData | null,
       ) => {
         set((state) => ({
           ...state,
           open: isOpen,
           type,
           certificateType,
-          data
-        }))
-      }
+          data,
+        }));
+      },
     }),
     {
       name: 'use-certificates',
-      storage: createJSONStorage(() => sessionStorage)
-    }
-  )
-)
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+);
