@@ -14,9 +14,9 @@ export function Toolbox({ templates, callback }: Toolbox) {
       <div>
         <h3 className="mb-2 text-lg font-semibold">Toolbox</h3>
         <ToolboxItem type="text" width={150} height={30} />
-        {/* <ToolboxItem type="signature" width={150} height={50} /> */}
         <ToolboxItem type="checkbox" width={25} height={25} />
         <ToolboxItem type="textarea" width={200} height={80} />
+        <ToolboxItem type="signature" width={150} height={50} />
       </div>
 
       <div>

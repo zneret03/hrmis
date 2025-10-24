@@ -2,7 +2,7 @@
 
 import React, { ReactNode } from 'react';
 import { useDraggable } from '@dnd-kit/core';
-import { Pencil, Check, PencilLine } from 'lucide-react';
+import { Pencil, Check, PencilLine, Signature } from 'lucide-react';
 import { FieldType, ToolboxDragData } from '@/lib/types/DraggableTypes';
 
 interface ToolboxItemProps {
@@ -28,6 +28,12 @@ const tooltBoxItems: { [key: string]: ReactNode } = {
     <div className="flex items-center gap-2">
       <Check className="h-4 w-4" />
       <span className="font-medium">Checkbox</span>
+    </div>
+  ),
+  signature: (
+    <div className="flex items-center gap-2">
+      <Signature className="h-4 w-4" />
+      <span className="font-medium">Signature</span>
     </div>
   ),
 };

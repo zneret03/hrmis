@@ -12,12 +12,6 @@ import { approveCustomDocument } from '@/services/certificates/certificates.serv
 import { parentPath } from '@/helpers/parentPath';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url,
-).toString();
-
 import {
   DndContext,
   DragEndEvent,
@@ -39,6 +33,12 @@ import { Button } from '@/components/ui/button';
 import { PageCallback } from 'react-pdf/dist/shared/types.js';
 import { useShallow } from 'zustand/shallow';
 import { TemplateDB } from '@/lib/types/template';
+// import { downloadFile } from '@/helpers/downloadFile';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url,
+).toString();
 
 interface PdfEditorPage {
   templates: TemplateDB[];
@@ -222,17 +222,21 @@ export function PdfEditorPage({
         const scaledX = field.x * scale;
         const scaledYTopDown = field.y * scale;
         const scaledHeight = field.height * scale;
+        const scaledWidth = field.width * scale;
+
+        const fontSize = 10;
+        const padding = 5;
 
         const pdfY = pageHeight - scaledYTopDown - scaledHeight;
-
         const pdfX = scaledX;
+        const textY = pdfY + scaledHeight - fontSize - padding;
 
         switch (field.type) {
           case 'text':
             page.drawText(field.value || '', {
               x: pdfX + 2,
               y: pdfY + 3,
-              size: 10,
+              size: fontSize,
               font,
               color: rgb(0, 0, 0),
             });
@@ -241,8 +245,8 @@ export function PdfEditorPage({
           case 'textarea':
             page.drawText(field.value || '', {
               x: pdfX + 5,
-              y: pdfY + 28,
-              size: 9,
+              y: textY + 3,
+              size: fontSize,
               font,
               color: rgb(0, 0, 0),
               lineHeight: 10,
@@ -255,12 +259,37 @@ export function PdfEditorPage({
               const checkY = pdfY + scaledHeight / 4;
 
               drawCheckmark(page, {
-                x: checkX,
+                x: checkX - 38,
                 y: checkY,
                 size: 12,
               });
             }
             break;
+
+          case 'signature':
+            if (field.value && field.value.startsWith('data:image/')) {
+              try {
+                let embeddedImage;
+
+                if (field.value.startsWith('data:image/png')) {
+                  embeddedImage = await pdfDoc.embedPng(field.value);
+                } else if (field.value.startsWith('data:image/jpeg')) {
+                  embeddedImage = await pdfDoc.embedJpg(field.value);
+                } else {
+                  console.warn('Unsupported signature image type');
+                  continue;
+                }
+
+                page.drawImage(embeddedImage, {
+                  x: pdfX,
+                  y: pdfY,
+                  width: scaledWidth,
+                  height: scaledHeight,
+                });
+              } catch (embedError) {
+                console.error('Failed to embed signature image:', embedError);
+              }
+            }
         }
       }
 
@@ -268,6 +297,8 @@ export function PdfEditorPage({
       const blob = new Blob([pdfBytes as BlobPart], {
         type: 'application/pdf',
       });
+
+      // downloadFile(blob, pdfFile.name);
 
       await approveCustomDocument(blob, certificateId);
       router.replace(parentPath(pathname));
