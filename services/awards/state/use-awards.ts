@@ -1,33 +1,33 @@
-import { persist } from 'zustand/middleware'
-import { createJSONStorage } from 'zustand/middleware'
-import { create } from 'zustand'
-import { Awards, YearThreshold } from '@/lib/types/awards'
+import { persist } from 'zustand/middleware';
+import { createJSONStorage } from 'zustand/middleware';
+import { create } from 'zustand';
+import { Awards, YearThreshold } from '@/lib/types/awards';
 
-type AwardsDialogType = 'add' | 'edit' | 'delete' | 'read' | null
+type AwardsDialogType = 'add' | 'edit' | 'delete' | 'read' | null;
 
 export type AwardsData = Omit<
   Awards,
   'created_at' | 'updated_at' | 'archived_at'
 > & {
-  yearThreshold?: YearThreshold
-}
+  yearThreshold?: YearThreshold;
+};
 
 export interface AwardsDialog {
-  open: boolean
-  type: AwardsDialogType
-  data: Partial<AwardsData> | null
+  open: boolean;
+  type: AwardsDialogType;
+  data: Partial<AwardsData> | null;
   toggleOpenDialog?: (
     isOpen: boolean,
     type: AwardsDialogType,
-    data: AwardsData | null
-  ) => void
+    data: AwardsData | null,
+  ) => void;
 }
 
 const initialState: AwardsDialog = {
   data: null,
   open: false,
-  type: null
-}
+  type: null,
+};
 
 export const useAwards = create<AwardsDialog>()(
   persist(
@@ -36,19 +36,19 @@ export const useAwards = create<AwardsDialog>()(
       toggleOpenDialog: (
         isOpen: boolean,
         type: AwardsDialogType,
-        data: AwardsData | null
+        data: AwardsData | null,
       ) => {
         set((state) => ({
           ...state,
           open: isOpen,
           type,
-          data
-        }))
-      }
+          data,
+        }));
+      },
     }),
     {
       name: 'use-awards',
-      storage: createJSONStorage(() => sessionStorage)
-    }
-  )
-)
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+);

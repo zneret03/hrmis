@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import * as React from 'react'
+import * as React from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,86 +11,86 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
-  VisibilityState
-} from '@tanstack/react-table'
+  VisibilityState,
+} from '@tanstack/react-table';
 import {
   ChevronDown,
   Plus,
   MoreHorizontal,
   Pencil,
   Trash,
-  CheckCircle
-} from 'lucide-react'
+  CheckCircle,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-  DropdownMenuItem
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
-} from '@/components/ui/table'
-import { TooltipComponent } from '@/components/custom/Tooltip'
-import { Badge } from '@/components/ui/badge'
-import { format } from 'date-fns'
-import { Button } from '@/components/ui/button'
-import { useShallow } from 'zustand/shallow'
-import { Pagination } from '@/components/custom/Pagination'
-import { Pagination as PaginationType } from '@/lib/types/pagination'
-import { useRouter, usePathname } from 'next/navigation'
-import { debounce } from 'lodash'
-import { LeaveApplicationsForm } from '@/lib/types/leave_application'
-import { useLeaveApplicationDialog } from '@/services/leave_applications/states/leave-application-dialog'
+  TableRow,
+} from '@/components/ui/table';
+import { TooltipComponent } from '@/components/custom/Tooltip';
+import { Badge } from '@/components/ui/badge';
+import { format } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import { useShallow } from 'zustand/shallow';
+import { Pagination } from '@/components/custom/Pagination';
+import { Pagination as PaginationType } from '@/lib/types/pagination';
+import { useRouter, usePathname } from 'next/navigation';
+import { debounce } from 'lodash';
+import { LeaveApplicationsForm } from '@/lib/types/leave_application';
+import { useLeaveApplicationDialog } from '@/services/leave_applications/states/leave-application-dialog';
 
 interface LeaveTableData extends PaginationType {
-  leave_applications: LeaveApplicationsForm[]
+  leave_applications: LeaveApplicationsForm[];
 }
 
 export function LeaveApplicationsTable({
   leave_applications: data,
   totalPages,
   currentPage,
-  count
+  count,
 }: LeaveTableData) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+    [],
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const { toggleOpen } = useLeaveApplicationDialog(
-    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog }))
-  )
+    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
+  );
 
-  const pathname = usePathname()
-  const router = useRouter()
+  const pathname = usePathname();
+  const router = useRouter();
 
   const onDebounce = React.useMemo(
     () =>
       debounce((value) => {
         if (!!value) {
-          router.replace(`${pathname}?page=${currentPage}&search=${value}`)
-          return
+          router.replace(`${pathname}?page=${currentPage}&search=${value}`);
+          return;
         }
 
-        router.replace(`${pathname}?page=${currentPage}`)
+        router.replace(`${pathname}?page=${currentPage}`);
       }, 500),
-    [pathname, router, currentPage]
-  )
+    [pathname, router, currentPage],
+  );
 
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { value } = event.target
-    onDebounce(value)
-  }
+    const { value } = event.target;
+    onDebounce(value);
+  };
 
   const columns: ColumnDef<LeaveApplicationsForm>[] = React.useMemo(
     () => [
@@ -99,53 +99,53 @@ export function LeaveApplicationsTable({
         header: 'Email',
         cell: function ({ row }) {
           return (
-            <div className='font-semibold'>{row.original.users?.email}</div>
-          )
-        }
+            <div className="font-semibold">{row.original.users?.email}</div>
+          );
+        },
       },
       {
         accessorKey: 'leave_categories',
         header: 'Application name',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>
+            <div className="capitalize">
               {row.original.leave_categories?.name}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'start_date',
         header: 'Started Date',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>
+            <div className="capitalize">
               {format(row.original.start_date, "MMMM dd, yyyy hh:mm aaaaa'm'")}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'end_date',
         header: 'End Date',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>
+            <div className="capitalize">
               {format(row.original.end_date, "MMMM dd, yyyy hh:mm aaaaa'm'")}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'status',
         header: 'Status',
         cell: function ({ row }) {
           return (
-            <Badge variant='outline' className='capitalize'>
+            <Badge variant="outline" className="capitalize">
               {row.original.status}
             </Badge>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'remarks',
@@ -153,12 +153,12 @@ export function LeaveApplicationsTable({
         cell: function ({ row }) {
           return (
             <TooltipComponent value={row.original.remarks as string}>
-              <div className='capitalize line-clamp-1 text-ellipsis w-30'>
+              <div className="line-clamp-1 w-30 text-ellipsis capitalize">
                 {row.original.remarks}
               </div>
             </TooltipComponent>
-          )
-        }
+          );
+        },
       },
       {
         id: 'actions',
@@ -167,12 +167,12 @@ export function LeaveApplicationsTable({
         cell: ({ row }) => (
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
-              <Button variant='ghost' className='h-8 w-8 p-0'>
-                <span className='sr-only'>Open menu</span>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
+            <DropdownMenuContent align="end">
               <DropdownMenuItem
                 onClick={() => toggleOpen?.(true, 'edit', { ...row.original })}
               >
@@ -199,11 +199,11 @@ export function LeaveApplicationsTable({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
-      }
+        ),
+      },
     ],
-    [toggleOpen]
-  )
+    [toggleOpen],
+  );
 
   const table = useReactTable({
     data,
@@ -220,27 +220,27 @@ export function LeaveApplicationsTable({
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
-    }
-  })
+      rowSelection,
+    },
+  });
 
   return (
-    <div className='w-full'>
-      <div className='flex items-center py-4'>
+    <div className="w-full">
+      <div className="flex items-center py-4">
         <Input
-          placeholder='Search leave name...'
+          placeholder="Search leave name..."
           onChange={(event) => onSearch(event)}
-          className='max-w-sm'
+          className="max-w-sm"
         />
 
-        <div className='flex items-center gap-2'>
+        <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='outline' className='ml-auto'>
+              <Button variant="outline" className="ml-auto">
                 Columns <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
+            <DropdownMenuContent align="end">
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
@@ -248,7 +248,7 @@ export function LeaveApplicationsTable({
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
-                      className='capitalize'
+                      className="capitalize"
                       checked={column.getIsVisible()}
                       onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
@@ -256,18 +256,18 @@ export function LeaveApplicationsTable({
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  )
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
 
           <Button onClick={() => toggleOpen?.(true, 'add', null)}>
-            <Plus className='w-5 h-5' />
+            <Plus className="h-5 w-5" />
             File a leave
           </Button>
         </div>
       </div>
-      <div className='rounded-md border'>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -279,10 +279,10 @@ export function LeaveApplicationsTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -298,7 +298,7 @@ export function LeaveApplicationsTable({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -308,7 +308,7 @@ export function LeaveApplicationsTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className='h-24 text-center'
+                  className="h-24 text-center"
                 >
                   No results.
                 </TableCell>
@@ -319,5 +319,5 @@ export function LeaveApplicationsTable({
       </div>
       <Pagination {...{ totalPages, currentPage, count }} />
     </div>
-  )
+  );
 }

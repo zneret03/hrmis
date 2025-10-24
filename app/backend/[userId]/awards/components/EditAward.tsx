@@ -1,48 +1,48 @@
-'use client'
+'use client';
 
-import { JSX, useTransition, useEffect, useState } from 'react'
+import { JSX, useTransition, useEffect, useState } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose
-} from '@/components/ui/dialog'
+  DialogClose,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
-import { Controller } from 'react-hook-form'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { CustomButton } from '@/components/custom/CustomButton'
-import { useShallow } from 'zustand/react/shallow'
-import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
-import { Awards } from '@/lib/types/awards'
-import { useAwards } from '@/services/awards/state/use-awards'
-import { awardsType } from '../helpers/constants'
-import { Users } from '@/lib/types/users'
-import { updateAward } from '@/services/awards/awards.service'
+  SelectValue,
+} from '@/components/ui/select';
+import { Controller } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { CustomButton } from '@/components/custom/CustomButton';
+import { useShallow } from 'zustand/react/shallow';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { Awards } from '@/lib/types/awards';
+import { useAwards } from '@/services/awards/state/use-awards';
+import { awardsType } from '../helpers/constants';
+import { Users } from '@/lib/types/users';
+import { updateAward } from '@/services/awards/awards.service';
 
 type AwardsForm = Partial<Awards> & {
-  yearThreshold: number
-}
+  yearThreshold: number;
+};
 
 interface EditAwardDialog {
-  users: Users[]
+  users: Users[];
 }
 
 export function EditAward({ users }: EditAwardDialog): JSX.Element {
-  const [isUpdateThreshold, setUpdateThreshold] = useState<boolean>(false)
-  const [isPending, startTransition] = useTransition()
-  const [isPendingThreshold, startThresholdTransition] = useTransition()
+  const [isUpdateThreshold, setUpdateThreshold] = useState<boolean>(false);
+  const [isPending, startTransition] = useTransition();
+  const [isPendingThreshold, startThresholdTransition] = useTransition();
 
   const {
     register,
@@ -50,54 +50,54 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
     formState: { errors },
     control,
     reset,
-    watch
-  } = useForm<AwardsForm>()
-  const today = new Date()
+    watch,
+  } = useForm<AwardsForm>();
+  const today = new Date();
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const threshold = watch('yearThreshold')
+  const threshold = watch('yearThreshold');
 
   const resetVariables = (): void => {
-    toggleOpen?.(false, null, null)
-    router.refresh()
-    setUpdateThreshold(false)
-  }
+    toggleOpen?.(false, null, null);
+    router.refresh();
+    setUpdateThreshold(false);
+  };
 
   const onUpdateThreshold = (): void => {
-    setUpdateThreshold((prevState) => !prevState)
-  }
+    setUpdateThreshold((prevState) => !prevState);
+  };
 
   const onUpdateYearThreshold = (): void => {
     startThresholdTransition(async () => {
       await updateAward(
         { value: threshold },
         data?.yearThreshold?.id as string,
-        'update-threshold'
-      )
+        'update-threshold',
+      );
 
-      resetVariables()
-    })
-  }
+      resetVariables();
+    });
+  };
 
   const { open, toggleOpen, type, data } = useAwards(
     useShallow((state) => ({
       open: state.open,
       type: state.type,
       toggleOpen: state.toggleOpenDialog,
-      data: state.data
-    }))
-  )
+      data: state.data,
+    })),
+  );
 
   const onSubmit = async (awardData: AwardsForm): Promise<void> => {
     startTransition(async () => {
       await updateAward(
         { ...awardData, year: today.getFullYear() },
-        data?.id as string
-      )
-      resetVariables()
-    })
-  }
+        data?.id as string,
+      );
+      resetVariables();
+    });
+  };
 
   useEffect(() => {
     if (!!data) {
@@ -106,37 +106,37 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
         award_type: data.award_type,
         user_id: data.users?.id,
         description: data.description,
-        yearThreshold: Number(data.yearThreshold?.year_threshold) as number
-      })
+        yearThreshold: Number(data.yearThreshold?.year_threshold) as number,
+      });
     }
-  }, [data, reset])
+  }, [data, reset]);
 
-  const isOpenDialog = open && type === 'edit'
+  const isOpenDialog = open && type === 'edit';
   const thresholdText = isUpdateThreshold
     ? 'Save Threshold'
-    : 'Update Threshold'
+    : 'Update Threshold';
 
   return (
     <Dialog
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className='sm:max-w-[40rem]'>
+      <DialogContent className="sm:max-w-[40rem]">
         <DialogHeader>
           <DialogTitle>Edit Award</DialogTitle>
         </DialogHeader>
 
-        <div className='space-y-2'>
+        <div className="space-y-2">
           <Input
-            type='number'
-            title='Year Threshold'
+            type="number"
+            title="Year Threshold"
             disabled={!isUpdateThreshold}
             {...register('yearThreshold', {
-              required: 'Required field'
+              required: 'Required field',
             })}
           />
 
-          <section className='text-right'>
+          <section className="text-right">
             <CustomButton
               disabled={isPendingThreshold}
               isLoading={isPendingThreshold}
@@ -151,28 +151,28 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
           </section>
         </div>
 
-        <div className='grid grid-cols-2 gap-2'>
+        <div className="grid grid-cols-2 gap-2">
           <Input
-            title='Title'
+            title="Title"
             {...register('title', {
-              required: 'Required field.'
+              required: 'Required field.',
             })}
             hasError={!!errors.title}
             errorMessage={errors.title?.message}
           />
 
-          <div className='space-y-2'>
-            <Label className='text-sm font-medium mb-1.5'>Awards*</Label>
+          <div className="space-y-2">
+            <Label className="mb-1.5 text-sm font-medium">Awards*</Label>
             <Controller
-              name='award_type'
+              name="award_type"
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Select
                   value={value as string}
                   onValueChange={(e) => onChange(e)}
                 >
-                  <SelectTrigger className='w-full'>
-                    <SelectValue placeholder='Select awards' />
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select awards" />
                   </SelectTrigger>
                   <SelectContent>
                     {awardsType.map((item) => (
@@ -185,25 +185,25 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
               )}
             />
             {!!errors.award_type && (
-              <h1 className='text-sm text-red-500'>
+              <h1 className="text-sm text-red-500">
                 {errors.award_type.message}
               </h1>
             )}
           </div>
         </div>
 
-        <div className='space-y-2'>
-          <Label className='text-sm font-medium mb-1.5'>Select User*</Label>
+        <div className="space-y-2">
+          <Label className="mb-1.5 text-sm font-medium">Select User*</Label>
           <Controller
-            name='user_id'
+            name="user_id"
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select
                 value={value as string}
                 onValueChange={(e) => onChange(e)}
               >
-                <SelectTrigger className='w-full'>
-                  <SelectValue placeholder='Select user' />
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select user" />
                 </SelectTrigger>
                 <SelectContent>
                   {users?.map((item) => (
@@ -216,16 +216,16 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
             )}
           />
           {!!errors.award_type && (
-            <h1 className='text-sm text-red-500'>
+            <h1 className="text-sm text-red-500">
               {errors.award_type.message}
             </h1>
           )}
         </div>
 
         <Textarea
-          title='Description'
+          title="Description"
           {...register('description', {
-            required: 'Required field.'
+            required: 'Required field.',
           })}
           hasError={!!errors.description}
           errorMessage={errors.description?.message}
@@ -233,14 +233,14 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type='button' variant='outline'>
+            <Button type="button" variant="outline">
               Cancel
             </Button>
           </DialogClose>
 
           <DialogClose asChild>
             <CustomButton
-              type='button'
+              type="button"
               isLoading={isPending}
               onClick={handleSubmit(onSubmit)}
             >
@@ -250,5 +250,5 @@ export function EditAward({ users }: EditAwardDialog): JSX.Element {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

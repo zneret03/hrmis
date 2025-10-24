@@ -1,26 +1,26 @@
-import { NextRequest } from 'next/server'
-import { createClient } from '@/config'
-import { paginatedData } from '../../helpers/paginated-data'
+import { NextRequest } from 'next/server';
+import { createClient } from '@/config';
+import { paginatedData } from '../../helpers/paginated-data';
 import {
   successResponse,
   badRequestResponse,
   generalErrorResponse,
-  validationErrorNextResponse
-} from '../../helpers/response'
-import { LeaveCreditsForm } from '@/lib/types/leave_credits'
-import { isEmpty } from 'lodash'
-import { updateCredits } from '../model/credits'
+  validationErrorNextResponse,
+} from '../../helpers/response';
+import { LeaveCreditsForm } from '@/lib/types/leave_credits';
+import { isEmpty } from 'lodash';
+import { updateCredits } from '../model/credits';
 
 export async function GET(req: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
-    const url = req.nextUrl.searchParams
+    const url = req.nextUrl.searchParams;
 
-    const page = Number(url.get('page') || 1)
-    const perPage = Number(url.get('perPage') || 10)
-    const sortBy = url.get('sortBy') || 'created_at'
-    const search = url.get('search') || ''
+    const page = Number(url.get('page') || 1);
+    const perPage = Number(url.get('perPage') || 10);
+    const sortBy = url.get('sortBy') || 'created_at';
+    const search = url.get('search') || '';
 
     const { data, error, count, totalPages, currentPage } =
       await paginatedData<LeaveCreditsForm>({
@@ -31,11 +31,11 @@ export async function GET(req: NextRequest) {
         search: { column: 'users.email', query: search },
         page,
         perPage,
-        sortBy
-      })
+        sortBy,
+      });
 
     if (error) {
-      return badRequestResponse({ error: error.message })
+      return badRequestResponse({ error: error.message });
     }
 
     return successResponse({
@@ -44,27 +44,27 @@ export async function GET(req: NextRequest) {
         user_credits: data,
         count,
         totalPages,
-        currentPage
-      }
-    })
+        currentPage,
+      },
+    });
   } catch (error) {
-    const newError = error as Error
-    return generalErrorResponse({ error: newError.message })
+    const newError = error as Error;
+    return generalErrorResponse({ error: newError.message });
   }
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json()
+  const body = await req.json();
 
   if (isEmpty(body)) {
-    return validationErrorNextResponse()
+    return validationErrorNextResponse();
   }
 
   if (body.type === 'update-credits') {
     return updateCredits({
       id: body.id,
       credits: Number(body.credits),
-      max_credits: Number(body.max_credits)
-    })
+      max_credits: Number(body.max_credits),
+    });
   }
 }

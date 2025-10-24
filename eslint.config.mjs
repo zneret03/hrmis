@@ -1,13 +1,13 @@
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { FlatCompat } from '@eslint/eslintrc'
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { FlatCompat } from '@eslint/eslintrc';
 
-const fileName = fileURLToPath(import.meta.url)
-const dirName = dirname(fileName)
+const fileName = fileURLToPath(import.meta.url);
+const dirName = dirname(fileName);
 
 const compat = new FlatCompat({
-  baseDirectory: dirName
-})
+  baseDirectory: dirName,
+});
 
 const eslintConfig = [
   ...compat.config({
@@ -33,9 +33,9 @@ const eslintConfig = [
         'error',
         {
           required: {
-            some: ['nesting', 'id']
-          }
-        }
+            some: ['nesting', 'id'],
+          },
+        },
       ],
       'react/prop-types': 0,
       'react/prefer-stateless-function': 2,
@@ -67,30 +67,30 @@ const eslintConfig = [
         'error',
         {
           selector: ['variable'],
-          format: ['camelCase', 'snake_case', 'UPPER_CASE']
-        }
+          format: ['camelCase', 'snake_case', 'UPPER_CASE'],
+        },
       ],
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
           argsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_'
-        }
-      ]
+          destructuredArrayIgnorePattern: '^_',
+        },
+      ],
     },
     overrides: [
       {
         files: ['components/**/*.{ts,tsx,js,jsx}'],
         rules: {
           'arrow-body-style': 'off',
-          '@typescript-eslint/naming-convention': 'off'
-        }
+          '@typescript-eslint/naming-convention': 'off',
+        },
       },
       {
         files: ['*.ts', '*.tsx'],
         parserOptions: {
-          project: ['./tsconfig.json']
-        }
+          project: ['./tsconfig.json'],
+        },
       }, // All index.tsx should always go for default export. Useful for Nextjs routing in the future
       {
         files: [
@@ -99,14 +99,14 @@ const eslintConfig = [
           'helpers.{ts,tsx}',
           '**/constants/*.{ts,tsx}',
           '**/helpers/*.{ts,tsx}',
-          '**/helpers/**'
+          '**/helpers/**',
         ],
         rules: {
-          'unicorn/filename-case': 'off'
-        }
-      }
-    ]
-  })
-]
+          'unicorn/filename-case': 'off',
+        },
+      },
+    ],
+  }),
+];
 
-export default eslintConfig
+export default eslintConfig;

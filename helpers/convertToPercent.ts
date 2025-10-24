@@ -1,2 +1,2 @@
 export const toPercentage = (total: number, count: number): number =>
-  (total / count) * 100
+  (total / count) * 100;

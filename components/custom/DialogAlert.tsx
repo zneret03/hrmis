@@ -1,22 +1,22 @@
-import { JSX } from 'react'
-import { Button } from '../ui/button'
-import { CustomButton } from './CustomButton'
+import { JSX } from 'react';
+import { Button } from '../ui/button';
+import { CustomButton } from './CustomButton';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter
-} from '@/components/ui/dialog'
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 interface DialogAlert {
-  open: boolean
-  cancel: () => void
-  callback: () => void
-  title: string
-  description: string
-  type?: 'success' | 'error'
-  isLoading?: boolean
+  open: boolean;
+  cancel: () => void;
+  callback: () => void;
+  title: string;
+  description: string;
+  type?: 'success' | 'error';
+  isLoading?: boolean;
 }
 
 export function DialogAlert({
@@ -26,33 +26,33 @@ export function DialogAlert({
   title,
   description,
   type = 'error',
-  isLoading
+  isLoading,
 }: DialogAlert): JSX.Element {
   const buttonTitle: { [key: string]: string } = {
     success: 'Save',
-    error: 'Remove'
-  }
+    error: 'Remove',
+  };
 
   const buttonVariant: { [key: string]: 'default' | 'destructive' } = {
     success: 'default',
-    error: 'destructive'
-  }
+    error: 'destructive',
+  };
 
   return (
     <Dialog open={open} onOpenChange={cancel}>
-      <DialogContent className='sm:max-w-[30rem] sm:max-h-[40rem] overflow-auto custom-scrollbar'>
+      <DialogContent className="custom-scrollbar overflow-auto sm:max-h-[40rem] sm:max-w-[30rem]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
-        <p className='text-gray-500'>{description}</p>
+        <p className="text-gray-500">{description}</p>
 
         <DialogFooter>
-          <Button type='button' variant='outline' onClick={cancel}>
+          <Button type="button" variant="outline" onClick={cancel}>
             Cancel
           </Button>
           <CustomButton
-            type='button'
+            type="button"
             variant={buttonVariant[type]}
             onClick={callback}
             isLoading={isLoading}
@@ -62,5 +62,5 @@ export function DialogAlert({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

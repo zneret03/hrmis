@@ -1,29 +1,29 @@
-import { JSX } from 'react'
-import { Container } from '@/components/custom/Container'
-import { SettingsForm } from './components/SettingsForm'
-import { fetchUser } from '@/services/users/users.services'
+import { JSX } from 'react';
+import { Container } from '@/components/custom/Container';
+import { SettingsForm } from './components/SettingsForm';
+import { fetchUser } from '@/services/users/users.services';
 
-import { UpdatePasswordDialog } from '@/app/components/UpdatePasswordDialog'
+import { UpdatePasswordDialog } from '@/app/components/UpdatePasswordDialog';
 
 export default async function SettingsPage({
-  params
+  params,
 }: {
-  params: Promise<{ userId: string }>
+  params: Promise<{ userId: string }>;
 }): Promise<JSX.Element> {
-  const { userId } = await params
+  const { userId } = await params;
 
-  const response = await fetchUser(userId)
+  const response = await fetchUser(userId);
 
   return (
     <Container
-      title='Settings'
-      description='update your personal settings here'
+      title="Settings"
+      description="update your personal settings here"
     >
-      <main className='max-w-4xl mx-auto'>
+      <main className="mx-auto max-w-4xl">
         <SettingsForm {...response} userId={userId} />
       </main>
 
       <UpdatePasswordDialog />
     </Container>
-  )
+  );
 }

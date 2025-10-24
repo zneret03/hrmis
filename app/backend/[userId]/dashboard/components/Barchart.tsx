@@ -1,65 +1,65 @@
-'use client'
+'use client';
 
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  CustomTooltipProps
-} from '@/components/ui/chart'
+  CustomTooltipProps,
+} from '@/components/ui/chart';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
-import { usePathname, useRouter } from 'next/navigation'
+  SelectValue,
+} from '@/components/ui/select';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface ChartType {
-  year: number[]
-  currentYear: string
+  year: number[];
+  currentYear: string;
   data: {
-    month: string
-    days_present: number
-    days_absent: number
-    tardiness_count: number
-  }[]
+    month: string;
+    days_present: number;
+    days_absent: number;
+    tardiness_count: number;
+  }[];
 }
 
 const chartConfig = {
   days_present: {
-    color: '#2563eb'
+    color: '#2563eb',
   },
   days_absent: {
-    color: '#5186f2'
+    color: '#5186f2',
   },
   tardiness_count: {
-    color: '#7ba6f8'
-  }
-} satisfies ChartConfig
+    color: '#7ba6f8',
+  },
+} satisfies ChartConfig;
 
 export function Chart({ data, year, currentYear }: ChartType) {
-  const pathname = usePathname()
-  const router = useRouter()
+  const pathname = usePathname();
+  const router = useRouter();
 
   const yearFilter = (value: string): void => {
-    router.replace(`${pathname}?year=${value}`)
-  }
+    router.replace(`${pathname}?year=${value}`);
+  };
 
   return (
     <Card>
-      <CardHeader className='flex items-center justify-between'>
-        <CardTitle className='text-2xl'>Attendance Statistics</CardTitle>
+      <CardHeader className="flex items-center justify-between">
+        <CardTitle className="text-2xl">Attendance Statistics</CardTitle>
 
         <Select
           value={currentYear as string}
           onValueChange={(e) => yearFilter(e)}
         >
-          <SelectTrigger className='w-auto'>
-            <SelectValue placeholder='Select role' />
+          <SelectTrigger className="w-auto">
+            <SelectValue placeholder="Select role" />
           </SelectTrigger>
           <SelectContent>
             {year.map((item, index) => (
@@ -71,11 +71,11 @@ export function Chart({ data, year, currentYear }: ChartType) {
         </Select>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className='max-h-[400px] w-full'>
+        <ChartContainer config={chartConfig} className="max-h-[400px] w-full">
           <BarChart accessibilityLayer data={data}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey='month'
+              dataKey="month"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -87,23 +87,23 @@ export function Chart({ data, year, currentYear }: ChartType) {
               )}
             />
             <Bar
-              dataKey='days_present'
-              fill='var(--color-days_present)'
+              dataKey="days_present"
+              fill="var(--color-days_present)"
               radius={4}
             />
             <Bar
-              dataKey='days_absent'
-              fill='var(--color-days_absent)'
+              dataKey="days_absent"
+              fill="var(--color-days_absent)"
               radius={4}
             />
             <Bar
-              dataKey='tardiness_count'
-              fill='var(--color-tardiness_count)'
+              dataKey="tardiness_count"
+              fill="var(--color-tardiness_count)"
               radius={4}
             />
           </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,24 +1,24 @@
-import { persist } from 'zustand/middleware'
-import { createJSONStorage } from 'zustand/middleware'
-import { create } from 'zustand'
-import { PDS as PDSTypes } from '@/lib/types/pds'
+import { persist } from 'zustand/middleware';
+import { createJSONStorage } from 'zustand/middleware';
+import { create } from 'zustand';
+import { PDS as PDSTypes } from '@/lib/types/pds';
 
-type PDSType = 'edit' | null
+type PDSType = 'edit' | null;
 
 export type PDSData = Omit<
   PDSTypes,
   'created_at' | 'updated_at' | 'archived_at'
->
+>;
 
 export interface PDS {
-  open: boolean
-  type: PDSType
-  data: Partial<PDSData> | null
+  open: boolean;
+  type: PDSType;
+  data: Partial<PDSData> | null;
   toggleOpenDialog?: (
     isOpen: boolean,
     type: PDSType,
-    data: Partial<PDSData> | null
-  ) => void
+    data: Partial<PDSData> | null,
+  ) => void;
 }
 
 const initialState: PDS = {
@@ -35,11 +35,11 @@ const initialState: PDS = {
     work_experience: null,
     other_static_data: null,
     pds_references: null,
-    file: ''
+    file: '',
   },
   open: false,
-  type: null
-}
+  type: null,
+};
 
 export const usePDS = create<PDS>()(
   persist(
@@ -48,19 +48,19 @@ export const usePDS = create<PDS>()(
       toggleOpenDialog: (
         isOpen: boolean,
         type: PDSType,
-        data: Partial<PDSData> | null
+        data: Partial<PDSData> | null,
       ) => {
         set((state) => ({
           ...state,
           open: isOpen,
           type,
-          data
-        }))
-      }
+          data,
+        }));
+      },
     }),
     {
       name: 'use-pds',
-      storage: createJSONStorage(() => sessionStorage)
-    }
-  )
-)
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+);

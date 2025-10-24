@@ -1,33 +1,33 @@
-import { NextRequest } from 'next/server'
-import { createClient } from '@/config'
+import { NextRequest } from 'next/server';
+import { createClient } from '@/config';
 import {
   badRequestResponse,
   generalErrorResponse,
-  successResponse
-} from '@/app/api/helpers/response'
-import { paginatedData } from '@/app/api/helpers/paginated-data'
-import { BiometricsDB } from '@/lib/types/biometrics'
+  successResponse,
+} from '@/app/api/helpers/response';
+import { paginatedData } from '@/app/api/helpers/paginated-data';
+import { BiometricsDB } from '@/lib/types/biometrics';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const supabase = await createClient()
-    const { id } = await params
+    const supabase = await createClient();
+    const { id } = await params;
 
-    const url = req.nextUrl.searchParams
+    const url = req.nextUrl.searchParams;
 
-    const page = Number(url.get('page') || 1)
-    const perPage = Number(url.get('perPage') || 10)
-    const sortBy = url.get('sortBy') || 'created_at'
-    const month = url.get('month')
-    const year = url.get('year')
+    const page = Number(url.get('page') || 1);
+    const perPage = Number(url.get('perPage') || 10);
+    const sortBy = url.get('sortBy') || 'created_at';
+    const month = url.get('month');
+    const year = url.get('year');
 
-    const endDate = new Date(Number(year), Number(month), 0).getDate()
+    const endDate = new Date(Number(year), Number(month), 0).getDate();
 
     if (!id) {
-      return badRequestResponse()
+      return badRequestResponse();
     }
 
     const {
@@ -35,7 +35,7 @@ export async function GET(
       error: errorBiometrics,
       count,
       totalPages,
-      currentPage
+      currentPage,
     } = await paginatedData<BiometricsDB>({
       tableName: 'biometrics',
       supabase,
@@ -44,11 +44,11 @@ export async function GET(
       page,
       perPage,
       sortBy,
-      specificTable: { column: 'employee_id', tableId: id }
-    })
+      specificTable: { column: 'employee_id', tableId: id },
+    });
 
     if (errorBiometrics) {
-      return generalErrorResponse({ error: errorBiometrics })
+      return generalErrorResponse({ error: errorBiometrics });
     }
 
     const { data: summary, error: errorSummary } = await supabase
@@ -57,37 +57,37 @@ export async function GET(
       .order('created_at', { ascending: true })
       .eq('employee_id', id)
       .gte('timestamp', `${year}-${month}-01T00:00:00Z`)
-      .lte('timestamp', `${year}-${month}-${endDate}T23:59:59Z`)
+      .lte('timestamp', `${year}-${month}-${endDate}T23:59:59Z`);
 
     if (errorSummary) {
-      return generalErrorResponse({ error: errorSummary })
+      return generalErrorResponse({ error: errorSummary });
     }
 
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('id, email, avatar, role, username, employee_id')
       .eq('employee_id', id)
-      .single()
+      .single();
 
     if (userError) {
-      return generalErrorResponse({ error: userError })
+      return generalErrorResponse({ error: userError });
     }
 
     const { data: userCredits, error: errorCredits } = await supabase
       .from('leave_credits')
       .select('id, credits, created_at, updated_at, archived_at')
       .eq('user_id', userData.id)
-      .single()
+      .single();
 
     if (errorCredits) {
-      return generalErrorResponse({ error: errorCredits })
+      return generalErrorResponse({ error: errorCredits });
     }
 
     const { data: attendance, error: errorAttendance } = await supabase
       .from('attendance')
       .select('id, days_present, days_absent, tardiness_count')
       .eq('employee_id', id)
-      .single()
+      .single();
 
     if (errorAttendance && errorAttendance.code === 'PGRST116') {
       return successResponse({
@@ -100,18 +100,18 @@ export async function GET(
             data: biometrics,
             count,
             totalPages,
-            currentPage
+            currentPage,
           },
           attendance: {
             days_absent: 0,
-            days_present: 0
-          }
-        }
-      })
+            days_present: 0,
+          },
+        },
+      });
     }
 
     if (errorAttendance) {
-      return generalErrorResponse({ error: errorAttendance.message })
+      return generalErrorResponse({ error: errorAttendance.message });
     }
 
     return successResponse({
@@ -124,13 +124,13 @@ export async function GET(
           data: biometrics,
           count,
           totalPages,
-          currentPage
+          currentPage,
         },
-        attendance
-      }
-    })
+        attendance,
+      },
+    });
   } catch (error) {
-    const newError = error as Error
-    return generalErrorResponse({ error: newError.message })
+    const newError = error as Error;
+    return generalErrorResponse({ error: newError.message });
   }
 }

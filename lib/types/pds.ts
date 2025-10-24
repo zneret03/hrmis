@@ -1,3 +1,3 @@
-import { Database } from './db-types'
+import { Database } from './db-types';
 
-export type PDS = Database['public']['Tables']['pds']['Row']
+export type PDS = Database['public']['Tables']['pds']['Row'];

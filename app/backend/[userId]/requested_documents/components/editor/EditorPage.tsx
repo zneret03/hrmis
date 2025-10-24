@@ -7,6 +7,10 @@ import { Plus, UploadCloud } from 'lucide-react';
 import { Spinner } from '@/components/custom/Spinner';
 import { drawCheckmark } from '@/helpers/drawCheckBox';
 import { useCertificates } from '@/services/certificates/state/use-certificate';
+import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder';
+import { approveCustomDocument } from '@/services/certificates/certificates.service';
+import { parentPath } from '@/helpers/parentPath';
+import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -38,9 +42,13 @@ import { TemplateDB } from '@/lib/types/template';
 
 interface PdfEditorPage {
   templates: TemplateDB[];
+  certificateId: string;
 }
 
-export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
+export function PdfEditorPage({
+  templates,
+  certificateId,
+}: PdfEditorPage): JSX.Element {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [pageDimensions, setPageDimensions] = useState<
@@ -51,6 +59,9 @@ export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
 
   const pdfCanvasContainerRef = useRef<HTMLDivElement>(null);
   const uploadPdfRef = useRef<HTMLInputElement>(null);
+
+  const pathname = usePathname();
+  const router = useRouter();
 
   const { toggleOpen } = useCertificates(
     useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
@@ -257,14 +268,9 @@ export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
       const blob = new Blob([pdfBytes as BlobPart], {
         type: 'application/pdf',
       });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `modified-${pdfFile.name}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+
+      await approveCustomDocument(blob, certificateId);
+      router.replace(parentPath(pathname));
     } catch (err) {
       console.error('Error saving PDF:', err);
       console.info(pageDimensions);
@@ -307,7 +313,7 @@ export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
               disabled={!pdfFile || fields.length === 0}
             >
               <Plus />
-              Save PDF
+              Approve Request
             </Button>
           </div>
         </div>
@@ -317,7 +323,7 @@ export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
 
           <div
             ref={pdfCanvasContainerRef}
-            className="flex-grow overflow-auto bg-gray-200 p-5"
+            className="flex-grow overflow-auto bg-gray-200/20 p-5"
           >
             {isPending ? (
               <div className="flex items-center justify-center py-30">
@@ -343,7 +349,7 @@ export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
                   </Document>
                 ) : (
                   <div className="p-5 text-center text-gray-600">
-                    Please select a PDF file to begin.
+                    <EmptyPlaceholder description="No template displayed" />
                   </div>
                 )}
               </main>

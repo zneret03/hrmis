@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "start:db": "yarn supabase start",
-    "stop:db": "yarn supabase stop"
+    "stop:db": "yarn supabase stop",
+    "format": "yarn prettier -w ."
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

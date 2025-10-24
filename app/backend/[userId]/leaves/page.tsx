@@ -1,33 +1,33 @@
-import { JSX } from 'react'
-import { FileLeaveDialog } from '@/app/auth/components/FileLeaveDialog'
-import { ApproveDisapproveDialog } from './components/ApprovedDisapprovedStatus'
-import { EditFileLeaveDialog } from './components/EditLeaveRequestDialog'
-import { DeleteLeaveRequestDialog } from './components/DeleteDialog'
-import { Container } from '@/components/custom/Container'
-import { LeaveApplicationsTable } from './components/LeaveApplicationsTable'
-import { LeaveApplicationsForm } from '@/lib/types/leave_application'
-import { getLeaveApplications } from '@/services/leave_applications/leave-applications.services'
-import { getLeaveCategories } from '@/services/leave_categories/leave-categories.services'
+import { JSX } from 'react';
+import { FileLeaveDialog } from '@/app/auth/components/FileLeaveDialog';
+import { ApproveDisapproveDialog } from './components/ApprovedDisapprovedStatus';
+import { EditFileLeaveDialog } from './components/EditLeaveRequestDialog';
+import { DeleteLeaveRequestDialog } from './components/DeleteDialog';
+import { Container } from '@/components/custom/Container';
+import { LeaveApplicationsTable } from './components/LeaveApplicationsTable';
+import { LeaveApplicationsForm } from '@/lib/types/leave_application';
+import { getLeaveApplications } from '@/services/leave_applications/leave-applications.services';
+import { getLeaveCategories } from '@/services/leave_categories/leave-categories.services';
 
 export default async function Leaves({
-  searchParams
+  searchParams,
 }: {
-  searchParams: Promise<{ page: string; search: string }>
+  searchParams: Promise<{ page: string; search: string }>;
 }): Promise<JSX.Element> {
-  const { page, search } = await searchParams
+  const { page, search } = await searchParams;
 
   const response = await getLeaveApplications(
-    `?page=${page}&perPage=10&search=${search}&sortBy=created_at`
-  )
+    `?page=${page}&perPage=10&search=${search}&sortBy=created_at`,
+  );
 
   const category = await getLeaveCategories(
-    `?&search=${search}&sortBy=created_at`
-  )
+    `?&search=${search}&sortBy=created_at`,
+  );
 
   return (
     <Container
-      title='Leave Applications'
-      description='You can see and all filed leaves here.'
+      title="Leave Applications"
+      description="You can see and all filed leaves here."
     >
       <>
         <LeaveApplicationsTable
@@ -36,7 +36,7 @@ export default async function Leaves({
               response.leave_applications as LeaveApplicationsForm[],
             totalPages: response?.totalPages as number,
             currentPage: response?.currentPage as number,
-            count: response?.count as number
+            count: response?.count as number,
           }}
         />
 
@@ -46,5 +46,5 @@ export default async function Leaves({
         <DeleteLeaveRequestDialog />
       </>
     </Container>
-  )
+  );
 }

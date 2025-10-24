@@ -2,31 +2,31 @@
 
 export type FormField =
   | {
-      name: string
-      type: 'checkbox'
-      page: number
-      x: number
-      y: number
-      width: number
-      height: number
-      marginHeight: number
-      marginWidth: number
+      name: string;
+      type: 'checkbox';
+      page: number;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      marginHeight: number;
+      marginWidth: number;
     }
   | {
-      name: string
-      type: 'text' | 'textarea'
-      page: number
-      x: number
-      y: number
-      width: number
-      height: number
-      marginHeight: number
-      marginWidth: number
-      fontSize: number
-    }
+      name: string;
+      type: 'text' | 'textarea';
+      page: number;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      marginHeight: number;
+      marginWidth: number;
+      fontSize: number;
+    };
 
-export const PDF_A4_WIDTH = 595
-export const PDF_A4_HEIGHT = 842
+export const PDF_A4_WIDTH = 595;
+export const PDF_A4_HEIGHT = 842;
 
 export const personalInfoFields: FormField[] = [
   // --- PERSONAL INFORMATION (Page 1) ---
@@ -40,7 +40,7 @@ export const personalInfoFields: FormField[] = [
     height: 12,
     marginHeight: 62,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'firstName',
@@ -52,7 +52,7 @@ export const personalInfoFields: FormField[] = [
     height: 12,
     marginHeight: 62,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'middleName',
@@ -64,7 +64,7 @@ export const personalInfoFields: FormField[] = [
     height: 12,
     marginHeight: 62,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'nameExtension',
@@ -77,7 +77,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 62,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirth',
@@ -90,7 +90,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'placeOfBirth',
@@ -103,7 +103,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 62,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'sexMale',
@@ -114,7 +114,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
     marginHeight: 60,
-    marginWidth: -4
+    marginWidth: -4,
   },
   {
     name: 'sexFemale',
@@ -126,7 +126,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 60,
-    marginWidth: -6
+    marginWidth: -6,
   },
   {
     name: 'civilStatusSingle',
@@ -138,7 +138,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 62,
-    marginWidth: -4
+    marginWidth: -4,
   },
   {
     name: 'civilStatusMarried',
@@ -150,7 +150,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 62,
-    marginWidth: -6
+    marginWidth: -6,
   },
   {
     name: 'civilStatusWidowed',
@@ -162,7 +162,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 62,
-    marginWidth: -4
+    marginWidth: -4,
   },
   {
     name: 'civilStatusSeparated',
@@ -174,7 +174,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 62,
-    marginWidth: -8
+    marginWidth: -8,
   },
   {
     name: 'civilStatusOthers',
@@ -186,7 +186,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 62,
-    marginWidth: -4
+    marginWidth: -4,
   },
   // Citizenship
   {
@@ -199,7 +199,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 60,
-    marginWidth: -10
+    marginWidth: -10,
   },
   {
     name: 'citizenshipDual',
@@ -211,7 +211,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 60,
-    marginWidth: -10
+    marginWidth: -10,
   },
   {
     name: 'dualCitizenshipTypeBirth',
@@ -223,7 +223,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 60,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'dualCitizenshipTypeNaturalization',
@@ -235,7 +235,7 @@ export const personalInfoFields: FormField[] = [
     height: 8,
 
     marginHeight: 60,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'dualCitizenshipCountry',
@@ -248,7 +248,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 50,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   // Addresses
   {
@@ -262,7 +262,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 63,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'resStreet',
@@ -275,7 +275,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 63,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'resSubdivision',
@@ -288,7 +288,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'resBarangay',
@@ -301,7 +301,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'resCity',
@@ -314,7 +314,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'resProvince',
@@ -327,7 +327,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'resZipCode',
@@ -340,7 +340,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   //Permanent Address
   {
@@ -354,7 +354,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'perStreet',
@@ -367,7 +367,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'perSubdivision',
@@ -380,7 +380,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'perBarangay',
@@ -393,7 +393,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'perCity',
@@ -406,7 +406,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'perProvince',
@@ -419,7 +419,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'perZipCode',
@@ -432,7 +432,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 68,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   //Personal info
   {
@@ -446,7 +446,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'weight',
@@ -459,7 +459,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'bloodType',
@@ -472,7 +472,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   //Government Ideas
   {
@@ -486,7 +486,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'pagibigNo',
@@ -499,7 +499,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'philhealthNo',
@@ -512,7 +512,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'sssNo',
@@ -525,7 +525,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'tinNo',
@@ -538,7 +538,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'agencyEmployeeNo',
@@ -551,7 +551,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 66,
     marginWidth: -8,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   // Contact
   {
@@ -565,7 +565,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 68,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'mobileNo',
@@ -578,7 +578,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 68,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'emailAddress',
@@ -591,7 +591,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 68,
     marginWidth: -12,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
 
   //FAMILY BACKGROUND PAGE 1
@@ -606,7 +606,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'spouseFirstName',
@@ -619,7 +619,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'spouseNameExtension',
@@ -632,7 +632,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 68,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'spouseMiddleName',
@@ -645,7 +645,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'spouseOccupation',
@@ -658,7 +658,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'employerOrBusinessPartner',
@@ -671,7 +671,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'businessAddress',
@@ -684,7 +684,7 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'businessTelPho',
@@ -697,9 +697,9 @@ export const personalInfoFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.6
-  }
-]
+    fontSize: 0.6,
+  },
+];
 
 export const familyBackgroundFields: FormField[] = [
   {
@@ -713,7 +713,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'fatherFirstName',
@@ -726,7 +726,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'fatherNameExtension',
@@ -739,7 +739,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'fatherMiddleName',
@@ -752,7 +752,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   // Mother Maidens name
   {
@@ -766,7 +766,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'motherSurname',
@@ -779,7 +779,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'motherFirstName',
@@ -792,7 +792,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'motherMiddleName',
@@ -805,7 +805,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   //Childrens Name
   {
@@ -819,7 +819,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild1',
@@ -832,7 +832,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName2',
@@ -845,7 +845,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild2',
@@ -858,7 +858,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName3',
@@ -871,7 +871,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild3',
@@ -884,7 +884,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName4',
@@ -897,7 +897,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild4',
@@ -910,7 +910,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName5',
@@ -923,7 +923,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild5',
@@ -936,7 +936,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName6',
@@ -949,7 +949,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild6',
@@ -962,7 +962,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName7',
@@ -975,7 +975,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 60,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild7',
@@ -988,7 +988,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 60,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName8',
@@ -1001,7 +1001,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 60,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild8',
@@ -1014,7 +1014,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 60,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName9',
@@ -1027,7 +1027,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild9',
@@ -1040,7 +1040,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName10',
@@ -1053,7 +1053,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild10',
@@ -1066,7 +1066,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName11',
@@ -1079,7 +1079,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild11',
@@ -1092,7 +1092,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'childrenName12',
@@ -1105,7 +1105,7 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'dateOfBirthChild12',
@@ -1118,9 +1118,9 @@ export const familyBackgroundFields: FormField[] = [
 
     marginHeight: 74,
     marginWidth: -15,
-    fontSize: 0.6
-  }
-]
+    fontSize: 0.6,
+  },
+];
 
 export const educationalBackgroundFields: FormField[] = [
   {
@@ -1134,7 +1134,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 78,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'elementaryBasicEdu',
@@ -1147,7 +1147,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 78,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'elementaryFrom',
@@ -1160,7 +1160,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 78,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'elementaryTo',
@@ -1173,7 +1173,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 78,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'elementaryHighestLevel',
@@ -1186,7 +1186,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 78,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'elementaryYearGraduated',
@@ -1199,7 +1199,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 78,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'elementaryHonors',
@@ -1212,7 +1212,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 78,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   //EDUCATIONAL Secondary
   {
@@ -1226,7 +1226,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'secondaryBasicEdu',
@@ -1239,7 +1239,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'secondaryFrom',
@@ -1252,7 +1252,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'secondaryTo',
@@ -1265,7 +1265,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'secondaryHighestLevel',
@@ -1278,7 +1278,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'secondaryYearGraduated',
@@ -1291,7 +1291,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'secondaryHonors',
@@ -1304,7 +1304,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -13,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   // EDUCATIONAL Trade Course
   {
@@ -1318,7 +1318,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'vocationalBasicEdu',
@@ -1331,7 +1331,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'vocationalFrom',
@@ -1344,7 +1344,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'vocationalTo',
@@ -1357,7 +1357,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'vocationalHighestLevel',
@@ -1370,7 +1370,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'vocationalYearGraduated',
@@ -1383,7 +1383,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'vocationalHonors',
@@ -1396,7 +1396,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   //EDUCATIONAL College
   {
@@ -1410,7 +1410,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'collegeBasicEdu',
@@ -1423,7 +1423,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'collegeFrom',
@@ -1436,7 +1436,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'collegeTo',
@@ -1449,7 +1449,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'collegeHighestLevel',
@@ -1462,7 +1462,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'collegeYearGraduated',
@@ -1475,7 +1475,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'collegeHonors',
@@ -1488,7 +1488,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   //GRADUATE STUDIES
   {
@@ -1502,7 +1502,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'graduateBasicEdu',
@@ -1515,7 +1515,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -8,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'graduateFrom',
@@ -1528,7 +1528,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'graduateTo',
@@ -1541,7 +1541,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -12,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'graduateHighestLevel',
@@ -1554,7 +1554,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'graduateYearGraduated',
@@ -1567,7 +1567,7 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -14,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'graduateHonors',
@@ -1580,9 +1580,9 @@ export const educationalBackgroundFields: FormField[] = [
 
     marginHeight: 80,
     marginWidth: -14,
-    fontSize: 0.4
-  }
-]
+    fontSize: 0.4,
+  },
+];
 
 export const otherStaticFields: FormField[] = [
   //PAGE 1 DATE
@@ -1597,7 +1597,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 82,
     marginWidth: -16,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
 
   {
@@ -1611,7 +1611,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 82,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
 
   //PAGE 3 DATE
@@ -1626,7 +1626,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 82,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
 
   {
@@ -1639,7 +1639,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 60,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q34a_no',
@@ -1651,7 +1651,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 60,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q34b_yes',
@@ -1663,7 +1663,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 58,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q34b_no',
@@ -1675,7 +1675,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 58,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q34_details',
@@ -1688,7 +1688,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 60,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
 
   // Question 35
@@ -1702,7 +1702,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 60,
-    marginWidth: -10
+    marginWidth: -10,
   },
   {
     name: 'q35a_no',
@@ -1714,7 +1714,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 60,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q35a_details',
@@ -1727,7 +1727,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 62,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'q35b_yes',
@@ -1739,7 +1739,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 62,
-    marginWidth: -10
+    marginWidth: -10,
   },
   {
     name: 'q35b_no',
@@ -1751,7 +1751,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 62,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q35b_details',
@@ -1764,7 +1764,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 60,
     marginWidth: -15,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
   {
     name: 'q35b_status',
@@ -1777,7 +1777,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 70,
     marginWidth: -15,
-    fontSize: 0.4
+    fontSize: 0.4,
   },
 
   // Question 36
@@ -1791,7 +1791,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 62,
-    marginWidth: -10
+    marginWidth: -10,
   },
   {
     name: 'q36_no',
@@ -1803,7 +1803,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 62,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q36_details',
@@ -1816,7 +1816,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 60,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   //
   // // Question 37
@@ -1830,7 +1830,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 64,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q37_no',
@@ -1842,7 +1842,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 64,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q37_details',
@@ -1855,7 +1855,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   //
   // // Question 38
@@ -1869,7 +1869,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 64,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q38a_no',
@@ -1881,7 +1881,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 64,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q38a_details',
@@ -1894,7 +1894,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 60,
     marginWidth: -12,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'q38b_yes',
@@ -1906,7 +1906,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 64,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q38b_no',
@@ -1918,7 +1918,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 64,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q38b_details',
@@ -1931,7 +1931,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 60,
     marginWidth: -15,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   // // Question 39
   {
@@ -1944,7 +1944,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 68,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q39_no',
@@ -1956,7 +1956,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 69,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q39_details',
@@ -1969,7 +1969,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 64,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   // Question 40
   {
@@ -1982,7 +1982,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 68,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q40a_no',
@@ -1994,7 +1994,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 68,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q40a_specify',
@@ -2007,7 +2007,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'q40b_yes',
@@ -2019,7 +2019,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 68,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q40b_no',
@@ -2031,7 +2031,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 68,
-    marginWidth: -14
+    marginWidth: -14,
   },
   {
     name: 'q40b_id_no',
@@ -2044,7 +2044,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'q40c_yes',
@@ -2056,7 +2056,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 68,
-    marginWidth: -12
+    marginWidth: -12,
   },
   {
     name: 'q40c_no',
@@ -2068,7 +2068,7 @@ export const otherStaticFields: FormField[] = [
     height: 10,
 
     marginHeight: 68,
-    marginWidth: -14
+    marginWidth: -14,
   },
   {
     name: 'q40c_id_no',
@@ -2081,7 +2081,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 72,
     marginWidth: -10,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
 
   //GOVERNMENT ISSUED ID
@@ -2096,7 +2096,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 76,
     marginWidth: -5,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'IDLicensePassortNo',
@@ -2109,7 +2109,7 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 76,
     marginWidth: -5,
-    fontSize: 0.6
+    fontSize: 0.6,
   },
   {
     name: 'issuance',
@@ -2122,66 +2122,66 @@ export const otherStaticFields: FormField[] = [
 
     marginHeight: 76,
     marginWidth: -5,
-    fontSize: 0.6
-  }
-]
+    fontSize: 0.6,
+  },
+];
 
 export type Eligibility = {
-  careerService: string
-  rating: string
-  dateOfExamination: string
-  placeOfExamination: string
-  licenseNumber: string
-  licenseDateOfValidity: string
-}
+  careerService: string;
+  rating: string;
+  dateOfExamination: string;
+  placeOfExamination: string;
+  licenseNumber: string;
+  licenseDateOfValidity: string;
+};
 
 export type WorkExperience = {
-  inclusiveDatesFrom: string
-  inclusiveDatesTo: string
-  positionTitle: string
-  department: string
-  monthlySalary: string
-  salaryGrade: string
-  statusOfAppointment: string
-  govtService: string
-}
+  inclusiveDatesFrom: string;
+  inclusiveDatesTo: string;
+  positionTitle: string;
+  department: string;
+  monthlySalary: string;
+  salaryGrade: string;
+  statusOfAppointment: string;
+  govtService: string;
+};
 
 export type VoluntaryWork = {
-  nameAndAddress: string
-  inclusiveDateFrom: string
-  inclusiveDateTo: string
-  numberOfHours: string
-  position: string
-}
+  nameAndAddress: string;
+  inclusiveDateFrom: string;
+  inclusiveDateTo: string;
+  numberOfHours: string;
+  position: string;
+};
 
 export type LearningAndDevelopment = {
-  title: string
-  inclusiveDatesFrom: string
-  inclusiveDatesTo: string
-  numberOfHours: string
-  typeOfLd: string
-  conductedBy: string
-}
+  title: string;
+  inclusiveDatesFrom: string;
+  inclusiveDatesTo: string;
+  numberOfHours: string;
+  typeOfLd: string;
+  conductedBy: string;
+};
 
 export type OtherInformation = {
-  specialSkills: string
-  nonAcademicDistrinction: string
-  membershipOrganization: string
-}
+  specialSkills: string;
+  nonAcademicDistrinction: string;
+  membershipOrganization: string;
+};
 
 export type References = {
-  name: string
-  address: string
-  telNo: string
-}
+  name: string;
+  address: string;
+  telNo: string;
+};
 
 // --- DYNAMIC FIELD TEMPLATE INTERFACE ---
 
 export interface DynamicFieldTemplate {
-  page: number
-  startY: number
-  rowHeight: number
-  fontSize?: number
+  page: number;
+  startY: number;
+  rowHeight: number;
+  fontSize?: number;
   columns: {
     name:
       | keyof Eligibility
@@ -2189,13 +2189,13 @@ export interface DynamicFieldTemplate {
       | keyof VoluntaryWork
       | keyof LearningAndDevelopment
       | keyof OtherInformation
-      | keyof References
-    x: number
-    width: number
-    marginWidth: number
-    marginHeight: number
-    fontSize: number
-  }[]
+      | keyof References;
+    x: number;
+    width: number;
+    marginWidth: number;
+    marginHeight: number;
+    fontSize: number;
+  }[];
 }
 
 // --- DYNAMIC FIELD TEMPLATE DEFINITIONS ---
@@ -2211,7 +2211,7 @@ export const eligibilityFieldTemplate: DynamicFieldTemplate = {
       width: 143,
       marginWidth: -5,
       marginHeight: 63,
-      fontSize: 0.4
+      fontSize: 0.4,
     },
     {
       name: 'rating',
@@ -2220,7 +2220,7 @@ export const eligibilityFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -8,
       marginHeight: 63,
-      fontSize: 0.4
+      fontSize: 0.4,
     },
     {
       name: 'dateOfExamination',
@@ -2229,7 +2229,7 @@ export const eligibilityFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -10,
       marginHeight: 63,
-      fontSize: 0.4
+      fontSize: 0.4,
     },
     {
       name: 'placeOfExamination',
@@ -2238,7 +2238,7 @@ export const eligibilityFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -14,
       marginHeight: 63,
-      fontSize: 0.4
+      fontSize: 0.4,
     },
     {
       name: 'licenseNumber',
@@ -2247,7 +2247,7 @@ export const eligibilityFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -16,
       marginHeight: 63,
-      fontSize: 0.4
+      fontSize: 0.4,
     },
     {
       name: 'licenseDateOfValidity',
@@ -2256,10 +2256,10 @@ export const eligibilityFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -16,
       marginHeight: 63,
-      fontSize: 0.6
-    }
-  ]
-}
+      fontSize: 0.6,
+    },
+  ],
+};
 
 export const workExperienceFieldTemplate: DynamicFieldTemplate = {
   page: 2,
@@ -2273,7 +2273,7 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -1,
       marginHeight: 66,
-      fontSize: 0.45
+      fontSize: 0.45,
     },
     {
       name: 'inclusiveDatesTo',
@@ -2282,7 +2282,7 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -2,
       marginHeight: 66,
-      fontSize: 0.45
+      fontSize: 0.45,
     },
     {
       name: 'positionTitle',
@@ -2291,7 +2291,7 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -4,
       marginHeight: 66,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'department',
@@ -2300,7 +2300,7 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -5,
       marginHeight: 66,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'monthlySalary',
@@ -2309,7 +2309,7 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -10,
       marginHeight: 66,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'salaryGrade',
@@ -2318,7 +2318,7 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -12,
       marginHeight: 66,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'statusOfAppointment',
@@ -2327,7 +2327,7 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -12,
       marginHeight: 66,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'govtService',
@@ -2336,10 +2336,10 @@ export const workExperienceFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -16,
       marginHeight: 66,
-      fontSize: 0.5
-    }
-  ]
-}
+      fontSize: 0.5,
+    },
+  ],
+};
 
 // NEW & CORRECTED: Template for Voluntary Work
 export const voluntaryWorkFieldTemplate: DynamicFieldTemplate = {
@@ -2354,7 +2354,7 @@ export const voluntaryWorkFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -5,
       marginHeight: 65,
-      fontSize: 0.6
+      fontSize: 0.6,
     },
     {
       name: 'inclusiveDateFrom',
@@ -2362,7 +2362,7 @@ export const voluntaryWorkFieldTemplate: DynamicFieldTemplate = {
       width: 35,
       marginWidth: -8,
       marginHeight: 65,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'inclusiveDateTo',
@@ -2371,7 +2371,7 @@ export const voluntaryWorkFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -8,
       marginHeight: 65,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'numberOfHours',
@@ -2380,7 +2380,7 @@ export const voluntaryWorkFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -12,
       marginHeight: 65,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'position',
@@ -2389,10 +2389,10 @@ export const voluntaryWorkFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -12,
       marginHeight: 65,
-      fontSize: 0.5
-    }
-  ]
-}
+      fontSize: 0.5,
+    },
+  ],
+};
 
 export const learningAndDevelopmentFieldTemplate: DynamicFieldTemplate = {
   page: 3,
@@ -2406,7 +2406,7 @@ export const learningAndDevelopmentFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -6,
       marginHeight: 68,
-      fontSize: 0.6
+      fontSize: 0.6,
     },
     {
       name: 'inclusiveDatesFrom',
@@ -2415,7 +2415,7 @@ export const learningAndDevelopmentFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -10,
       marginHeight: 68,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'inclusiveDatesTo',
@@ -2424,7 +2424,7 @@ export const learningAndDevelopmentFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -8,
       marginHeight: 68,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'numberOfHours',
@@ -2433,7 +2433,7 @@ export const learningAndDevelopmentFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -9,
       marginHeight: 68,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'typeOfLd',
@@ -2442,7 +2442,7 @@ export const learningAndDevelopmentFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -12,
       marginHeight: 68,
-      fontSize: 0.6
+      fontSize: 0.6,
     },
     {
       name: 'conductedBy',
@@ -2451,10 +2451,10 @@ export const learningAndDevelopmentFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -14,
       marginHeight: 68,
-      fontSize: 0.6
-    }
-  ]
-}
+      fontSize: 0.6,
+    },
+  ],
+};
 
 export const otherInformationFieldTemplate: DynamicFieldTemplate = {
   page: 3,
@@ -2468,7 +2468,7 @@ export const otherInformationFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -6,
       marginHeight: 78,
-      fontSize: 0.6
+      fontSize: 0.6,
     },
     {
       name: 'nonAcademicDistrinction',
@@ -2476,7 +2476,7 @@ export const otherInformationFieldTemplate: DynamicFieldTemplate = {
       width: 232,
       marginWidth: -10,
       marginHeight: 78,
-      fontSize: 0.6
+      fontSize: 0.6,
     },
     {
       name: 'membershipOrganization',
@@ -2485,10 +2485,10 @@ export const otherInformationFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -14,
       marginHeight: 78,
-      fontSize: 0.6
-    }
-  ]
-}
+      fontSize: 0.6,
+    },
+  ],
+};
 
 export const referencesFieldTemplate: DynamicFieldTemplate = {
   page: 4,
@@ -2502,7 +2502,7 @@ export const referencesFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -4,
       marginHeight: 76,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'address',
@@ -2511,7 +2511,7 @@ export const referencesFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -6,
       marginHeight: 76,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'telNo',
@@ -2520,7 +2520,7 @@ export const referencesFieldTemplate: DynamicFieldTemplate = {
 
       marginWidth: -10,
       marginHeight: 76,
-      fontSize: 0.5
-    }
-  ]
-}
+      fontSize: 0.5,
+    },
+  ],
+};

@@ -1,20 +1,20 @@
-import { MenuOptions } from '@/lib/types/MenuOptions'
+import { MenuOptions } from '@/lib/types/MenuOptions';
 
 export const awardsType: MenuOptions[] = [
   {
     label: 'Perfect Attendance',
-    value: 'perfect_attendance'
+    value: 'perfect_attendance',
   },
   {
     label: 'Lowest Absent',
-    value: 'lowest_absent'
+    value: 'lowest_absent',
   },
   {
     label: 'Lowest Tardiness/Late',
-    value: 'lowest_tardy'
+    value: 'lowest_tardy',
   },
   {
     label: 'Loyalty Award',
-    value: 'loyalty_award'
-  }
-]
+    value: 'loyalty_award',
+  },
+];

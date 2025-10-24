@@ -1,36 +1,36 @@
-import axios, { InternalAxiosRequestConfig } from 'axios'
+import axios, { InternalAxiosRequestConfig } from 'axios';
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
 
-const isServer = typeof window === 'undefined'
+const isServer = typeof window === 'undefined';
 
 const logInterceptor = async (req: InternalAxiosRequestConfig) => {
   if (isServer) {
-    console.info('[AXIOS] [SERVER] ', req.url)
+    console.info('[AXIOS] [SERVER] ', req.url);
   } else {
-    console.info('[AXIOS] [CLIENT] ', req.url)
+    console.info('[AXIOS] [CLIENT] ', req.url);
   }
-  return req
-}
+  return req;
+};
 
 const cookiesInterceptor = async (req: InternalAxiosRequestConfig) => {
   if (isServer) {
-    const { cookies } = await import('next/headers')
-    const cookiesString = await cookies()
+    const { cookies } = await import('next/headers');
+    const cookiesString = await cookies();
 
     cookiesString
       .getAll()
       .map((item) => `${item.name}=${item.value}`)
-      .join('; ')
+      .join('; ');
 
-    req.headers.cookie = cookiesString
+    req.headers.cookie = cookiesString;
   }
-  return req
-}
+  return req;
+};
 
 export const axiosService = axios.create({
-  baseURL: baseUrl
-})
+  baseURL: baseUrl,
+});
 
-axiosService.interceptors.request.use(logInterceptor)
-axiosService.interceptors.request.use(cookiesInterceptor)
+axiosService.interceptors.request.use(logInterceptor);
+axiosService.interceptors.request.use(cookiesInterceptor);

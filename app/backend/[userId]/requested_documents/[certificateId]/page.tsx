@@ -29,7 +29,7 @@ export default async function EditorPage({
         <EditorSwitch document={document} />
       </section>
       {document === 'pdf-editor' ? (
-        <PdfEditorPage {...{ templates: response.templates }} />
+        <PdfEditorPage {...{ templates: response.templates, certificateId }} />
       ) : (
         <DocumentEditor certificateId={certificateId} />
       )}

@@ -1,10 +1,10 @@
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-import { UserForm } from '@/lib/types/users'
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { UserForm } from '@/lib/types/users';
 
 export interface UseAuth extends UserForm {
-  setUserInfo: (user: UserForm) => void
-  reset: () => void
+  setUserInfo: (user: UserForm) => void;
+  reset: () => void;
 }
 
 const initialState: UserForm = {
@@ -12,8 +12,8 @@ const initialState: UserForm = {
   email: '',
   employee_id: '',
   id: '',
-  role: ''
-}
+  role: '',
+};
 
 export const useAuth = create<UseAuth>()(
   persist(
@@ -21,16 +21,16 @@ export const useAuth = create<UseAuth>()(
       ...initialState,
       setUserInfo: (user: UserForm) => {
         set({
-          ...user
-        })
+          ...user,
+        });
       },
       reset: () => {
-        set(initialState)
-      }
+        set(initialState);
+      },
     }),
     {
       name: 'use-auth',
-      storage: createJSONStorage(() => sessionStorage)
-    }
-  )
-)
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+);

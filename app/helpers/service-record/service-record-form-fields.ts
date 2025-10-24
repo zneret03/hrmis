@@ -2,31 +2,31 @@
 
 export type FormField =
   | {
-      name: string
-      type: 'checkbox'
-      page: number
-      x: number
-      y: number
-      width: number
-      height: number
-      marginHeight: number
-      marginWidth: number
+      name: string;
+      type: 'checkbox';
+      page: number;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      marginHeight: number;
+      marginWidth: number;
     }
   | {
-      name: string
-      type: 'text' | 'textarea'
-      page: number
-      x: number
-      y: number
-      width: number
-      height: number
-      marginHeight: number
-      marginWidth: number
-      fontSize: number
-    }
+      name: string;
+      type: 'text' | 'textarea';
+      page: number;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+      marginHeight: number;
+      marginWidth: number;
+      fontSize: number;
+    };
 
-export const PDF_A4_WIDTH = 595
-export const PDF_A4_HEIGHT = 842
+export const PDF_A4_WIDTH = 595;
+export const PDF_A4_HEIGHT = 842;
 
 export const formValues: FormField[] = [
   {
@@ -40,7 +40,7 @@ export const formValues: FormField[] = [
 
     marginHeight: -154,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'givenName',
@@ -53,7 +53,7 @@ export const formValues: FormField[] = [
 
     marginHeight: -154,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'middleInitial',
@@ -66,7 +66,7 @@ export const formValues: FormField[] = [
 
     marginHeight: -154,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'dateOfBirth',
@@ -79,7 +79,7 @@ export const formValues: FormField[] = [
 
     marginHeight: -150,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'placeOfBirth',
@@ -92,7 +92,7 @@ export const formValues: FormField[] = [
 
     marginHeight: -150,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'dateSigned',
@@ -105,7 +105,7 @@ export const formValues: FormField[] = [
 
     marginHeight: -134,
     marginWidth: -10,
-    fontSize: 0.8
+    fontSize: 0.8,
   },
   {
     name: 'signedName',
@@ -118,37 +118,37 @@ export const formValues: FormField[] = [
 
     marginHeight: -134,
     marginWidth: -10,
-    fontSize: 0.8
-  }
-]
+    fontSize: 0.8,
+  },
+];
 
 export type ServiceRecordDynamic = {
-  from: string
-  to: string
-  designation: string
-  status: string
-  salary: string
-  placeOfAssignment: string
-  branch: string
-  withOrWithoutPay: string
-  date: string
-  cause: string
-}
+  from: string;
+  to: string;
+  designation: string;
+  status: string;
+  salary: string;
+  placeOfAssignment: string;
+  branch: string;
+  withOrWithoutPay: string;
+  date: string;
+  cause: string;
+};
 
 export interface DynamicFieldTemplate {
-  page: number
-  startY: number
-  rowHeight: number
-  serverHeight?: number
-  fontSize?: number
+  page: number;
+  startY: number;
+  rowHeight: number;
+  serverHeight?: number;
+  fontSize?: number;
   columns: {
-    name: keyof ServiceRecordDynamic
-    x: number
-    width: number
-    marginWidth: number
-    marginHeight: number
-    fontSize: number
-  }[]
+    name: keyof ServiceRecordDynamic;
+    x: number;
+    width: number;
+    marginWidth: number;
+    marginHeight: number;
+    fontSize: number;
+  }[];
 }
 
 export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
@@ -164,7 +164,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -2,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'to',
@@ -173,7 +173,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -2,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'designation',
@@ -182,7 +182,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -4,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'status',
@@ -191,7 +191,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -6,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'salary',
@@ -200,7 +200,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -6,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'placeOfAssignment',
@@ -209,7 +209,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -10,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'branch',
@@ -218,7 +218,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -12,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'withOrWithoutPay',
@@ -227,7 +227,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -12,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'date',
@@ -236,7 +236,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -14,
-      fontSize: 0.5
+      fontSize: 0.5,
     },
     {
       name: 'cause',
@@ -245,7 +245,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
 
       marginHeight: -148,
       marginWidth: -14,
-      fontSize: 0.5
-    }
-  ]
-}
+      fontSize: 0.5,
+    },
+  ],
+};

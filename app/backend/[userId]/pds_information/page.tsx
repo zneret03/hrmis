@@ -1,25 +1,25 @@
-import { JSX } from 'react'
-import { Container } from '@/components/custom/Container'
-import { PDFAction } from '@/app/components/pds/PDFAction'
-import { PdfForm } from '@/app/components/pds/PdfForm'
-import { fetchUserPds } from '@/services/pds/pds.service'
-import { UpdatePDFDialog } from '@/app/components/pds/PDFDialog'
+import { JSX } from 'react';
+import { Container } from '@/components/custom/Container';
+import { PDFAction } from '@/app/components/pds/PDFAction';
+import { PdfForm } from '@/app/components/pds/PdfForm';
+import { fetchUserPds } from '@/services/pds/pds.service';
+import { UpdatePDFDialog } from '@/app/components/pds/PDFDialog';
 
 export default async function PDSInformation({
-  params
+  params,
 }: {
-  params: Promise<{ userId: string }>
+  params: Promise<{ userId: string }>;
 }): Promise<JSX.Element> {
-  const { userId } = await params
-  const pdsInfo = await fetchUserPds(userId)
+  const { userId } = await params;
+  const pdsInfo = await fetchUserPds(userId);
 
   return (
     <Container
-      title='Personal Data Management'
-      description='You can update your PDS here'
+      title="Personal Data Management"
+      description="You can update your PDS here"
     >
-      <section className='flex gap-2'>
-        <div className='flex-1'>
+      <section className="flex gap-2">
+        <div className="flex-1">
           <PDFAction isAdmin data={pdsInfo} />
           <PdfForm isAdmin file={pdsInfo.file} />
         </div>
@@ -27,5 +27,5 @@ export default async function PDSInformation({
 
       <UpdatePDFDialog userId={userId} />
     </Container>
-  )
+  );
 }

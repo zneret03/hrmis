@@ -11,5 +11,5 @@ export const months: { [key: string]: string } = {
   September: '09',
   October: '10',
   November: '11',
-  December: '12'
-}
+  December: '12',
+};
