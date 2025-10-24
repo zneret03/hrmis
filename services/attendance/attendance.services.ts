@@ -1,28 +1,28 @@
-import axios from 'axios'
-import { axiosService } from '@/app/api/axios-client'
-import { toast } from 'sonner'
+import axios from 'axios';
+import { axiosService } from '@/app/api/axios-client';
+import { toast } from 'sonner';
 
-export type UploadType = 'upload-csv' | 'upload-dat'
+export type UploadType = 'upload-csv' | 'upload-dat';
 
 export const uploadCSVOrBatFile = async (file: File, type: UploadType) => {
   try {
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('type', type)
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', type);
 
     const response = await axiosService.post(
       '/api/protected/attendance',
       formData,
       {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
-    )
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
 
     toast('Successfully', {
-      description: response.data.message
-    })
+      description: response.data.message,
+    });
   } catch (e) {
     if (axios.isAxiosError(e)) {
       if (
@@ -31,53 +31,53 @@ export const uploadCSVOrBatFile = async (file: File, type: UploadType) => {
       ) {
         toast.error('ERROR!', {
           description:
-            'Some users doesnt exist, please verify the list of users registered in the app.'
-        })
-        return
+            'Some users doesnt exist, please verify the list of users registered in the app.',
+        });
+        return;
       }
-      throw e.response?.data.error
+      throw e.response?.data.error;
     }
   }
-}
+};
 
 export const getAttendance = async (params: string) => {
   try {
     const response = await axiosService.get(
-      `/api/protected/attendance${params}`
-    )
+      `/api/protected/attendance${params}`,
+    );
 
-    return response.data.data
+    return response.data.data;
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      throw e.response?.data.error
+      throw e.response?.data.error;
     }
   }
-}
+};
 
 export const getAttendanceAnalytics = async (params: string) => {
   try {
     const response = await axiosService.get(
-      `/api/protected/attendance/analytics${params}`
-    )
+      `/api/protected/attendance/analytics${params}`,
+    );
 
-    return response.data.data
+    return response.data.data;
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      throw e.response?.data.error
+      throw e.response?.data.error;
     }
   }
-}
+};
 
 export const getAttendanceSummary = async (userId: string, params: string) => {
   try {
     const response = await axiosService.get(
-      `/api/protected/attendance/${userId}${params}`
-    )
+      `/api/protected/attendance/${userId}${params}`,
+    );
 
-    return response.data.data
+    return response.data.data;
   } catch (e) {
     if (axios.isAxiosError(e)) {
-      throw e.response?.data.error
+      throw e.response?.data.error;
     }
   }
-}
+};

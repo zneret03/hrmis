@@ -1,26 +1,26 @@
-import { NextRequest } from 'next/server'
-import { createClient } from '@/config'
-import { paginatedData } from '../../helpers/paginated-data'
+import { NextRequest } from 'next/server';
+import { createClient } from '@/config';
+import { paginatedData } from '../../helpers/paginated-data';
 import {
   conflictRequestResponse,
   badRequestResponse,
   generalErrorResponse,
-  successResponse
-} from '../../helpers/response'
-import { AttendanceDB } from '@/lib/types/attendance'
-import { processBiometricData, processCSVData } from '../model/attendance'
+  successResponse,
+} from '../../helpers/response';
+import { AttendanceDB } from '@/lib/types/attendance';
+import { processBiometricData, processCSVData } from '../model/attendance';
 
 export async function GET(req: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await createClient();
 
-    const url = req.nextUrl.searchParams
+    const url = req.nextUrl.searchParams;
 
-    const page = Number(url.get('page') || 1)
-    const perPage = Number(url.get('perPage') || 10)
-    const sortBy = url.get('sortBy') || 'created_at'
-    const search = url.get('search') || ''
-    const limit = url.get('limit') || ''
+    const page = Number(url.get('page') || 1);
+    const perPage = Number(url.get('perPage') || 10);
+    const sortBy = url.get('sortBy') || 'created_at';
+    const search = url.get('search') || '';
+    const limit = url.get('limit') || '';
 
     const { data, error, count, totalPages, currentPage } =
       await paginatedData<AttendanceDB>({
@@ -32,11 +32,11 @@ export async function GET(req: NextRequest) {
         page,
         perPage,
         sortBy,
-        limit: Number(limit) as number
-      })
+        limit: Number(limit) as number,
+      });
 
     if (error) {
-      return badRequestResponse({ error: error.message })
+      return badRequestResponse({ error: error.message });
     }
 
     return successResponse({
@@ -45,38 +45,38 @@ export async function GET(req: NextRequest) {
         attendance: data || null,
         count,
         totalPages,
-        currentPage
-      }
-    })
+        currentPage,
+      },
+    });
   } catch (error) {
-    const newError = error as Error
-    return generalErrorResponse({ error: newError.message })
+    const newError = error as Error;
+    return generalErrorResponse({ error: newError.message });
   }
 }
 
 export async function POST(req: NextRequest) {
-  const formData = await req.formData()
+  const formData = await req.formData();
 
   if (formData.get('type') === 'upload-csv') {
-    const csvFile = formData.get('file') as File | null
+    const csvFile = formData.get('file') as File | null;
 
     if (!csvFile) {
-      return conflictRequestResponse({ error: 'No CSV File uploaded.' })
+      return conflictRequestResponse({ error: 'No CSV File uploaded.' });
     }
 
-    const csvText = await csvFile.text()
+    const csvText = await csvFile.text();
 
-    return processCSVData(csvText)
+    return processCSVData(csvText);
   }
 
   if (formData.get('type') === 'upload-dat') {
-    const batFile = formData.get('file') as File | null
+    const batFile = formData.get('file') as File | null;
 
     if (!batFile) {
-      return conflictRequestResponse({ error: 'No CSV File uploaded.' })
+      return conflictRequestResponse({ error: 'No CSV File uploaded.' });
     }
 
-    const batText = await batFile.text()
-    return processBiometricData(batText)
+    const batText = await batFile.text();
+    return processBiometricData(batText);
   }
 }

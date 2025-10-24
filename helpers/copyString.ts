@@ -1,3 +1,3 @@
 export const copyClipBoard = (path: string): void => {
-  navigator.clipboard.writeText(path)
-}
+  navigator.clipboard.writeText(path);
+};

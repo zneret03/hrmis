@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { Collapsible, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { Collapsible, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
-} from '@/components/ui/sidebar'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { SideMenu } from '@/lib/types/menus'
+  SidebarMenuItem,
+} from '@/components/ui/sidebar';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { SideMenu } from '@/lib/types/menus';
 
 export function NavMain({ items }: { items: SideMenu[] }) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <SidebarGroup>
@@ -24,13 +24,13 @@ export function NavMain({ items }: { items: SideMenu[] }) {
             key={item.title}
             asChild
             defaultOpen={item.isActive}
-            className='group/collapsible'
+            className="group/collapsible"
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <Link href={item.url} passHref>
                   <SidebarMenuButton
-                    className='cursor-pointer'
+                    className="cursor-pointer"
                     isActive={pathname === item?.url}
                     tooltip={item.title}
                   >
@@ -44,5 +44,5 @@ export function NavMain({ items }: { items: SideMenu[] }) {
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }

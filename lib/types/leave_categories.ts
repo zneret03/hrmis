@@ -1,4 +1,4 @@
-import { Database } from './db-types'
+import { Database } from './db-types';
 
 export type LeaveCategories =
-  Database['public']['Tables']['leave_categories']['Row']
+  Database['public']['Tables']['leave_categories']['Row'];

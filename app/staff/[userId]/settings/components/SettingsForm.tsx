@@ -1,64 +1,67 @@
-'use client'
+'use client';
 
-import { useTransition } from 'react'
+import { useTransition } from 'react';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
-  CardFooter
-} from '@/components/ui/card'
-import { LockOpen } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useForm } from 'react-hook-form'
-import { ImageUpload } from '@/components/custom/ImageUpload'
-import { PencilIcon } from 'lucide-react'
-import { CustomButton } from '@/components/custom/CustomButton'
-import { Controller } from 'react-hook-form'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { avatarName } from '@/helpers/avatarName'
-import { UpdateUserInfo, updateUserInfo } from '@/services/users/users.services'
-import { UpdateUser } from '@/lib/types/users'
-import { useUserDialog } from '@/services/auth/states/user-dialog'
-import { useShallow } from 'zustand/shallow'
+  CardFooter,
+} from '@/components/ui/card';
+import { LockOpen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useForm } from 'react-hook-form';
+import { ImageUpload } from '@/components/custom/ImageUpload';
+import { PencilIcon } from 'lucide-react';
+import { CustomButton } from '@/components/custom/CustomButton';
+import { Controller } from 'react-hook-form';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { avatarName } from '@/helpers/avatarName';
+import {
+  UpdateUserInfo,
+  updateUserInfo,
+} from '@/services/users/users.services';
+import { UpdateUser } from '@/lib/types/users';
+import { useUserDialog } from '@/services/auth/states/user-dialog';
+import { useShallow } from 'zustand/shallow';
 
 interface SettingsForm extends UpdateUser {
-  userId: string
+  userId: string;
 }
 
 interface UserSetting extends Omit<UpdateUser, 'avatar'> {
-  oldAvatar: string
-  avatar: File[] | string
+  oldAvatar: string;
+  avatar: File[] | string;
 }
 
 export function SettingsForm({ userId, ...data }: SettingsForm) {
-  const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition();
 
-  const router = useRouter()
+  const router = useRouter();
   const { toggleOpen } = useUserDialog(
-    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog }))
-  )
+    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
+  );
 
   const {
     control,
     register,
     formState: { errors },
-    handleSubmit
+    handleSubmit,
   } = useForm<UserSetting>({
     defaultValues: {
       ...data,
       avatar: data.avatar as string,
       username: data?.username as string,
-      oldAvatar: data?.avatar as string
-    }
-  })
+      oldAvatar: data?.avatar as string,
+    },
+  });
 
   const onSubmit = async (updatedData: UserSetting): Promise<void> => {
     startTransition(async () => {
-      const { username, employee_id, avatar, oldAvatar, email } = updatedData
+      const { username, employee_id, avatar, oldAvatar, email } = updatedData;
 
       const newData = {
         username,
@@ -66,45 +69,45 @@ export function SettingsForm({ userId, ...data }: SettingsForm) {
         avatar,
         oldAvatar,
         email,
-        id: userId as string
-      }
+        id: userId as string,
+      };
 
       await updateUserInfo({
         ...newData,
-        id: userId as string
-      } as UpdateUserInfo)
+        id: userId as string,
+      } as UpdateUserInfo);
 
-      router.refresh()
-    })
-  }
+      router.refresh();
+    });
+  };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='text-2xl'>Profile Settings</CardTitle>
+        <CardTitle className="text-2xl">Profile Settings</CardTitle>
       </CardHeader>
-      <CardContent className='space-y-4'>
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center gap-2'>
-            <Avatar className='h-20 w-20 rounded-full'>
+      <CardContent className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Avatar className="h-20 w-20 rounded-full">
               <AvatarImage
-                className='object-cover'
+                className="object-cover"
                 src={data.avatar as string}
                 alt={data.email}
               />
-              <AvatarFallback className='text-3xl rounded-lg fill-blue-500 bg-blue-400 text-white font-semibold'>
+              <AvatarFallback className="rounded-lg bg-blue-400 fill-blue-500 text-3xl font-semibold text-white">
                 {avatarName(data?.email as string)}
               </AvatarFallback>
             </Avatar>
 
             <div>
-              <h1 className='font-bold'>{data.email}</h1>
+              <h1 className="font-bold">{data.email}</h1>
               <h2>{data.username || 'EMPTY'}</h2>
             </div>
           </div>
 
           <Button
-            variant='outline'
+            variant="outline"
             onClick={() => toggleOpen?.(true, 'update-password', null)}
           >
             <LockOpen />
@@ -113,40 +116,40 @@ export function SettingsForm({ userId, ...data }: SettingsForm) {
         </div>
 
         <Input
-          title='Email'
+          title="Email"
           hasError={!!errors.email}
           errorMessage={errors.email?.message}
           disabled
           {...register('email', {
-            required: 'Field required.'
+            required: 'Field required.',
           })}
         />
-        <div className='grid grid-cols-2 gap-2'>
+        <div className="grid grid-cols-2 gap-2">
           <Input
-            title='Username'
+            title="Username"
             hasError={!!errors.username}
             errorMessage={errors.username?.message}
             {...register('username', {
-              required: 'Field required.'
+              required: 'Field required.',
             })}
           />
           <Input
-            title='Employee ID'
+            title="Employee ID"
             hasError={!!errors.employee_id}
             errorMessage={errors.employee_id?.message}
             {...register('employee_id', {
-              required: 'Field required.'
+              required: 'Field required.',
             })}
           />
         </div>
 
-        <div className='space-y-2'>
+        <div className="space-y-2">
           <Controller
-            name='avatar'
+            name="avatar"
             control={control}
             render={({ field: { onChange, value } }) => (
               <ImageUpload
-                title='Image'
+                title="Image"
                 filePreview={typeof value === 'string' ? value : undefined}
                 pendingFiles={value as File[]}
                 isLoading={isPending}
@@ -156,15 +159,15 @@ export function SettingsForm({ userId, ...data }: SettingsForm) {
             )}
           />
           {!!errors.avatar && (
-            <Label className='text-sm text-red-500'>
+            <Label className="text-sm text-red-500">
               {errors.avatar.message}
             </Label>
           )}
         </div>
       </CardContent>
-      <CardFooter className='flex items-center gap-2 justify-end'>
+      <CardFooter className="flex items-center justify-end gap-2">
         <CustomButton
-          type='button'
+          type="button"
           isLoading={isPending}
           onClick={handleSubmit(onSubmit)}
         >
@@ -173,5 +176,5 @@ export function SettingsForm({ userId, ...data }: SettingsForm) {
         </CustomButton>
       </CardFooter>
     </Card>
-  )
+  );
 }

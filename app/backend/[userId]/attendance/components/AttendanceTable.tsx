@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import * as React from 'react'
+import * as React from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,80 +11,80 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
-  VisibilityState
-} from '@tanstack/react-table'
-import { ChevronDown, Plus } from 'lucide-react'
+  VisibilityState,
+} from '@tanstack/react-table';
+import { ChevronDown, Plus } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
-} from '@/components/ui/table'
-import { format, subHours } from 'date-fns'
-import { Button } from '@/components/ui/button'
-import { useShallow } from 'zustand/shallow'
-import { Pagination } from '@/components/custom/Pagination'
-import { Pagination as PaginationType } from '@/lib/types/pagination'
-import { useRouter, usePathname, permanentRedirect } from 'next/navigation'
-import { debounce } from 'lodash'
-import { useUploadAttendanceDialog } from '@/services/attendance/state/attendance-dialog'
-import { AttendanceDB } from '@/lib/types/attendance'
+  TableRow,
+} from '@/components/ui/table';
+import { format, subHours } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import { useShallow } from 'zustand/shallow';
+import { Pagination } from '@/components/custom/Pagination';
+import { Pagination as PaginationType } from '@/lib/types/pagination';
+import { useRouter, usePathname, permanentRedirect } from 'next/navigation';
+import { debounce } from 'lodash';
+import { useUploadAttendanceDialog } from '@/services/attendance/state/attendance-dialog';
+import { AttendanceDB } from '@/lib/types/attendance';
 
 interface AttendanceTableData extends PaginationType {
-  data: AttendanceDB[]
+  data: AttendanceDB[];
 }
 
 export function AttendanceTable({
   data,
   totalPages,
   currentPage,
-  count
+  count,
 }: AttendanceTableData) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+    [],
+  );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
   const { toggleOpen } = useUploadAttendanceDialog(
-    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog }))
-  )
+    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
+  );
 
-  const pathname = usePathname()
-  const router = useRouter()
+  const pathname = usePathname();
+  const router = useRouter();
 
   const onDebounce = React.useMemo(
     () =>
       debounce((value) => {
         if (!!value) {
-          router.replace(`${pathname}?page=${currentPage}&search=${value}`)
-          return
+          router.replace(`${pathname}?page=${currentPage}&search=${value}`);
+          return;
         }
 
-        router.replace(`${pathname}?page=${currentPage}`)
+        router.replace(`${pathname}?page=${currentPage}`);
       }, 500),
-    [pathname, router, currentPage]
-  )
+    [pathname, router, currentPage],
+  );
 
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { value } = event.target
-    onDebounce(value)
-  }
+    const { value } = event.target;
+    onDebounce(value);
+  };
 
   const goAttendanceSummary = (id: string): void => {
-    permanentRedirect(`${pathname}/${id}`)
-  }
+    permanentRedirect(`${pathname}/${id}`);
+  };
 
   const columns: ColumnDef<AttendanceDB>[] = React.useMemo(
     () => [
@@ -93,90 +93,92 @@ export function AttendanceTable({
         header: 'Employee ID',
         cell: function ({ row }) {
           return (
-            <div className='flex items-center gap-2'>
-              <div className='capitalize font-semibold'>
+            <div className="flex items-center gap-2">
+              <div className="font-semibold capitalize">
                 {row.original.users?.employee_id}
               </div>
             </div>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'email',
         header: 'Email',
         cell: function ({ row }) {
-          return <div className='font-medium'>{row.original.users?.email}</div>
-        }
+          return <div className="font-medium">{row.original.users?.email}</div>;
+        },
       },
       {
         accessorKey: 'month',
         header: 'Month',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>
+            <div className="capitalize">
               {format(row.getValue('month'), 'MMMM')}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'days_present',
         header: 'Days Present',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>{row.getValue('days_present')}</div>
-          )
-        }
+            <div className="capitalize">{row.getValue('days_present')}</div>
+          );
+        },
       },
       {
         accessorKey: 'days_absent',
         header: 'Days Absent',
         cell: function ({ row }) {
-          return <div className='capitalize'>{row.getValue('days_absent')}</div>
-        }
+          return (
+            <div className="capitalize">{row.getValue('days_absent')}</div>
+          );
+        },
       },
       {
         accessorKey: 'tardiness_count',
         header: 'Tardiness/Late',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>{row.getValue('tardiness_count')}</div>
-          )
-        }
+            <div className="capitalize">{row.getValue('tardiness_count')}</div>
+          );
+        },
       },
       {
         accessorKey: 'created_at',
         header: 'Created At',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>
+            <div className="capitalize">
               {format(
                 subHours(row.getValue('created_at'), 8),
-                'MMMM d, yyyy, h:mm:ss a'
+                'MMMM d, yyyy, h:mm:ss a',
               )}
             </div>
-          )
-        }
+          );
+        },
       },
       {
         accessorKey: 'updated_at',
         header: 'Updated At',
         cell: function ({ row }) {
           return (
-            <div className='capitalize'>
+            <div className="capitalize">
               {row.getValue('updated_at')
                 ? format(
                     subHours(row.getValue('created_at'), 8),
-                    'MMMM d, yyyy, h:mm:ss a'
+                    'MMMM d, yyyy, h:mm:ss a',
                   )
                 : 'N/A'}
             </div>
-          )
-        }
-      }
+          );
+        },
+      },
     ],
-    []
-  )
+    [],
+  );
 
   const table = useReactTable({
     data,
@@ -193,27 +195,27 @@ export function AttendanceTable({
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
-    }
-  })
+      rowSelection,
+    },
+  });
 
   return (
-    <div className='w-full'>
-      <div className='flex items-center py-4'>
+    <div className="w-full">
+      <div className="flex items-center py-4">
         <Input
-          placeholder='Search employee...'
+          placeholder="Search employee..."
           onChange={(event) => onSearch(event)}
-          className='max-w-sm'
+          className="max-w-sm"
         />
 
-        <div className='flex items-center gap-2'>
+        <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant='outline' className='ml-auto'>
+              <Button variant="outline" className="ml-auto">
                 Columns <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
+            <DropdownMenuContent align="end">
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
@@ -221,7 +223,7 @@ export function AttendanceTable({
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
-                      className='capitalize'
+                      className="capitalize"
                       checked={column.getIsVisible()}
                       onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
@@ -229,18 +231,18 @@ export function AttendanceTable({
                     >
                       {column.id}
                     </DropdownMenuCheckboxItem>
-                  )
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
 
           <Button onClick={() => toggleOpen?.(true, 'upload')}>
-            <Plus className='w-5 h-5' />
+            <Plus className="h-5 w-5" />
             import biometrics
           </Button>
         </div>
       </div>
-      <div className='rounded-md border'>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -252,10 +254,10 @@ export function AttendanceTable({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -268,16 +270,16 @@ export function AttendanceTable({
                   data-state={row.getIsSelected() && 'selected'}
                   onClick={() =>
                     goAttendanceSummary(
-                      row.original.users?.employee_id as string
+                      row.original.users?.employee_id as string,
                     )
                   }
-                  className='cursor-pointer'
+                  className="cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -287,7 +289,7 @@ export function AttendanceTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className='h-24 text-center'
+                  className="h-24 text-center"
                 >
                   No results.
                 </TableCell>
@@ -298,5 +300,5 @@ export function AttendanceTable({
       </div>
       <Pagination {...{ totalPages, currentPage, count }} />
     </div>
-  )
+  );
 }

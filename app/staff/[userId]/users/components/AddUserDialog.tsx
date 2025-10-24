@@ -1,58 +1,58 @@
-'use client'
+'use client';
 
-import { JSX, useState, useTransition } from 'react'
+import { JSX, useState, useTransition } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose
-} from '@/components/ui/dialog'
+  DialogClose,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
-import { Controller } from 'react-hook-form'
-import { Label } from '@radix-ui/react-label'
-import { useForm } from 'react-hook-form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { CustomButton } from '@/components/custom/CustomButton'
-import { regularEmailRegex } from '@/helpers/reusableRegex'
-import { useUserDialog } from '@/services/auth/states/user-dialog'
-import { UserForm } from '@/lib/types/users'
-import { useRouter } from 'next/navigation'
-import { useShallow } from 'zustand/react/shallow'
-import { signUp } from '@/services/users/users.services'
-import { roleTypes } from '@/app/auth/sign-in/helpers/constants'
-import { ImageUpload } from '@/components/custom/ImageUpload'
+  SelectValue,
+} from '@/components/ui/select';
+import { Controller } from 'react-hook-form';
+import { Label } from '@radix-ui/react-label';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { CustomButton } from '@/components/custom/CustomButton';
+import { regularEmailRegex } from '@/helpers/reusableRegex';
+import { useUserDialog } from '@/services/auth/states/user-dialog';
+import { UserForm } from '@/lib/types/users';
+import { useRouter } from 'next/navigation';
+import { useShallow } from 'zustand/react/shallow';
+import { signUp } from '@/services/users/users.services';
+import { roleTypes } from '@/app/auth/sign-in/helpers/constants';
+import { ImageUpload } from '@/components/custom/ImageUpload';
 
 interface AddUserDialog extends UserForm {
-  password: string
-  confirmPassword: string
-  avatar: File[]
+  password: string;
+  confirmPassword: string;
+  avatar: File[];
 }
 
 interface UserFormData extends UserForm {
-  avatar: File[]
+  avatar: File[];
 }
 
 export function AddUserDialog(): JSX.Element {
-  const router = useRouter()
-  const [isPending, startTransition] = useTransition()
-  const [message, setMessage] = useState<string>('')
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [message, setMessage] = useState<string>('');
 
   const { open, toggleOpen, type } = useUserDialog(
     useShallow((state) => ({
       open: state.open,
       type: state.type,
-      toggleOpen: state.toggleOpenDialog
-    }))
-  )
+      toggleOpen: state.toggleOpenDialog,
+    })),
+  );
 
   const {
     handleSubmit,
@@ -60,8 +60,8 @@ export function AddUserDialog(): JSX.Element {
     reset,
     formState: { errors },
     setError,
-    control
-  } = useForm<AddUserDialog>()
+    control,
+  } = useForm<AddUserDialog>();
 
   const resetVariable = (): void => {
     reset({
@@ -70,23 +70,23 @@ export function AddUserDialog(): JSX.Element {
       username: '',
       confirmPassword: '',
       employee_id: '',
-      role: ''
-    })
-    setMessage('')
-    router.refresh()
-    toggleOpen?.(false, null, null)
-  }
+      role: '',
+    });
+    setMessage('');
+    router.refresh();
+    toggleOpen?.(false, null, null);
+  };
 
   const onSubmit = async (data: AddUserDialog): Promise<void> => {
-    const { email, username, role, employee_id, avatar } = data
+    const { email, username, role, employee_id, avatar } = data;
     startTransition(async () => {
       try {
-        const { password, confirmPassword } = data
+        const { password, confirmPassword } = data;
         if (password !== confirmPassword) {
           setError('confirmPassword', {
-            message: "password doesn't matched"
-          })
-          return
+            message: "password doesn't matched",
+          });
+          return;
         }
 
         await signUp({
@@ -95,85 +95,85 @@ export function AddUserDialog(): JSX.Element {
           password,
           role,
           employee_id,
-          avatar: avatar || []
-        } as UserFormData)
-        resetVariable()
+          avatar: avatar || [],
+        } as UserFormData);
+        resetVariable();
       } catch (error) {
-        setMessage(error as string)
+        setMessage(error as string);
       }
-    })
-  }
+    });
+  };
 
-  const isOpenDialog = open && type === 'add'
+  const isOpenDialog = open && type === 'add';
 
   return (
     <Dialog
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className='sm:max-w-[40rem]'>
+      <DialogContent className="sm:max-w-[40rem]">
         <DialogHeader>
           <DialogTitle>Add New User</DialogTitle>
         </DialogHeader>
 
-        <div className='grid grid-cols-2 gap-2'>
+        <div className="grid grid-cols-2 gap-2">
           <Input
-            title='Email'
+            title="Email"
             {...register('email', {
               required: 'Field is required.',
 
               pattern: {
                 value: regularEmailRegex,
-                message: 'invalid email address'
-              }
+                message: 'invalid email address',
+              },
             })}
             hasError={!!errors.email}
             errorMessage={errors.email?.message}
           />
 
           <Input
-            title='Username'
+            title="Username"
             {...register('username', {
-              required: 'Field is required.'
+              required: 'Field is required.',
             })}
             hasError={!!errors.email}
             errorMessage={errors.email?.message}
           />
         </div>
-        <div className='grid grid-cols-2 gap-2'>
+        <div className="grid grid-cols-2 gap-2">
           <Input
-            title='Password'
-            type='password'
+            title="Password"
+            type="password"
             {...register('password', {
-              required: 'Field is required.'
+              required: 'Field is required.',
             })}
             hasError={!!errors.password}
             errorMessage={errors.password?.message}
           />
           <Input
-            title='Confirm Password'
-            type='password'
+            title="Confirm Password"
+            type="password"
             {...register('confirmPassword', {
-              required: 'Field is required.'
+              required: 'Field is required.',
             })}
             hasError={!!errors.confirmPassword}
             errorMessage={errors.confirmPassword?.message}
           />
         </div>
 
-        <div className='grid grid-cols-2 gap-2'>
-          <div className='space-y-2'>
-            <Label className='text-sm font-medium mb-1.5'>Role*</Label>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
+            <Label className="mb-1.5 text-sm font-medium">Role*</Label>
             <Controller
-              name='role'
+              name="role"
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Select
                   value={value as string}
                   onValueChange={(e) => onChange(e)}
                 >
-                  <SelectTrigger className='w-full'>
-                    <SelectValue placeholder='Select role' />
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
                     {roleTypes.map((item, index) => (
@@ -186,20 +186,20 @@ export function AddUserDialog(): JSX.Element {
               )}
             />
             {!!errors.role && (
-              <h1 className='text-sm text-red-500'>{errors.role.message}</h1>
+              <h1 className="text-sm text-red-500">{errors.role.message}</h1>
             )}
           </div>
 
-          <Input title='Employee ID' isOptional {...register('employee_id')} />
+          <Input title="Employee ID" isOptional {...register('employee_id')} />
         </div>
 
-        <div className='space-y-2'>
+        <div className="space-y-2">
           <Controller
-            name='avatar'
+            name="avatar"
             control={control}
             render={({ field: { onChange, value } }) => (
               <ImageUpload
-                title='Image'
+                title="Image"
                 pendingFiles={value as File[]}
                 isLoading={isPending}
                 acceptedImageCount={1}
@@ -208,15 +208,15 @@ export function AddUserDialog(): JSX.Element {
             )}
           />
           {!!errors.avatar && (
-            <h1 className='text-sm text-red-500'>{errors.avatar.message}</h1>
+            <h1 className="text-sm text-red-500">{errors.avatar.message}</h1>
           )}
         </div>
-        {!!message && <p className='text-sm text-red-500'>{message}</p>}
+        {!!message && <p className="text-sm text-red-500">{message}</p>}
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              type='button'
-              variant='outline'
+              type="button"
+              variant="outline"
               onClick={() => resetVariable()}
             >
               Cancel
@@ -225,7 +225,7 @@ export function AddUserDialog(): JSX.Element {
 
           <DialogClose asChild>
             <CustomButton
-              type='button'
+              type="button"
               onClick={handleSubmit(onSubmit)}
               disabled={isPending}
               isLoading={isPending}
@@ -236,5 +236,5 @@ export function AddUserDialog(): JSX.Element {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

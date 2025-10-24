@@ -1,7 +1,7 @@
-import { persist } from 'zustand/middleware'
-import { createJSONStorage } from 'zustand/middleware'
-import { create } from 'zustand'
-import { LeaveApplicationsForm } from '@/lib/types/leave_application'
+import { persist } from 'zustand/middleware';
+import { createJSONStorage } from 'zustand/middleware';
+import { create } from 'zustand';
+import { LeaveApplicationsForm } from '@/lib/types/leave_application';
 
 type LeaveApplicationDialogType =
   | 'add'
@@ -10,22 +10,22 @@ type LeaveApplicationDialogType =
   | 'disapprove'
   | 'delete'
   | 'cancel'
-  | null
+  | null;
 
 export type LeaveApplicationsData = Omit<
   LeaveApplicationsForm,
   'created_at' | 'updated_at' | 'archived_at'
->
+>;
 
 export interface LeaveApplicationsDialog {
-  open: boolean
-  type: LeaveApplicationDialogType
-  data: Partial<LeaveApplicationsData> | null
+  open: boolean;
+  type: LeaveApplicationDialogType;
+  data: Partial<LeaveApplicationsData> | null;
   toggleOpenDialog?: (
     isOpen: boolean,
     type: LeaveApplicationDialogType,
-    data: LeaveApplicationsData | null
-  ) => void
+    data: LeaveApplicationsData | null,
+  ) => void;
 }
 
 const initialState: LeaveApplicationsDialog = {
@@ -33,20 +33,20 @@ const initialState: LeaveApplicationsDialog = {
     users: {
       email: '',
       username: '',
-      id: ''
+      id: '',
     },
     leave_categories: {
       name: '',
-      id: ''
+      id: '',
     },
     start_date: '',
     end_date: '',
     status: '',
-    remarks: ''
+    remarks: '',
   },
   open: false,
-  type: null
-}
+  type: null,
+};
 
 export const useLeaveApplicationDialog = create<LeaveApplicationsDialog>()(
   persist(
@@ -55,19 +55,19 @@ export const useLeaveApplicationDialog = create<LeaveApplicationsDialog>()(
       toggleOpenDialog: (
         isOpen: boolean,
         type: LeaveApplicationDialogType,
-        data: LeaveApplicationsData | null
+        data: LeaveApplicationsData | null,
       ) => {
         set((state) => ({
           ...state,
           open: isOpen,
           type,
-          data
-        }))
-      }
+          data,
+        }));
+      },
     }),
     {
       name: 'leave-application-dialog',
-      storage: createJSONStorage(() => sessionStorage)
-    }
-  )
-)
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+);

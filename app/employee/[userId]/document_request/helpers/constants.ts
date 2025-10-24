@@ -1,20 +1,20 @@
-import { MenuOptions } from '@/lib/types/MenuOptions'
+import { MenuOptions } from '@/lib/types/MenuOptions';
 
 export const certificateType: MenuOptions[] = [
   {
     label: 'COE',
-    value: 'coe'
+    value: 'coe',
   },
   {
     label: 'Service Record',
-    value: 'service_record'
+    value: 'service_record',
   },
   {
     label: 'NOSA',
-    value: 'nosa'
+    value: 'nosa',
   },
   {
     label: 'COEC',
-    value: 'coec'
-  }
-]
+    value: 'coec',
+  },
+];

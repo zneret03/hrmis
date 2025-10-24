@@ -1,4 +1,4 @@
-import { SideMenu } from '@/lib/types/menus'
+import { SideMenu } from '@/lib/types/menus';
 import {
   LayoutDashboard,
   Users,
@@ -8,8 +8,8 @@ import {
   FileStack,
   Files,
   Award,
-  Medal
-} from 'lucide-react'
+  Medal,
+} from 'lucide-react';
 
 export const adminMenus = (id: string): SideMenu[] => {
   return [
@@ -17,46 +17,46 @@ export const adminMenus = (id: string): SideMenu[] => {
       title: 'Dashboard',
       url: `/backend/${id}/dashboard`,
       icon: LayoutDashboard,
-      isActive: true
+      isActive: true,
     },
     {
       title: 'Awards',
       url: `/backend/${id}/awards`,
       icon: Award,
-      isActive: true
+      isActive: true,
     },
     {
       title: 'Requested Documents',
       url: `/backend/${id}/requested_documents`,
       icon: Files,
-      isActive: true
+      isActive: true,
     },
     {
       title: 'Attendance',
       url: `/backend/${id}/attendance`,
       icon: FileText,
-      isActive: true
+      isActive: true,
     },
     {
       title: 'Leaves',
       url: `/backend/${id}/leaves?page=1`,
       icon: Plane,
-      isActive: true
+      isActive: true,
     },
     {
       title: 'Leave Categories',
       url: `/backend/${id}/leave-categories?page=1`,
       icon: TowerControl,
-      isActive: true
+      isActive: true,
     },
     {
       title: 'Users',
       url: `/backend/${id}/users?page=1`,
       icon: Users,
-      isActive: true
-    }
-  ]
-}
+      isActive: true,
+    },
+  ];
+};
 
 export const employeeMenus = (id: string): SideMenu[] => {
   return [
@@ -64,28 +64,28 @@ export const employeeMenus = (id: string): SideMenu[] => {
       title: 'Personal Management',
       url: `/employee/${id}/personal_management`,
       icon: FileStack,
-      isActive: true
+      isActive: true,
     },
     {
       title: 'Nominated Awards',
       url: `/employee/${id}/nominated_awards`,
       icon: Medal,
-      isActive: true
+      isActive: true,
     },
     {
       title: 'Attendance',
       url: `/employee/${id}/attendance`,
       icon: FileText,
-      isActive: true
+      isActive: true,
     },
     {
       title: 'Documents Request',
       url: `/employee/${id}/document_request?page=1`,
       icon: Files,
-      isActive: true
-    }
-  ]
-}
+      isActive: true,
+    },
+  ];
+};
 
 export const staffMenus = (id: string): SideMenu[] => {
   return [
@@ -93,7 +93,7 @@ export const staffMenus = (id: string): SideMenu[] => {
       title: 'Users',
       url: `/backend/${id}/users?page=1`,
       icon: Users,
-      isActive: true
-    }
-  ]
-}
+      isActive: true,
+    },
+  ];
+};

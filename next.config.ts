@@ -1,4 +1,4 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   env: {
@@ -9,10 +9,10 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY:
       process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
-    NEXT_PUBLIC_SYNCFUSION_KEY: process.env.NEXT_PUBLIC_SYNCFUSION_KEY
+    NEXT_PUBLIC_SYNCFUSION_KEY: process.env.NEXT_PUBLIC_SYNCFUSION_KEY,
   },
   images: {
-    remotePatterns: [new URL(`${process.env.NEXT_IMAGE_PUBLIC_URL}`)]
+    remotePatterns: [new URL(`${process.env.NEXT_IMAGE_PUBLIC_URL}`)],
   },
   /* config options here */
   async redirects() {
@@ -20,10 +20,10 @@ const nextConfig: NextConfig = {
       {
         source: '/',
         destination: `${process.env.NEXT_PUBLIC_DESTINATION}`,
-        permanent: true
-      }
-    ]
-  }
-}
+        permanent: true,
+      },
+    ];
+  },
+};
 
-export default nextConfig
+export default nextConfig;

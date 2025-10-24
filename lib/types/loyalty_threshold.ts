@@ -1,4 +1,4 @@
-import { Database } from './db-types'
+import { Database } from './db-types';
 
 export type EmployeeLoyaltyThreshold =
-  Database['public']['Tables']['employee_loyalty_threshold']['Row']
+  Database['public']['Tables']['employee_loyalty_threshold']['Row'];

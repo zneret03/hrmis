@@ -1,29 +1,29 @@
-import { JSX } from 'react'
-import { EmployeeAwardsTable } from './components/AwardsTable'
-import { NominateDialog } from './components/NominateDialog'
-import { getAwards } from '@/services/awards/awards.service'
-import { Container } from '@/components/custom/Container'
-import { fetchAllUsers } from '@/services/users/users.services'
-import { DeleteAward } from './components/DeleteAward'
-import { EditAward } from './components/EditAward'
+import { JSX } from 'react';
+import { EmployeeAwardsTable } from './components/AwardsTable';
+import { NominateDialog } from './components/NominateDialog';
+import { getAwards } from '@/services/awards/awards.service';
+import { Container } from '@/components/custom/Container';
+import { fetchAllUsers } from '@/services/users/users.services';
+import { DeleteAward } from './components/DeleteAward';
+import { EditAward } from './components/EditAward';
 
 export default async function Awards({
-  searchParams
+  searchParams,
 }: {
-  searchParams: Promise<{ page: string; search: string }>
+  searchParams: Promise<{ page: string; search: string }>;
 }): Promise<JSX.Element> {
-  const { page, search } = await searchParams
+  const { page, search } = await searchParams;
 
-  const allUser = await fetchAllUsers()
+  const allUser = await fetchAllUsers();
 
   const response = await getAwards(
-    `?page=${page || 1}&perPage=10&search=${search}&sortBy=created_at`
-  )
+    `?page=${page || 1}&perPage=10&search=${search}&sortBy=created_at`,
+  );
 
   return (
     <Container
-      title='Employee Awards'
-      description='All awarded users can be seen here.'
+      title="Employee Awards"
+      description="All awarded users can be seen here."
     >
       <EmployeeAwardsTable
         {...{
@@ -31,7 +31,7 @@ export default async function Awards({
           totalPages: response.totalPages,
           currentPage: response.currentPage,
           count: response.count,
-          yearThreshold: response.yearThreshold
+          yearThreshold: response.yearThreshold,
         }}
       />
 
@@ -39,5 +39,5 @@ export default async function Awards({
       <EditAward users={allUser.users} />
       <DeleteAward />
     </Container>
-  )
+  );
 }

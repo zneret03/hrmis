@@ -114,7 +114,7 @@ export function CertificatesTable({
         return;
       }
 
-      router.push(`${pathname}/${data.id}`);
+      router.push(`${pathname}/${data.id}?document=pdf-editor`);
 
       setTimeout(() => {
         setOpenEditor(false);

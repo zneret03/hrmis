@@ -1,74 +1,74 @@
-'use client'
+'use client';
 
-import { JSX, useState, useTransition, useEffect, ReactNode } from 'react'
+import { JSX, useState, useTransition, useEffect, ReactNode } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose
-} from '@/components/ui/dialog'
+  DialogClose,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
-import { RotateCcw } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { avatarName } from '@/helpers/avatarName'
-import { Controller } from 'react-hook-form'
-import { Label } from '@radix-ui/react-label'
-import { useForm } from 'react-hook-form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
-import { CustomButton } from '@/components/custom/CustomButton'
-import { useUserDialog } from '@/services/auth/states/user-dialog'
-import { UpdateUser } from '@/lib/types/users'
-import { useRouter } from 'next/navigation'
-import { updateUserInfo } from '@/services/users/users.services'
-import { useShallow } from 'zustand/react/shallow'
-import { roleTypes } from '@/app/auth/sign-in/helpers/constants'
-import { ImageUpload } from '@/components/custom/ImageUpload'
-import { toPercentage } from '@/helpers/convertToPercent'
-import { isEqual } from 'lodash'
-import { toast } from 'sonner'
-import { updateLeaveCredits } from '@/services/leave_credits/leave_credits.services'
+  SelectValue,
+} from '@/components/ui/select';
+import { RotateCcw } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { avatarName } from '@/helpers/avatarName';
+import { Controller } from 'react-hook-form';
+import { Label } from '@radix-ui/react-label';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { CustomButton } from '@/components/custom/CustomButton';
+import { useUserDialog } from '@/services/auth/states/user-dialog';
+import { UpdateUser } from '@/lib/types/users';
+import { useRouter } from 'next/navigation';
+import { updateUserInfo } from '@/services/users/users.services';
+import { useShallow } from 'zustand/react/shallow';
+import { roleTypes } from '@/app/auth/sign-in/helpers/constants';
+import { ImageUpload } from '@/components/custom/ImageUpload';
+import { toPercentage } from '@/helpers/convertToPercent';
+import { isEqual } from 'lodash';
+import { toast } from 'sonner';
+import { updateLeaveCredits } from '@/services/leave_credits/leave_credits.services';
 
 interface EditUserDialog extends Omit<UpdateUser, 'avatar'> {
-  avatar: File[] | string
-  oldAvatar: string
+  avatar: File[] | string;
+  oldAvatar: string;
 }
 
 const errorMessage = (error: string): ReactNode => (
-  <p className='text-sm text-red-500'>{error}</p>
-)
+  <p className="text-sm text-red-500">{error}</p>
+);
 
 export function EditUserDialog(): JSX.Element {
-  const router = useRouter()
-  const [isPending, startTransition] = useTransition()
-  const [isPendingCredits, startCreditTransition] = useTransition()
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [isPendingCredits, startCreditTransition] = useTransition();
 
-  const [isUpdateCredits, setUpdateCredits] = useState<boolean>(false)
-  const [message, setMessage] = useState<string>('')
-  const [credsError, setCredsError] = useState<string>('')
+  const [isUpdateCredits, setUpdateCredits] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
+  const [credsError, setCredsError] = useState<string>('');
 
   const { open, toggleOpen, type, data } = useUserDialog(
     useShallow((state) => ({
       open: state.open,
       type: state.type,
       toggleOpen: state.toggleOpenDialog,
-      data: state.data
-    }))
-  )
+      data: state.data,
+    })),
+  );
 
-  const [newCredit, setNewCredit] = useState<number>(data?.credits as number)
+  const [newCredit, setNewCredit] = useState<number>(data?.credits as number);
   const [newMaxCredits, setNewMaxCredits] = useState<number>(
-    data?.maxCredits as number
-  )
+    data?.maxCredits as number,
+  );
 
   const oldData = {
     avatar: data?.avatar,
@@ -76,70 +76,70 @@ export function EditUserDialog(): JSX.Element {
     oldAvatar: data?.avatar,
     role: data?.role,
     username: data?.username,
-    email: data?.email
-  }
+    email: data?.email,
+  };
 
   const {
     handleSubmit,
     register,
     reset,
     formState: { errors },
-    control
-  } = useForm<EditUserDialog>()
+    control,
+  } = useForm<EditUserDialog>();
 
   const toggleCreditsField = (): void => {
-    setUpdateCredits((prevState) => !prevState)
-  }
+    setUpdateCredits((prevState) => !prevState);
+  };
 
   const resetVariable = (): void => {
-    setMessage('')
-    router.refresh()
-    toggleOpen?.(false, null, null)
-    setUpdateCredits(false)
-  }
+    setMessage('');
+    router.refresh();
+    toggleOpen?.(false, null, null);
+    setUpdateCredits(false);
+  };
 
   const updateCredits = (): void => {
     startCreditTransition(async () => {
       if (newCredit > Number(data?.maxCredits)) {
-        setCredsError('Credits cant be greater that max credits')
-        return
+        setCredsError('Credits cant be greater that max credits');
+        return;
       }
       await updateLeaveCredits({
         id: data?.id as string,
         credits: newCredit || (data?.credits as number),
-        max_credits: newMaxCredits || (data?.maxCredits as number)
-      })
+        max_credits: newMaxCredits || (data?.maxCredits as number),
+      });
 
-      resetVariable()
-    })
-  }
+      resetVariable();
+    });
+  };
 
   const onSubmit = async (editData: EditUserDialog): Promise<void> => {
-    const { avatar } = editData
+    const { avatar } = editData;
 
     startTransition(async () => {
       try {
         if (isEqual(editData, oldData)) {
           toast.info('Info', {
-            description: 'No changes in data.'
-          })
+            description: 'No changes in data.',
+          });
 
-          toggleOpen?.(false, null, null)
-          return
+          toggleOpen?.(false, null, null);
+          return;
         }
 
         await updateUserInfo({
           ...editData,
           email: data?.email as string,
           avatar: avatar as File[],
-          id: data?.id as string
-        })
-        resetVariable()
+          id: data?.id as string,
+        });
+        resetVariable();
       } catch (error) {
-        setMessage(error as string)
+        setMessage(error as string);
       }
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     if (!!data) {
@@ -149,60 +149,60 @@ export function EditUserDialog(): JSX.Element {
         role: data.role,
         employee_id: data.employee_id,
         oldAvatar: data.avatar as string,
-        email: data.email as string
-      })
-      setNewCredit(data?.credits as number)
-      setNewMaxCredits(data?.maxCredits as number)
+        email: data.email as string,
+      });
+      setNewCredit(data?.credits as number);
+      setNewMaxCredits(data?.maxCredits as number);
     }
-  }, [data, reset])
+  }, [data, reset]);
 
-  const isOpenDialog = open && type === 'edit'
+  const isOpenDialog = open && type === 'edit';
 
   return (
     <Dialog
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className='sm:max-w-[40rem] xl:max-h-[45rem] lg:max-h-[40rem] md:max-h-[30rem] sm:max-h-[20rem] overflow-auto'>
+      <DialogContent className="overflow-auto sm:max-h-[20rem] sm:max-w-[40rem] md:max-h-[30rem] lg:max-h-[40rem] xl:max-h-[45rem]">
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>
 
-          <div className='flex items-center gap-2'>
-            <Avatar className='h-20 w-20 rounded-full'>
+          <div className="flex items-center gap-2">
+            <Avatar className="h-20 w-20 rounded-full">
               <AvatarImage
                 src={data?.avatar as string}
                 alt={data?.email as string}
-                className='object-cover'
+                className="object-cover"
               />
-              <AvatarFallback className='rounded-lg text-2xl fill-primary bg-primary text-white font-semibold'>
+              <AvatarFallback className="fill-primary bg-primary rounded-lg text-2xl font-semibold text-white">
                 {avatarName(data?.email as string)}
               </AvatarFallback>
             </Avatar>
             <section>
-              <h1 className='font-medium'>{data?.email}</h1>
-              <h2 className='text-md'>{data?.username}</h2>
+              <h1 className="font-medium">{data?.email}</h1>
+              <h2 className="text-md">{data?.username}</h2>
             </section>
           </div>
 
-          <div className='shadow-sm p-4 rounded-sm space-y-3'>
-            <h1 className='font-medium'>Leave Credits</h1>
-            <section className='flex items-center gap-2'>
+          <div className="space-y-3 rounded-sm p-4 shadow-sm">
+            <h1 className="font-medium">Leave Credits</h1>
+            <section className="flex items-center gap-2">
               <Progress value={toPercentage(data?.credits as number, 10)} />
-              <span className='text-sm'>
+              <span className="text-sm">
                 {data?.credits}/{data?.maxCredits}
               </span>
             </section>
             {isUpdateCredits && (
-              <div className='grid grid-cols-2 gap-2'>
+              <div className="grid grid-cols-2 gap-2">
                 <Input
-                  type='text'
-                  title='Credits'
+                  type="text"
+                  title="Credits"
                   value={newCredit}
                   onChange={(event) => setNewCredit(Number(event.target.value))}
                 />
                 <Input
-                  type='text'
-                  title='Max Credits'
+                  type="text"
+                  title="Max Credits"
                   value={newMaxCredits}
                   onChange={(event) =>
                     setNewMaxCredits(Number(event.target.value))
@@ -213,7 +213,7 @@ export function EditUserDialog(): JSX.Element {
 
             {!!credsError && errorMessage(credsError)}
 
-            <div className='text-right'>
+            <div className="text-right">
               <CustomButton
                 onClick={isUpdateCredits ? updateCredits : toggleCreditsField}
                 disabled={isPendingCredits}
@@ -227,27 +227,27 @@ export function EditUserDialog(): JSX.Element {
         </DialogHeader>
 
         <Input
-          title='Username'
+          title="Username"
           {...register('username', {
-            required: 'Field is required.'
+            required: 'Field is required.',
           })}
           hasError={!!errors.username}
           errorMessage={errors.username?.message}
         />
 
-        <div className='grid grid-cols-2 gap-2'>
-          <div className='space-y-2'>
-            <Label className='text-sm font-medium mb-1.5'>Role*</Label>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
+            <Label className="mb-1.5 text-sm font-medium">Role*</Label>
             <Controller
-              name='role'
+              name="role"
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Select
                   value={value as string}
                   onValueChange={(e) => onChange(e)}
                 >
-                  <SelectTrigger className='w-full'>
-                    <SelectValue placeholder='Select role' />
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
                     {roleTypes.map((item, index) => (
@@ -260,27 +260,27 @@ export function EditUserDialog(): JSX.Element {
               )}
             />
             {!!errors.role && (
-              <h1 className='text-sm text-red-500'>{errors.role.message}</h1>
+              <h1 className="text-sm text-red-500">{errors.role.message}</h1>
             )}
           </div>
 
           <Input
-            title='Employee ID'
+            title="Employee ID"
             hasError={!!errors.employee_id}
             errorMessage={errors.employee_id?.message}
             {...register('employee_id', {
-              required: 'This field is required.'
+              required: 'This field is required.',
             })}
           />
         </div>
 
-        <div className='space-y-2'>
+        <div className="space-y-2">
           <Controller
-            name='avatar'
+            name="avatar"
             control={control}
             render={({ field: { onChange, value } }) => (
               <ImageUpload
-                title='Image'
+                title="Image"
                 filePreview={typeof value === 'string' ? value : undefined}
                 pendingFiles={value as File[]}
                 isLoading={isPending}
@@ -290,15 +290,15 @@ export function EditUserDialog(): JSX.Element {
             )}
           />
           {!!errors.avatar && (
-            <h1 className='text-sm text-red-500'>{errors.avatar.message}</h1>
+            <h1 className="text-sm text-red-500">{errors.avatar.message}</h1>
           )}
         </div>
         {!!message && errorMessage(message)}
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              type='button'
-              variant='outline'
+              type="button"
+              variant="outline"
               onClick={() => resetVariable()}
             >
               Cancel
@@ -307,7 +307,7 @@ export function EditUserDialog(): JSX.Element {
 
           <DialogClose asChild>
             <CustomButton
-              type='button'
+              type="button"
               onClick={handleSubmit(onSubmit)}
               disabled={isPending}
               isLoading={isPending}
@@ -318,5 +318,5 @@ export function EditUserDialog(): JSX.Element {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

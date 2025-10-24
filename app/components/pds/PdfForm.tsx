@@ -1,40 +1,40 @@
-'use client'
+'use client';
 
-import { JSX, useState } from 'react'
-import { Document, Page, pdfjs } from 'react-pdf'
-import { Button } from '@/components/ui/button'
-import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder'
-import { toast } from 'sonner'
+import { JSX, useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import { Button } from '@/components/ui/button';
+import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder';
+import { toast } from 'sonner';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url
-).toString()
+  import.meta.url,
+).toString();
 
 interface PdfForm {
-  file: string
-  isAdmin?: boolean
+  file: string;
+  isAdmin?: boolean;
 }
 
 export function PdfForm({ file, isAdmin = false }: PdfForm): JSX.Element {
-  const [numPages, setNumPages] = useState<number | null>(null)
-  const [pageNumber, setPageNumber] = useState<number>(1)
+  const [numPages, setNumPages] = useState<number | null>(null);
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
-    setNumPages(numPages)
-  }
+    setNumPages(numPages);
+  };
 
   const onError = (error: string): void => {
     toast.error('Error!!', {
-      description: error
-    })
-  }
+      description: error,
+    });
+  };
 
-  const pdfFile = !file ? '/documents/pds-form.pdf' : file
-  const documentWidth = !isAdmin ? 1000 : 1300
+  const pdfFile = !file ? '/documents/pds-form.pdf' : file;
+  const documentWidth = !isAdmin ? 1000 : 1300;
 
   return (
-    <div className='relative max-w-7xl mx-auto'>
+    <div className="relative mx-auto max-w-7xl">
       <Document
         file={pdfFile}
         noData={<EmptyPlaceholder />}
@@ -50,20 +50,20 @@ export function PdfForm({ file, isAdmin = false }: PdfForm): JSX.Element {
         />
 
         {numPages && (
-          <div className='text-right space-y-2'>
+          <div className="space-y-2 text-right">
             <p>
               <strong>Page</strong> {pageNumber} of {numPages}
             </p>
-            <section className='flex items-center justify-end gap-2'>
+            <section className="flex items-center justify-end gap-2">
               <Button
-                variant='outline'
+                variant="outline"
                 disabled={pageNumber === 1}
                 onClick={() => setPageNumber((prev) => Math.max(1, prev - 1))}
               >
                 Previous
               </Button>
               <Button
-                variant='outline'
+                variant="outline"
                 disabled={pageNumber === numPages}
                 onClick={() =>
                   setPageNumber((prev) => Math.min(numPages, prev + 1))
@@ -76,5 +76,5 @@ export function PdfForm({ file, isAdmin = false }: PdfForm): JSX.Element {
         )}
       </Document>
     </div>
-  )
+  );
 }

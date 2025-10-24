@@ -1,7 +1,7 @@
-import { persist } from 'zustand/middleware'
-import { createJSONStorage } from 'zustand/middleware'
-import { create } from 'zustand'
-import { Users } from '@/lib/types/users'
+import { persist } from 'zustand/middleware';
+import { createJSONStorage } from 'zustand/middleware';
+import { create } from 'zustand';
+import { Users } from '@/lib/types/users';
 
 type UserDialogType =
   | 'add'
@@ -11,25 +11,25 @@ type UserDialogType =
   | 'verify-email'
   | 'update-password'
   | 'update-pdf'
-  | null
+  | null;
 
 export type UserData = Pick<
   Users,
   'username' | 'role' | 'employee_id' | 'avatar' | 'email' | 'id'
 > & {
-  credits?: number
-  maxCredits?: number
-}
+  credits?: number;
+  maxCredits?: number;
+};
 
 export interface UserDialog {
-  open: boolean
-  type: UserDialogType
-  data: Partial<UserData> | null
+  open: boolean;
+  type: UserDialogType;
+  data: Partial<UserData> | null;
   toggleOpenDialog?: (
     isOpen: boolean,
     type: UserDialogType,
-    data: UserData | null
-  ) => void
+    data: UserData | null,
+  ) => void;
 }
 
 const initialState: UserDialog = {
@@ -41,11 +41,11 @@ const initialState: UserDialog = {
     employee_id: '',
     avatar: '',
     credits: 0,
-    maxCredits: 0
+    maxCredits: 0,
   },
   open: false,
-  type: null
-}
+  type: null,
+};
 
 export const useUserDialog = create<UserDialog>()(
   persist(
@@ -54,19 +54,19 @@ export const useUserDialog = create<UserDialog>()(
       toggleOpenDialog: (
         isOpen: boolean,
         type: UserDialogType,
-        data: UserData | null
+        data: UserData | null,
       ) => {
         set((state) => ({
           ...state,
           open: isOpen,
           type,
-          data
-        }))
-      }
+          data,
+        }));
+      },
     }),
     {
       name: 'add-user-dialog',
-      storage: createJSONStorage(() => sessionStorage)
-    }
-  )
-)
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+);

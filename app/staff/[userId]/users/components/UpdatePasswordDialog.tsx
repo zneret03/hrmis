@@ -1,90 +1,90 @@
-'use client'
+'use client';
 
-import { JSX, useTransition } from 'react'
+import { JSX, useTransition } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { CustomButton } from '@/components/custom/CustomButton'
-import { Input } from '@/components/ui/input'
-import { useForm } from 'react-hook-form'
+  DialogClose,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { CustomButton } from '@/components/custom/CustomButton';
+import { Input } from '@/components/ui/input';
+import { useForm } from 'react-hook-form';
 import {
   useSearchParams,
   usePathname,
-  permanentRedirect
-} from 'next/navigation'
-import { updatePassword } from '@/services/users/users.services'
+  permanentRedirect,
+} from 'next/navigation';
+import { updatePassword } from '@/services/users/users.services';
 
 interface UpdatePassword {
-  password: string
-  confirmPassword: string
+  password: string;
+  confirmPassword: string;
 }
 
 export function UpdatePassword(): JSX.Element {
-  const [isPending, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition();
 
-  const pathname = usePathname()
-  const params = useSearchParams()
-  const getParams = new URLSearchParams(params)
+  const pathname = usePathname();
+  const params = useSearchParams();
+  const getParams = new URLSearchParams(params);
 
-  getParams.get('password-reset')
+  getParams.get('password-reset');
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    setError
-  } = useForm<UpdatePassword>()
+    setError,
+  } = useForm<UpdatePassword>();
 
   const resetVariables = (): void => {
-    permanentRedirect(pathname)
-  }
+    permanentRedirect(pathname);
+  };
 
   const onResetPassword = async (data: UpdatePassword): Promise<void> => {
     startTransition(async () => {
-      const { password, confirmPassword } = data
+      const { password, confirmPassword } = data;
       if (password !== confirmPassword) {
         setError('confirmPassword', {
-          message: "password doesn't matched"
-        })
-        return
+          message: "password doesn't matched",
+        });
+        return;
       }
 
-      await updatePassword(password)
+      await updatePassword(password);
 
-      resetVariables()
-    })
-  }
+      resetVariables();
+    });
+  };
 
   return (
     <Dialog
       open={Boolean(getParams.get('password-reset'))}
       onOpenChange={() => resetVariables()}
     >
-      <DialogContent className='sm:max-w-[40rem]'>
+      <DialogContent className="sm:max-w-[40rem]">
         <DialogHeader>
           <DialogTitle>New Password</DialogTitle>
         </DialogHeader>
 
         <Input
-          title='Password'
-          type='password'
+          title="Password"
+          type="password"
           {...register('password', {
-            required: 'Field is required.'
+            required: 'Field is required.',
           })}
           hasError={!!errors.password}
           errorMessage={errors.password?.message}
         />
         <Input
-          title='Confirm Password'
-          type='password'
+          title="Confirm Password"
+          type="password"
           {...register('confirmPassword', {
-            required: 'Field is required.'
+            required: 'Field is required.',
           })}
           hasError={!!errors.confirmPassword}
           errorMessage={errors.confirmPassword?.message}
@@ -93,8 +93,8 @@ export function UpdatePassword(): JSX.Element {
         <DialogFooter>
           <DialogClose asChild>
             <Button
-              type='button'
-              variant='outline'
+              type="button"
+              variant="outline"
               onClick={() => resetVariables()}
             >
               Cancel
@@ -103,7 +103,7 @@ export function UpdatePassword(): JSX.Element {
 
           <DialogClose asChild>
             <CustomButton
-              type='button'
+              type="button"
               disabled={isPending}
               isLoading={isPending}
               onClick={handleSubmit(onResetPassword)}
@@ -114,5 +114,5 @@ export function UpdatePassword(): JSX.Element {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

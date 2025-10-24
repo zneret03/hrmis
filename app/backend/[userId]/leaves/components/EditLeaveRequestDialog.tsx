@@ -1,53 +1,53 @@
-'use client'
+'use client';
 
-import { JSX, useTransition, useEffect } from 'react'
+import { JSX, useTransition, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose
-} from '@/components/ui/dialog'
+  DialogClose,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
-import { Plus } from 'lucide-react'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { CustomButton } from '@/components/custom/CustomButton'
-import { useLeaveApplicationDialog } from '@/services/leave_applications/states/leave-application-dialog'
-import { useShallow } from 'zustand/react/shallow'
-import { useRouter } from 'next/navigation'
-import { Controller } from 'react-hook-form'
-import { useForm, Control } from 'react-hook-form'
-import { useAuth } from '@/services/auth/states/auth-state'
-import { CalendarPicker } from '@/components/custom/CalendarPicker'
-import { LeaveApplicationsFormData } from '@/lib/types/leave_application'
-import { LeaveCategories } from '@/lib/types/leave_categories'
-import { editLeaveRequest } from '@/services/leave_applications/leave-applications.services'
-import { DateRange } from 'react-day-picker'
+  SelectValue,
+} from '@/components/ui/select';
+import { Plus } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { CustomButton } from '@/components/custom/CustomButton';
+import { useLeaveApplicationDialog } from '@/services/leave_applications/states/leave-application-dialog';
+import { useShallow } from 'zustand/react/shallow';
+import { useRouter } from 'next/navigation';
+import { Controller } from 'react-hook-form';
+import { useForm, Control } from 'react-hook-form';
+import { useAuth } from '@/services/auth/states/auth-state';
+import { CalendarPicker } from '@/components/custom/CalendarPicker';
+import { LeaveApplicationsFormData } from '@/lib/types/leave_application';
+import { LeaveCategories } from '@/lib/types/leave_categories';
+import { editLeaveRequest } from '@/services/leave_applications/leave-applications.services';
+import { DateRange } from 'react-day-picker';
 
 interface FileLeaveDialog {
-  category: Pick<LeaveCategories, 'name' | 'id'>[]
+  category: Pick<LeaveCategories, 'name' | 'id'>[];
 }
 
 export function EditFileLeaveDialog({
-  category
+  category,
 }: FileLeaveDialog): JSX.Element {
-  const [isPending, startTransition] = useTransition()
-  const state = useAuth()
-  const router = useRouter()
+  const [isPending, startTransition] = useTransition();
+  const state = useAuth();
+  const router = useRouter();
 
   const categoryData = category.map((item) => ({
     id: item.id,
-    name: item.name
-  }))
+    name: item.name,
+  }));
 
   const {
     control,
@@ -55,36 +55,36 @@ export function EditFileLeaveDialog({
     handleSubmit,
     register,
     watch,
-    reset
+    reset,
   } = useForm<LeaveApplicationsFormData>({
     defaultValues: {
       leave_id: '',
       remarks: '',
-      dateRange: undefined
-    }
-  })
+      dateRange: undefined,
+    },
+  });
 
-  const dateRange = watch('dateRange')
+  const dateRange = watch('dateRange');
 
   const { open, toggleOpen, type, data } = useLeaveApplicationDialog(
     useShallow((state) => ({
       open: state.open,
       type: state.type,
       data: state.data,
-      toggleOpen: state.toggleOpenDialog
-    }))
-  )
+      toggleOpen: state.toggleOpenDialog,
+    })),
+  );
 
   const resetVariables = (): void => {
-    toggleOpen?.(false, null, null)
-    router.refresh()
-    reset()
-  }
+    toggleOpen?.(false, null, null);
+    router.refresh();
+    reset();
+  };
 
   const onSubmit = (leaveData: LeaveApplicationsFormData): void => {
-    const { leave_id, remarks } = leaveData
-    const startDate = leaveData.dateRange?.from
-    const endDate = leaveData.dateRange?.to
+    const { leave_id, remarks } = leaveData;
+    const startDate = leaveData.dateRange?.from;
+    const endDate = leaveData.dateRange?.to;
 
     const newData = {
       leave_id,
@@ -92,14 +92,14 @@ export function EditFileLeaveDialog({
       status: 'pending',
       remarks,
       start_date: new Date(startDate as Date).toISOString(),
-      end_date: new Date(endDate as Date).toISOString()
-    }
+      end_date: new Date(endDate as Date).toISOString(),
+    };
 
     startTransition(async () => {
-      await editLeaveRequest(newData as typeof newData, data?.id as string)
-      resetVariables()
-    })
-  }
+      await editLeaveRequest(newData as typeof newData, data?.id as string);
+      resetVariables();
+    });
+  };
 
   useEffect(() => {
     if (!!data) {
@@ -107,37 +107,37 @@ export function EditFileLeaveDialog({
         leave_id: data.leave_categories?.id,
         dateRange: {
           from: new Date(data.start_date as string),
-          to: new Date(data.end_date as string)
+          to: new Date(data.end_date as string),
         },
-        remarks: data.remarks
-      })
+        remarks: data.remarks,
+      });
     }
-  }, [data, reset])
+  }, [data, reset]);
 
-  const isOpenDialog = open && type === 'edit'
+  const isOpenDialog = open && type === 'edit';
 
   return (
     <Dialog
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className='sm:max-w-[40rem]'>
+      <DialogContent className="sm:max-w-[40rem]">
         <DialogHeader>
           <DialogTitle>Edit Leave Applications</DialogTitle>
         </DialogHeader>
 
-        <div className='space-y-2'>
-          <Label className='text-sm font-medium mb-1.5'>Leave Status*</Label>
+        <div className="space-y-2">
+          <Label className="mb-1.5 text-sm font-medium">Leave Status*</Label>
           <Controller
-            name='leave_id'
+            name="leave_id"
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select
                 value={value as string}
                 onValueChange={(e) => onChange(e)}
               >
-                <SelectTrigger className='w-full'>
-                  <SelectValue placeholder='Select Leave Status' />
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Leave Status" />
                 </SelectTrigger>
                 <SelectContent>
                   {categoryData.map((item, index) => (
@@ -150,41 +150,41 @@ export function EditFileLeaveDialog({
             )}
           />
           {!!errors.leave_id && (
-            <h1 className='text-sm text-red-499'>{errors.leave_id.message}</h1>
+            <h1 className="text-red-499 text-sm">{errors.leave_id.message}</h1>
           )}
         </div>
 
         <CalendarPicker
-          title='Start and End Date'
-          name='dateRange'
+          title="Start and End Date"
+          name="dateRange"
           control={
             control as Control<LeaveApplicationsFormData | { date: Date }>
           }
           date={dateRange as DateRange}
-          mode='range'
+          mode="range"
         />
 
         <Textarea
-          title='Description'
-          className='h-[10rem]'
-          placeholder='Leave Description'
+          title="Description"
+          className="h-[10rem]"
+          placeholder="Leave Description"
           hasError={!!errors.remarks}
           errorMessage={errors.remarks?.message}
           {...register('remarks', {
-            required: 'Required field.'
+            required: 'Required field.',
           })}
         />
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type='button' variant='outline'>
+            <Button type="button" variant="outline">
               Cancel
             </Button>
           </DialogClose>
 
           <DialogClose asChild>
             <CustomButton
-              type='button'
+              type="button"
               isLoading={isPending}
               onClick={handleSubmit(onSubmit)}
             >
@@ -194,5 +194,5 @@ export function EditFileLeaveDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

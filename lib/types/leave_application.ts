@@ -1,23 +1,23 @@
-import { Database } from './db-types'
-import { Users } from './users'
-import { DateRange } from 'react-day-picker'
-import { LeaveCategories } from './leave_categories'
+import { Database } from './db-types';
+import { Users } from './users';
+import { DateRange } from 'react-day-picker';
+import { LeaveCategories } from './leave_categories';
 
 export type LeaveApplications =
-  Database['public']['Tables']['leave_applications']['Row']
+  Database['public']['Tables']['leave_applications']['Row'];
 
-export type LeaveStatus = 'approved' | 'disapproved' | 'pending' | 'cancelled'
+export type LeaveStatus = 'approved' | 'disapproved' | 'pending' | 'cancelled';
 
 export type LeaveApplicationsData = Omit<
   LeaveApplications,
   'user_id' | 'leave_id'
->
+>;
 
 export interface LeaveApplicationsForm extends LeaveApplicationsData {
-  users: Pick<Users, 'email' | 'username' | 'id'>
-  leave_categories: Pick<LeaveCategories, 'name' | 'id'>
+  users: Pick<Users, 'email' | 'username' | 'id'>;
+  leave_categories: Pick<LeaveCategories, 'name' | 'id'>;
 }
 
 export interface LeaveApplicationsFormData extends LeaveApplications {
-  dateRange: DateRange | undefined
+  dateRange: DateRange | undefined;
 }

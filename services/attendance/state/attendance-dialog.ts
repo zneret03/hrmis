@@ -1,22 +1,22 @@
-import { persist } from 'zustand/middleware'
-import { createJSONStorage } from 'zustand/middleware'
-import { create } from 'zustand'
-import { LeaveCategories } from '@/lib/types/leave_categories'
+import { persist } from 'zustand/middleware';
+import { createJSONStorage } from 'zustand/middleware';
+import { create } from 'zustand';
+import { LeaveCategories } from '@/lib/types/leave_categories';
 
-type AttendanceDialogType = 'upload' | 'bat-file' | 'csv-file' | null
+type AttendanceDialogType = 'upload' | 'bat-file' | 'csv-file' | null;
 
-export type AttendanceData = Pick<LeaveCategories, 'name' | 'id'>
+export type AttendanceData = Pick<LeaveCategories, 'name' | 'id'>;
 
 export interface AttendanceDialog {
-  open: boolean
-  type: AttendanceDialogType
-  toggleOpenDialog?: (isOpen: boolean, type: AttendanceDialogType) => void
+  open: boolean;
+  type: AttendanceDialogType;
+  toggleOpenDialog?: (isOpen: boolean, type: AttendanceDialogType) => void;
 }
 
 const initialState: AttendanceDialog = {
   open: false,
-  type: null
-}
+  type: null,
+};
 
 export const useUploadAttendanceDialog = create<AttendanceDialog>()(
   persist(
@@ -26,13 +26,13 @@ export const useUploadAttendanceDialog = create<AttendanceDialog>()(
         set((state) => ({
           ...state,
           open: isOpen,
-          type
-        }))
-      }
+          type,
+        }));
+      },
     }),
     {
       name: 'attendance-dialog',
-      storage: createJSONStorage(() => sessionStorage)
-    }
-  )
-)
+      storage: createJSONStorage(() => sessionStorage),
+    },
+  ),
+);
