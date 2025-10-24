@@ -112,7 +112,15 @@ export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
     id: string,
     value: Partial<PlacedField> | string,
   ) => {
-    setFields((prev) => prev.map((f) => (f.id === id ? { ...f, value } : f)));
+    setFields((prev) =>
+      prev.map((f) =>
+        f.id === id
+          ? typeof value === 'string'
+            ? { ...f, value }
+            : { ...f, ...value }
+          : f,
+      ),
+    );
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
