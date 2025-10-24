@@ -456,6 +456,7 @@ export type Database = {
         Row: {
           id: string;
           file: string;
+          name: string;
           archived_at: string | null;
           created_at: string | null;
           updated_at: string | null;
@@ -463,6 +464,7 @@ export type Database = {
         Insert: {
           id: string | null;
           file: string;
+          name: string;
           archived_at: string | null;
           created_at: string | null;
           updated_at: string | null;
@@ -470,6 +472,7 @@ export type Database = {
         Update: {
           id: string | null;
           file: string | null;
+          name: string | null;
           archived_at: string | null;
           created_at: string | null;
           updated_at: string | null;

@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useRef, JSX } from 'react';
+import React, { useState, useRef, JSX, useTransition } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Document, pdfjs } from 'react-pdf';
-import { Plus, UploadCloud, FileText } from 'lucide-react';
+import { Plus, UploadCloud } from 'lucide-react';
+import { Spinner } from '@/components/custom/Spinner';
 import { drawCheckmark } from '@/helpers/drawCheckBox';
 import { useCertificates } from '@/services/certificates/state/use-certificate';
 import { toast } from 'sonner';
@@ -46,6 +47,7 @@ export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
     { width: number; height: number }[]
   >([]);
   const [fields, setFields] = useState<PlacedField[]>([]);
+  const [isPending, startTransition] = useTransition();
 
   const pdfCanvasContainerRef = useRef<HTMLDivElement>(null);
   const uploadPdfRef = useRef<HTMLInputElement>(null);
@@ -61,6 +63,27 @@ export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
       },
     }),
   );
+
+  const handleSelectedFile = async (
+    file: string,
+    name: string,
+  ): Promise<void> => {
+    startTransition(async () => {
+      const response = await fetch(file);
+
+      if (!response.ok) {
+        toast.error('ERROR!!', {
+          description: 'Something went wrong',
+        });
+        return;
+      }
+
+      const blob = await response.blob();
+
+      const newFile = new File([blob], name);
+      setPdfFile(newFile);
+    });
+  };
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -282,38 +305,40 @@ export function PdfEditorPage({ templates }: PdfEditorPage): JSX.Element {
         </div>
 
         <div className="flex flex-grow overflow-hidden">
-          <Toolbox />
+          <Toolbox templates={templates} callback={handleSelectedFile} />
 
-          <div></div>
           <div
             ref={pdfCanvasContainerRef}
             className="flex-grow overflow-auto bg-gray-200 p-5"
           >
-            {pdfFile ? (
-              <Document
-                file={pdfFile}
-                onLoadSuccess={onDocumentLoadSuccess}
-                onLoadError={(error) => onError(error.message)}
-              >
-                {Array.from(new Array(numPages), (el, index) => (
-                  <PdfPageDroppable
-                    key={`page_${index + 1}`}
-                    pageNumber={index + 1}
-                    fields={fields}
-                    onFieldUpdate={handleFieldUpdate}
-                    onPageLoad={(page) => onPageLoadSuccess(index, page)}
-                  />
-                ))}
-              </Document>
-            ) : (
-              <div className="p-5 text-center text-gray-600">
-                Please select a PDF file to begin.
-                {templates.map((item) => (
-                  <div key={item.file}>
-                    <FileText />
-                  </div>
-                ))}
+            {isPending ? (
+              <div className="flex items-center justify-center py-30">
+                <Spinner />
               </div>
+            ) : (
+              <main>
+                {pdfFile ? (
+                  <Document
+                    file={pdfFile}
+                    onLoadSuccess={onDocumentLoadSuccess}
+                    onLoadError={(error) => onError(error.message)}
+                  >
+                    {Array.from(new Array(numPages), (el, index) => (
+                      <PdfPageDroppable
+                        key={`page_${index + 1}`}
+                        pageNumber={index + 1}
+                        fields={fields}
+                        onFieldUpdate={handleFieldUpdate}
+                        onPageLoad={(page) => onPageLoadSuccess(index, page)}
+                      />
+                    ))}
+                  </Document>
+                ) : (
+                  <div className="p-5 text-center text-gray-600">
+                    Please select a PDF file to begin.
+                  </div>
+                )}
+              </main>
             )}
           </div>
         </div>

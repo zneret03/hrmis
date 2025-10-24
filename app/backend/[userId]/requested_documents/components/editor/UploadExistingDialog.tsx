@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogClose,
 } from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
 import { uploadTemplate } from '@/services/template/template.service';
 import { useCertificates } from '@/services/certificates/state/use-certificate';
 import { Plus, UploadCloud, Trash } from 'lucide-react';
@@ -20,6 +21,8 @@ export function UploadExistingDialog(): JSX.Element {
   const uploadPdfRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
   const [pdfFile, setPdfFile] = useState<File | null>(null);
+
+  const router = useRouter();
 
   const { open, type, toggleOpen } = useCertificates(
     useShallow((state) => ({
@@ -47,6 +50,7 @@ export function UploadExistingDialog(): JSX.Element {
   const onSubmit = async (): Promise<void> => {
     startTransition(async () => {
       await uploadTemplate(pdfFile as File);
+      router.refresh();
     });
   };
 

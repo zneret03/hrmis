@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       await paginatedData<TemplateDB>({
         tableName: 'document_templates',
         supabase,
-        columns: 'id, file, created_at, updated_at, archived_at',
+        columns: 'id, file, name, created_at, updated_at, archived_at',
         search: { column: 'file', query: search },
         page,
         perPage,
