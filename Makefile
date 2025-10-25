@@ -44,12 +44,12 @@ setup-supabase: init-log
 	@echo "[$(TIMESTAMP)] Temporary output file cleaned up" | tee -a $(LOG_FILE)
 
 run-dev:
-	yarn supabase start
+	yarn supabase start --ignore-health-check
 	yarn dev
 	@echo "running dev with supabase"
 
 run-start:
-	yarn supabase start
+	yarn supabase start --ignore-health-check
 	yarn start
 	@echo "Running prod with supabase"
 
