@@ -255,13 +255,13 @@ export function UsersTable({
                     event.stopPropagation();
                     toggleOpen?.(
                       true,
-                      row.original.archived_at ? 'reinstate' : 'revoked',
+                      row.original.users.archived_at ? 'reinstate' : 'revoked',
                       { ...row.original?.users },
                     );
                   }}
                 >
                   <Trash />
-                  {row.original.archived_at ? 'Reinstate' : 'Revoke'}
+                  {row.original.users.archived_at ? 'Reinstate' : 'Revoke'}
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>
