@@ -101,7 +101,7 @@ export function UploadExistingDialog(): JSX.Element {
             <CustomButton
               type="button"
               onClick={onSubmit}
-              disabled={isPending}
+              disabled={isPending || !pdfFile}
               isLoading={isPending}
             >
               <Plus /> Upload File
