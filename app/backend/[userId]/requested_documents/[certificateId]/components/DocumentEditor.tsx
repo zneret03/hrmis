@@ -16,9 +16,9 @@ import { parentPath } from '@/helpers/parentPath';
 
 const customToolbarItem = {
   prefixIcon: 'e-de-ctnr-open',
-  tooltipText: 'Import SFDT', // Updated tooltip
+  tooltipText: 'Import SFDT',
   id: 'custom_import',
-  disabled: true, // Start as disabled
+  disabled: true,
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -83,7 +83,7 @@ export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
         id="container"
         height="800px"
         width="100%"
-        serviceUrl="/api/protected/document_request/"
+        serviceUrl="http://localhost:6002/api/documenteditor/"
         toolbarItems={[
           customToolbarItem,
           'Separator',
