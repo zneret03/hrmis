@@ -3,7 +3,7 @@ services:
   word-processor-server:
     image: syncfusion/word-processor-server:latest
     environment:
-      SYNCFUSION_LICENSE_KEY: 'NxYtGyMROh0gHDMgDk1jXU9FaF5FVmJLYVB3WmpQdldgdVRMZVVbQX9PIiBoS35Rc0RjW3teeHRTR2hVVUJyVEFc'
+      SYNCFUSION_LICENSE_KEY: ${NEXT_PUBLIC_SYNCFUSION_KEY}
     volumes:
       - ./data:/app/data
     ports:
