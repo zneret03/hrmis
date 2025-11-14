@@ -921,7 +921,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 135,
     height: 13,
 
-    marginHeight: 74,
+    marginHeight: 72,
     marginWidth: -10,
     fontSize: 0.6,
   },
@@ -934,7 +934,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 70,
     height: 13,
 
-    marginHeight: 74,
+    marginHeight: 72,
     marginWidth: -15,
     fontSize: 0.6,
   },
@@ -973,7 +973,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 135,
     height: 13,
 
-    marginHeight: 60,
+    marginHeight: 75,
     marginWidth: -10,
     fontSize: 0.6,
   },
@@ -986,7 +986,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 70,
     height: 13,
 
-    marginHeight: 60,
+    marginHeight: 75,
     marginWidth: -15,
     fontSize: 0.6,
   },
@@ -999,7 +999,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 135,
     height: 13,
 
-    marginHeight: 60,
+    marginHeight: 75,
     marginWidth: -10,
     fontSize: 0.6,
   },
@@ -1012,7 +1012,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 70,
     height: 13,
 
-    marginHeight: 60,
+    marginHeight: 75,
     marginWidth: -15,
     fontSize: 0.6,
   },
@@ -1077,7 +1077,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 135,
     height: 13,
 
-    marginHeight: 72,
+    marginHeight: 74,
     marginWidth: -10,
     fontSize: 0.6,
   },
@@ -1132,8 +1132,8 @@ export const educationalBackgroundFields: FormField[] = [
     width: 112,
     height: 18,
 
-    marginHeight: 78,
-    marginWidth: -8,
+    marginHeight: 75,
+    marginWidth: -5,
     fontSize: 0.35,
   },
   {
@@ -1224,8 +1224,8 @@ export const educationalBackgroundFields: FormField[] = [
     width: 112,
     height: 18,
 
-    marginHeight: 80,
-    marginWidth: -8,
+    marginHeight: 75,
+    marginWidth: -5,
     fontSize: 0.35,
   },
   {
@@ -1316,8 +1316,8 @@ export const educationalBackgroundFields: FormField[] = [
     width: 112,
     height: 18,
 
-    marginHeight: 80,
-    marginWidth: -8,
+    marginHeight: 75,
+    marginWidth: -5,
     fontSize: 0.35,
   },
   {
@@ -1408,8 +1408,8 @@ export const educationalBackgroundFields: FormField[] = [
     width: 112,
     height: 18,
 
-    marginHeight: 80,
-    marginWidth: -8,
+    marginHeight: 76,
+    marginWidth: -5,
     fontSize: 0.35,
   },
   {
@@ -1500,7 +1500,7 @@ export const educationalBackgroundFields: FormField[] = [
     width: 112,
     height: 18,
 
-    marginHeight: 80,
+    marginHeight: 75,
     marginWidth: -8,
     fontSize: 0.35,
   },

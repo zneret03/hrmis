@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts, PDFFont } from 'pdf-lib';
 import { promises as fs } from 'fs';
 import path from 'path';
 import {
@@ -25,6 +25,53 @@ import { createClient } from '@/config';
 import { drawCheckmark } from '@/helpers/drawCheckBox';
 import { generalErrorResponse } from '../../../helpers/response';
 import { removeImageViaPath } from '../../../helpers/image/image';
+
+function getWrappedLines(
+  text: string,
+  font: PDFFont,
+  fontSize: number,
+  maxWidth: number,
+): string[] {
+  const allLines: string[] = [];
+  const originalLines = text.split('\n'); // Respect manual newlines
+
+  for (const originalLine of originalLines) {
+    const words = originalLine.split(' ');
+    let currentLine = '';
+
+    for (const word of words) {
+      const testLine = currentLine + (currentLine ? ' ' : '') + word;
+      const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+
+      if (testWidth <= maxWidth) {
+        currentLine = testLine;
+      } else {
+        if (currentLine.length > 0) {
+          allLines.push(currentLine);
+        }
+
+        let currentWord = word;
+        while (font.widthOfTextAtSize(currentWord, fontSize) > maxWidth) {
+          let breakIndex = currentWord.length - 1;
+          while (
+            breakIndex > 0 &&
+            font.widthOfTextAtSize(
+              currentWord.substring(0, breakIndex),
+              fontSize,
+            ) > maxWidth
+          ) {
+            breakIndex--;
+          }
+          allLines.push(currentWord.substring(0, breakIndex));
+          currentWord = currentWord.substring(breakIndex);
+        }
+        currentLine = currentWord;
+      }
+    }
+    allLines.push(currentLine);
+  }
+  return allLines;
+}
 
 export async function POST(request: Request) {
   try {
@@ -93,18 +140,25 @@ export async function POST(request: Request) {
             color: rgb(0, 0, 0),
           });
         } else if (field.type === 'textarea' && typeof value === 'string') {
-          const lines = value.split('\n');
-          let y = field.y - field.marginHeight;
+          const size = field.height * field.fontSize;
+          const lines = getWrappedLines(
+            value.toUpperCase(),
+            font,
+            size,
+            field.width,
+          );
+
+          let currentY = field.y - field.marginHeight;
 
           for (const line of lines) {
             page.drawText(line, {
               x: field.x - field.marginWidth,
-              y: y,
+              y: currentY,
               size: field.height * field.fontSize,
               font,
               color: rgb(0, 0, 0),
             });
-            y -= lineHeight;
+            currentY -= lineHeight;
           }
         }
       }
