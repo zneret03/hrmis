@@ -100,7 +100,7 @@ export async function POST(request: Request) {
             page.drawText(line, {
               x: field.x - field.marginWidth,
               y: y - field.marginHeight,
-              size: regularSize,
+              size: field.height * field.fontSize,
               font,
               color: rgb(0, 0, 0),
             });

@@ -9,6 +9,7 @@ import {
   Files,
   Award,
   Medal,
+  LayoutTemplate,
 } from 'lucide-react';
 
 export const adminMenus = (id: string): SideMenu[] => {
@@ -29,6 +30,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       title: 'Requested Documents',
       url: `/backend/${id}/requested_documents`,
       icon: Files,
+      isActive: true,
+    },
+    {
+      title: 'Document Templates',
+      url: `/backend/${id}/document_templates`,
+      icon: LayoutTemplate,
       isActive: true,
     },
     {

@@ -1125,7 +1125,7 @@ export const familyBackgroundFields: FormField[] = [
 export const educationalBackgroundFields: FormField[] = [
   {
     name: 'elementary',
-    type: 'text',
+    type: 'textarea',
     page: 1,
     x: 145,
     y: 214,
