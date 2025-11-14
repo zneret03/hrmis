@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const pages = pdfDoc.getPages();
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const regularSize = 8;
+    // const regularSize = 8;
     const lineHeight = 10;
 
     const formFields = [
@@ -94,12 +94,12 @@ export async function POST(request: Request) {
           });
         } else if (field.type === 'textarea' && typeof value === 'string') {
           const lines = value.split('\n');
-          let y = field.y - regularSize;
+          let y = field.y - field.marginHeight;
 
           for (const line of lines) {
             page.drawText(line, {
               x: field.x - field.marginWidth,
-              y: y - field.marginHeight,
+              y: y,
               size: field.height * field.fontSize,
               font,
               color: rgb(0, 0, 0),
