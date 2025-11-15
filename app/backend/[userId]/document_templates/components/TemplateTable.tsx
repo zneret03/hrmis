@@ -98,20 +98,6 @@ export function TemplateTable({
         },
       },
       {
-        accessorKey: 'created_at',
-        header: 'Created At',
-        cell: function ({ row }) {
-          return (
-            <div className="capitalize">
-              {format(
-                subHours(row.getValue('created_at'), 8),
-                'MMMM d, yyyy, h:mm:ss a',
-              )}
-            </div>
-          );
-        },
-      },
-      {
         accessorKey: 'file',
         header: 'Requested File',
         cell: function ({ row }) {
@@ -127,6 +113,33 @@ export function TemplateTable({
                 </Link>
               ) : (
                 'N/A'
+              )}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: 'type',
+        header: 'Type',
+        cell: function ({ row }) {
+          return (
+            <div className="flex items-center gap-2">
+              <div className="font-semibold capitalize">
+                {row.getValue('type')}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: 'created_at',
+        header: 'Created At',
+        cell: function ({ row }) {
+          return (
+            <div className="capitalize">
+              {format(
+                subHours(row.getValue('created_at'), 8),
+                'MMMM d, yyyy, h:mm:ss a',
               )}
             </div>
           );

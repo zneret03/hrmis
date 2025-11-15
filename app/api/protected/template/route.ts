@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       await paginatedData<TemplateDB>({
         tableName: 'document_templates',
         supabase,
-        columns: 'id, file, name, created_at, updated_at, archived_at',
+        columns: 'id, file, name, type, created_at, updated_at, archived_at',
         search: { column: 'file', query: search },
         page,
         perPage,
@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient();
 
     const file = formData.get('file') as File;
+    const type = formData.get('type') as string;
 
     const { imageUrls, error } = await uploadImage(
       [file] as File[],
@@ -76,8 +77,11 @@ export async function POST(request: NextRequest) {
       .from('document_templates')
       .insert({
         file: imageUrls[0],
+        type,
         name: file.name,
       });
+
+    console.log(templateError);
 
     if (templateError) {
       removeImageViaPath(supabase, getImagePath(imageUrls[0]), 'documents');
