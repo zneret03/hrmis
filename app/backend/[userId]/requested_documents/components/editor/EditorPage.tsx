@@ -42,7 +42,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 interface PdfEditorPage {
   templates: TemplateDB[];
-  certificateId: string;
+  certificateId?: string;
 }
 
 export function PdfEditorPage({
@@ -300,7 +300,7 @@ export function PdfEditorPage({
 
       // downloadFile(blob, pdfFile.name);
 
-      await approveCustomDocument(blob, certificateId);
+      await approveCustomDocument(blob, certificateId as string);
       router.replace(parentPath(pathname));
     } catch (err) {
       console.error('Error saving PDF:', err);
@@ -338,14 +338,17 @@ export function PdfEditorPage({
               accept="application/pdf"
               hidden
             />
-            <Button
-              variant="outline"
-              onClick={handleSave}
-              disabled={!pdfFile || fields.length === 0}
-            >
-              <Plus />
-              Approve Request
-            </Button>
+
+            {!!certificateId && (
+              <Button
+                variant="outline"
+                onClick={handleSave}
+                disabled={!pdfFile || fields.length === 0}
+              >
+                <Plus />
+                Approve Request
+              </Button>
+            )}
           </div>
         </div>
 

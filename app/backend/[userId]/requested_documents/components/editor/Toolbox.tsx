@@ -17,6 +17,7 @@ export function Toolbox({ templates, callback }: Toolbox) {
         <ToolboxItem type="checkbox" width={25} height={25} />
         <ToolboxItem type="textarea" width={200} height={80} />
         <ToolboxItem type="signature" width={150} height={50} />
+        <ToolboxItem type="image" width={150} height={50} />
       </div>
 
       <div>

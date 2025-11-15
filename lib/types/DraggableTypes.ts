@@ -1,4 +1,9 @@
-export type FieldType = 'text' | 'signature' | 'checkbox' | 'textarea';
+export type FieldType =
+  | 'text'
+  | 'signature'
+  | 'checkbox'
+  | 'textarea'
+  | 'image';
 
 export interface PlacedField {
   id: string;

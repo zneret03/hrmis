@@ -14,13 +14,6 @@ import { useRouter, usePathname } from 'next/navigation';
 import { approveCustomDocument } from '@/services/certificates/certificates.service';
 import { parentPath } from '@/helpers/parentPath';
 
-const customToolbarItem = {
-  prefixIcon: 'e-de-ctnr-open',
-  tooltipText: 'Import SFDT',
-  id: 'custom_import',
-  disabled: true,
-};
-
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const DocumentEditorContainerComponentSSR = dynamic(
   () =>
@@ -33,7 +26,7 @@ const DocumentEditorContainerComponentSSR = dynamic(
 registerLicense(process.env.NEXT_PUBLIC_SYNCFUSION_KEY as string);
 
 interface DocumentEditor {
-  certificateId: string;
+  certificateId?: string;
 }
 
 export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
@@ -58,7 +51,7 @@ export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
     try {
       if (editor.current) {
         const docxBlob = await editorInstance.saveAsBlob('Docx');
-        await approveCustomDocument(docxBlob, certificateId);
+        await approveCustomDocument(docxBlob, certificateId as string);
         router.replace(parentPath(pathname));
       }
     } catch (error) {
@@ -74,9 +67,15 @@ export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
   return (
     <main className="space-y-4">
       <section className="text-right">
-        <Button onClick={onSave}>
-          <Plus /> Approve Document
-        </Button>
+        {!!certificateId ? (
+          <Button onClick={onSave}>
+            <Plus /> Approve Document
+          </Button>
+        ) : (
+          <Button onClick={onSave}>
+            <Plus /> Save Template
+          </Button>
+        )}
       </section>
       <DocumentEditorContainerComponentSSR
         ref={editor}
@@ -85,7 +84,7 @@ export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
         width="100%"
         serviceUrl="http://localhost:6002/api/documenteditor/"
         toolbarItems={[
-          customToolbarItem,
+          'Open',
           'Separator',
           'Undo',
           'Redo',
