@@ -268,6 +268,31 @@ export function PdfEditorPage({
             }
             break;
 
+          case 'image':
+            if (field.value && field.value.startsWith('data:image/')) {
+              try {
+                let embeddedImage;
+
+                if (field.value.startsWith('data:image/png')) {
+                  embeddedImage = await pdfDoc.embedPng(field.value);
+                } else if (field.value.startsWith('data:image/jpeg')) {
+                  embeddedImage = await pdfDoc.embedJpg(field.value);
+                } else {
+                  console.warn('Unsupported signature image type');
+                  continue;
+                }
+
+                page.drawImage(embeddedImage, {
+                  x: pdfX,
+                  y: pdfY,
+                  width: scaledWidth,
+                  height: scaledHeight,
+                });
+              } catch (embedError) {
+                console.error('Failed to embed signature image:', embedError);
+              }
+            }
+
           case 'signature':
             if (field.value && field.value.startsWith('data:image/')) {
               try {
