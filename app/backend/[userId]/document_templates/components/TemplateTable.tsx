@@ -30,6 +30,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { useTemplateDialog } from '@/services/template/state/template-state';
+import { useShallow } from 'zustand/shallow';
 import { format, subHours } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Pagination } from '@/components/custom/Pagination';
@@ -56,6 +58,10 @@ export function TemplateTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const { toggleOpen } = useTemplateDialog(
+    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
+  );
 
   const pathname = usePathname();
   const router = useRouter();
@@ -187,7 +193,11 @@ export function TemplateTable({
                 <Pencil />
                 Edit info
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  toggleOpen?.(true, 'delete', { ...row.original })
+                }
+              >
                 <Trash />
                 Delete
               </DropdownMenuItem>
@@ -196,7 +206,7 @@ export function TemplateTable({
         ),
       },
     ],
-    [editTemplate],
+    [editTemplate, toggleOpen],
   );
 
   const table = useReactTable({

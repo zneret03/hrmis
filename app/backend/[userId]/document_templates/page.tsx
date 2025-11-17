@@ -2,6 +2,7 @@ import { Container } from '@/components/custom/Container';
 import { getTemplates } from '@/services/template/template.service';
 import { TemplateTable } from './components/TemplateTable';
 import { JSX } from 'react';
+import { DeleteTemplate } from './components/DeleteDialog';
 import { TemplateDB } from '@/lib/types/template';
 
 export default async function LeaveCategories({
@@ -28,6 +29,8 @@ export default async function LeaveCategories({
           count: response?.count as number,
         }}
       />
+
+      <DeleteTemplate />
     </Container>
   );
 }
