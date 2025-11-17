@@ -9,6 +9,8 @@ import {
   DialogTitle,
   DialogClose,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { useForm } from 'react-hook-form';
 import { useRouter, usePathname } from 'next/navigation';
 import { uploadTemplate } from '@/services/template/template.service';
 import { useCertificates } from '@/services/certificates/state/use-certificate';
@@ -24,6 +26,15 @@ export function UploadExistingDialog(): JSX.Element {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<{ name: string }>();
+
+  const name = watch('name');
 
   const { open, type, toggleOpen } = useCertificates(
     useShallow((state) => ({
@@ -48,9 +59,10 @@ export function UploadExistingDialog(): JSX.Element {
     uploadPdfRef.current?.click();
   };
 
-  const onSubmit = async (): Promise<void> => {
+  const onSubmit = async (data: { name: string }): Promise<void> => {
+    const { name } = data;
     startTransition(async () => {
-      await uploadTemplate(pdfFile as File);
+      await uploadTemplate(name, pdfFile as File, 'pdf');
       router.push(pathname.split('/template_editor')[0]);
       router.refresh();
     });
@@ -67,6 +79,15 @@ export function UploadExistingDialog(): JSX.Element {
         <DialogHeader>
           <DialogTitle>Upload new Template</DialogTitle>
         </DialogHeader>
+
+        <Input
+          title="Name"
+          {...register('name', {
+            required: 'Required field.',
+          })}
+          hasError={!!errors.name}
+          errorMessage={errors.name?.message}
+        />
 
         <div className="space-x-2">
           <div
@@ -102,8 +123,8 @@ export function UploadExistingDialog(): JSX.Element {
           <DialogClose asChild>
             <CustomButton
               type="button"
-              onClick={onSubmit}
-              disabled={isPending || !pdfFile}
+              onClick={handleSubmit(onSubmit)}
+              disabled={isPending || !pdfFile || !name}
               isLoading={isPending}
             >
               <Plus /> Upload File

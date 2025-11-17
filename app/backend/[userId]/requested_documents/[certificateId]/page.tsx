@@ -16,8 +16,10 @@ export default async function EditorPage({
   const { page, document } = await searchParams;
   const { certificateId } = await params;
 
+  const pdf = document === 'pdf-editor' ? 'pdf' : 'docx';
+
   const response = await getTemplates(
-    `?page=${page || 1}&perPage=10&sortBy=created_at`,
+    `?page=${page || 1}&perPage=10&sortBy=created_at&type=${pdf}`,
   );
 
   return (
@@ -31,7 +33,7 @@ export default async function EditorPage({
       {document === 'pdf-editor' ? (
         <PdfEditorPage {...{ templates: response.templates, certificateId }} />
       ) : (
-        <DocumentEditor />
+        <DocumentEditor {...{ templates: response.templates, certificateId }} />
       )}
 
       <UploadExistingDialog />

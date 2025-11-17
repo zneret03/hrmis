@@ -82,6 +82,13 @@ export function TemplateTable({
     router.push(`${pathname}/template_editor?document=pdf-editor`);
   };
 
+  const editTemplate = React.useCallback(
+    (templateId: string) => {
+      router.push(`${pathname}/${templateId}`);
+    },
+    [router, pathname],
+  );
+
   const columns: ColumnDef<TemplateDB>[] = React.useMemo(
     () => [
       {
@@ -165,7 +172,7 @@ export function TemplateTable({
         id: 'actions',
         header: 'Actions',
         enableHiding: false,
-        cell: () => (
+        cell: ({ row }) => (
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
@@ -174,7 +181,9 @@ export function TemplateTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => editTemplate(row.original.id as string)}
+              >
                 <Pencil />
                 Edit info
               </DropdownMenuItem>
@@ -187,7 +196,7 @@ export function TemplateTable({
         ),
       },
     ],
-    [],
+    [editTemplate],
   );
 
   const table = useReactTable({

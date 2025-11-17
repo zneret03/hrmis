@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
     const sortBy = url.get('sortBy') || 'created_at';
     const search = url.get('search') || '';
     const limit = url.get('limit') || '';
+    const type = url.get('type') || '';
 
     const { data, error, count, totalPages, currentPage } =
       await paginatedData<TemplateDB>({
@@ -31,6 +32,7 @@ export async function GET(req: NextRequest) {
         page,
         perPage,
         sortBy,
+        specificTable: !type ? null : { column: 'type', tableId: type },
         limit: Number(limit) as number,
       });
 
@@ -58,6 +60,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const supabase = await createClient();
 
+    const name = formData.get('name') as string;
     const file = formData.get('file') as File;
     const type = formData.get('type') as string;
 
@@ -78,10 +81,8 @@ export async function POST(request: NextRequest) {
       .insert({
         file: imageUrls[0],
         type,
-        name: file.name,
+        name: name,
       });
-
-    console.log(templateError);
 
     if (templateError) {
       removeImageViaPath(supabase, getImagePath(imageUrls[0]), 'documents');

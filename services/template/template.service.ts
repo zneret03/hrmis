@@ -14,11 +14,16 @@ export const getTemplates = async (params: string) => {
   }
 };
 
-export const uploadTemplate = async (file: File) => {
+export const uploadTemplate = async (
+  name: string,
+  file: File,
+  type: string,
+) => {
   try {
     const formData = new FormData();
+    formData.append('name', name);
     formData.append('file', file);
-    formData.append('type', 'pdf');
+    formData.append('type', type);
 
     const response = await axiosService.post(
       `/api/protected/template`,

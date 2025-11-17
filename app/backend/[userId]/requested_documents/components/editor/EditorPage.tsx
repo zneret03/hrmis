@@ -315,6 +315,8 @@ export function PdfEditorPage({
     });
   };
 
+  const isTemplateEditor = pathname.endsWith('template_editor');
+
   return (
     <DndContext
       sensors={sensors}
@@ -353,7 +355,11 @@ export function PdfEditorPage({
         </div>
 
         <div className="flex flex-grow overflow-hidden">
-          <Toolbox templates={templates} callback={handleSelectedFile} />
+          <Toolbox
+            templates={templates}
+            callback={handleSelectedFile}
+            isTemplateEditor={isTemplateEditor}
+          />
 
           <div
             ref={pdfCanvasContainerRef}

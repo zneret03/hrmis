@@ -472,13 +472,13 @@ export type Database = {
           updated_at: string | null;
         };
         Update: {
-          id: string | null;
-          file: string | null;
-          name: string | null;
-          type: string | null;
-          archived_at: string | null;
-          created_at: string | null;
-          updated_at: string | null;
+          id?: string | null;
+          file?: string | null;
+          name?: string | null;
+          type?: string | null;
+          archived_at?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
         };
       };
       users: {
