@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, JSX, useTransition } from 'react';
+import React, { useState, useRef, JSX, useTransition, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Document, pdfjs } from 'react-pdf';
 import { Plus, UploadCloud } from 'lucide-react';
@@ -41,11 +41,13 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 interface PdfEditorPage {
-  templates: TemplateDB[];
+  template?: TemplateDB;
+  templates?: TemplateDB[];
   certificateId?: string;
 }
 
 export function PdfEditorPage({
+  template,
   templates,
   certificateId,
 }: PdfEditorPage): JSX.Element {
@@ -315,7 +317,24 @@ export function PdfEditorPage({
     });
   };
 
-  const isTemplateEditor = pathname.endsWith('template_editor');
+  useEffect(() => {
+    const renderSingleTemplate = async (): Promise<void> => {
+      const response = await fetch(template?.file as string);
+
+      const blob = await response.blob();
+      const file = new File([blob], 'new-file');
+
+      setPdfFile(file);
+    };
+
+    if (template) {
+      renderSingleTemplate();
+    }
+  }, [template]);
+
+  const isTemplateEditor =
+    pathname.endsWith('template_editor') ||
+    Object.keys((template as TemplateDB) || []).length > 0;
 
   return (
     <DndContext
@@ -356,7 +375,7 @@ export function PdfEditorPage({
 
         <div className="flex flex-grow overflow-hidden">
           <Toolbox
-            templates={templates}
+            templates={templates ?? []}
             callback={handleSelectedFile}
             isTemplateEditor={isTemplateEditor}
           />

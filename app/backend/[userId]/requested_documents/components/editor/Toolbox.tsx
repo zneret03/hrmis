@@ -4,7 +4,7 @@ import { ToolboxItem } from './ToolboxItem';
 import { TemplateDB } from '@/lib/types/template';
 
 interface Toolbox {
-  templates: TemplateDB[];
+  templates?: TemplateDB[];
   callback: (file: string, name: string) => void;
   isTemplateEditor?: boolean;
 }
@@ -24,7 +24,7 @@ export function Toolbox({ templates, callback, isTemplateEditor }: Toolbox) {
       {!isTemplateEditor && (
         <div>
           <h3 className="mb-2 text-lg font-semibold">Templates</h3>
-          {templates.map((item) => (
+          {templates?.map((item) => (
             <div
               key={item.name}
               onClick={() => callback(item.file as string, item.name as string)}

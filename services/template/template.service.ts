@@ -2,6 +2,18 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { axiosService } from '@/app/api/axios-client';
 
+export const getTemplate = async (id: string) => {
+  try {
+    const response = await axiosService.get(`/api/protected/template/${id}`);
+
+    return response.data.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
 export const getTemplates = async (params: string) => {
   try {
     const response = await axiosService.get(`/api/protected/template${params}`);

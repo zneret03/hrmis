@@ -2,10 +2,41 @@ import { NextRequest } from 'next/server';
 import {
   generalErrorResponse,
   successResponse,
+  badRequestResponse,
 } from '@/app/api/helpers/response';
 import { removeImageViaPath, uploadImage } from '@/app/api/helpers/image/image';
 import { getImagePath } from '@/app/api/helpers/image/image';
+import { TemplateDB } from '@/lib/types/template';
 import { createClient } from '@/config';
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const supabase = await createClient();
+    const { id } = await params;
+
+    const { error, data } = await supabase
+      .from('document_templates')
+      .select('id, file, name, type, created_at, updated_at, archived_at')
+      .eq('id', id)
+      .single()
+      .returns<TemplateDB>();
+
+    if (error) {
+      return badRequestResponse({ error: error.message });
+    }
+
+    return successResponse({
+      message: 'Successfully fetched document template',
+      data,
+    });
+  } catch (error) {
+    const newError = error as Error;
+    return generalErrorResponse({ error: newError.message });
+  }
+}
 
 export async function PUT(
   request: NextRequest,

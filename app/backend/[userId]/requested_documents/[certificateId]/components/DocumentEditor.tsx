@@ -32,6 +32,7 @@ registerLicense(process.env.NEXT_PUBLIC_SYNCFUSION_KEY as string);
 
 interface DocumentEditor {
   certificateId?: string;
+  serverTemplate?: TemplateDB;
   templates?: TemplateDB[];
 }
 
@@ -39,6 +40,7 @@ const serviceUrl = 'http://localhost:6002/api/documenteditor';
 
 export function DocumentEditor({
   certificateId,
+  serverTemplate,
   templates,
 }: DocumentEditor): JSX.Element {
   const [isPending, startTransition] = useTransition();
@@ -118,6 +120,18 @@ export function DocumentEditor({
     });
   };
 
+  const renderNewTemplate = async (formData: FormData): Promise<void> => {
+    const response = await fetch(`${serviceUrl}/Import`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) throw new Error('Import failed');
+
+    const sfdt = await response.json();
+    editor.current?.documentEditor?.open(JSON.stringify(sfdt));
+  };
+
   useEffect(() => {
     const renderTemplate = async (): Promise<void> => {
       try {
@@ -129,33 +143,52 @@ export function DocumentEditor({
         const file = new File([blob], 'new-docx');
         formData.append('files', file);
 
-        const response = await fetch(`${serviceUrl}/Import`, {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) throw new Error('Import failed');
-
-        const sfdt = await response.json();
-        editor.current?.documentEditor?.open(JSON.stringify(sfdt));
+        renderNewTemplate(formData);
       } catch (error) {
         console.error('Import error:', error);
       }
     };
 
+    const renderSingleTemplate = async (): Promise<void> => {
+      try {
+        const formData = new FormData();
+        const responseOne = await fetch(serverTemplate?.file as string);
+
+        const blob = await responseOne.blob();
+
+        const file = new File([blob], 'new-docx');
+        formData.append('files', file);
+
+        renderNewTemplate(formData);
+      } catch (error) {
+        console.error('Import error:', error);
+      }
+    };
+
+    if (serverTemplate) {
+      renderSingleTemplate();
+    }
+
     if (template) {
       renderTemplate();
     }
-  }, [template]);
+  }, [template, serverTemplate]);
+
+  const isDisableTemplate = !pathname.endsWith('template_editor');
+
+  const templateArr =
+    Object.keys((serverTemplate as TemplateDB) || []).length <= 0
+      ? templates
+      : [serverTemplate];
 
   return (
     <main className="space-y-4">
-      {!pathname.endsWith('template_editor') && (
+      {isDisableTemplate && (
         <div className="space-y-2">
           <h1 className="font-semibold">Templates</h1>
 
           <section className="flex gap-2">
-            {templates?.map((item) => (
+            {(templateArr as TemplateDB[])?.map((item) => (
               <div
                 key={item.id}
                 className="cursor-pointer rounded-sm px-4 py-2 font-semibold text-gray-500 ring ring-gray-500/50 hover:text-black hover:ring-gray-500 focus:text-black focus:ring-gray-500"

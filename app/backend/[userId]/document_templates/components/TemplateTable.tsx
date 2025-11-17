@@ -89,8 +89,8 @@ export function TemplateTable({
   };
 
   const editTemplate = React.useCallback(
-    (templateId: string) => {
-      router.push(`${pathname}/${templateId}`);
+    (templateId: string, type: string) => {
+      router.push(`${pathname}/${templateId}?type=${type}`);
     },
     [router, pathname],
   );
@@ -188,7 +188,12 @@ export function TemplateTable({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onClick={() => editTemplate(row.original.id as string)}
+                onClick={() =>
+                  editTemplate(
+                    row.original.id as string,
+                    row.original.type as string,
+                  )
+                }
               >
                 <Pencil />
                 Edit info
