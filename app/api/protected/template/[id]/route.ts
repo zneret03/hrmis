@@ -4,10 +4,11 @@ import {
   successResponse,
   badRequestResponse,
 } from '@/app/api/helpers/response';
-import { removeImageViaPath, uploadImage } from '@/app/api/helpers/image/image';
+import { removeImageViaPath } from '@/app/api/helpers/image/image';
 import { getImagePath } from '@/app/api/helpers/image/image';
 import { TemplateDB } from '@/lib/types/template';
 import { createClient } from '@/config';
+import { updatePdfWithName } from '../../model/template';
 
 export async function GET(
   req: NextRequest,
@@ -42,49 +43,23 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  try {
-    const formData = await request.formData();
-    const { id } = await params;
+  const formData = await request.formData();
+  const { id } = await params;
 
-    const name = formData.get('name') as string;
-    const file = formData.get('file') as File;
-    const type = formData.get('type') as string;
-    const oldFile = formData.get('oldFile') as string;
+  const routeType = formData.get('routeType') as string;
+  const name = formData.get('name') as string;
+  const file = formData.get('file') as File;
+  const type = formData.get('type') as string;
+  const oldFile = formData.get('oldFile') as string;
 
-    const supabase = await createClient();
-
-    removeImageViaPath(supabase, getImagePath(oldFile), 'documents');
-
-    const { imageUrls, error } = await uploadImage(
-      [file] as File[],
-      supabase,
-      'template',
-      'documents',
-      'application/pdf',
-    );
-
-    if (error) {
-      return generalErrorResponse({ error: error });
-    }
-
-    const { error: templateError } = await supabase
-      .from('document_templates')
-      .update({
-        file: imageUrls[0],
-        type,
-        name: name,
-      })
-      .eq('id', id);
-
-    if (templateError) {
-      removeImageViaPath(supabase, getImagePath(imageUrls[0]), 'documents');
-      return generalErrorResponse({ error: templateError.message });
-    }
-
-    return successResponse({ message: 'Successfully updated template' });
-  } catch (error) {
-    const newError = error as Error;
-    return generalErrorResponse({ error: newError.message });
+  if (routeType === 'update-pdf-with-name') {
+    return updatePdfWithName({
+      id,
+      name,
+      file,
+      type,
+      oldFile,
+    });
   }
 }
 

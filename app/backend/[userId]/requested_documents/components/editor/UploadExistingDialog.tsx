@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useRef, useState, useTransition } from 'react';
+import { JSX, useEffect, useRef, useState, useTransition } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -12,12 +12,17 @@ import {
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { useRouter, usePathname } from 'next/navigation';
-import { uploadTemplate } from '@/services/template/template.service';
-import { useCertificates } from '@/services/certificates/state/use-certificate';
+import {
+  uploadTemplate,
+  updateTemplate,
+} from '@/services/template/template.service';
 import { Plus, UploadCloud, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CustomButton } from '@/components/custom/CustomButton';
 import { useShallow } from 'zustand/shallow';
+import { useCertificates } from '@/services/certificates/state/use-certificate';
+import { useTemplateDialog } from '@/services/template/state/template-state';
+import { removeLastSegment } from '@/helpers/removeLastSegmentPath';
 
 export function UploadExistingDialog(): JSX.Element {
   const uploadPdfRef = useRef<HTMLInputElement>(null);
@@ -32,6 +37,7 @@ export function UploadExistingDialog(): JSX.Element {
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm<{ name: string }>();
 
   const name = watch('name');
@@ -41,7 +47,12 @@ export function UploadExistingDialog(): JSX.Element {
       open: state.open,
       toggleOpen: state.toggleOpenDialog,
       type: state.type,
+      data: state.data,
     })),
+  );
+
+  const { data: templateData } = useTemplateDialog(
+    useShallow((state) => ({ data: state.data })),
   );
 
   const removeUploadedFile = (): void => {
@@ -59,16 +70,45 @@ export function UploadExistingDialog(): JSX.Element {
     uploadPdfRef.current?.click();
   };
 
+  const resetVariable = (): void => {
+    toggleOpen?.(false, null, null, null);
+    router.refresh();
+  };
+
   const onSubmit = async (data: { name: string }): Promise<void> => {
     const { name } = data;
     startTransition(async () => {
+      resetVariable();
+
+      if (isEdit) {
+        await updateTemplate(
+          templateData?.id as string,
+          name,
+          pdfFile as File,
+          'pdf',
+          templateData?.file as string,
+        );
+
+        router.push(removeLastSegment(pathname));
+        return;
+      }
+
       await uploadTemplate(name, pdfFile as File, 'pdf');
       router.push(pathname.split('/template_editor')[0]);
-      router.refresh();
     });
   };
 
+  useEffect(() => {
+    if (templateData) {
+      reset({
+        name: templateData.name as string,
+      });
+    }
+  }, [templateData, reset]);
+
   const isOpenDialog = open && type === 'upload-existing';
+
+  const isEdit = templateData ? 'Update File' : 'Save File';
 
   return (
     <Dialog
@@ -127,7 +167,7 @@ export function UploadExistingDialog(): JSX.Element {
               disabled={isPending || !pdfFile || !name}
               isLoading={isPending}
             >
-              <Plus /> Upload File
+              <Plus /> {isEdit}
             </CustomButton>
           </DialogClose>
         </DialogFooter>

@@ -23,9 +23,9 @@ export default async function EditorPage({
       description="You can edit a document here"
     >
       {type === 'pdf' ? (
-        <PdfEditorPage {...{ template: response }} />
+        <PdfEditorPage {...{ template: response, isEdit: true }} />
       ) : (
-        <DocumentEditor {...{ serverTemplate: response }} />
+        <DocumentEditor {...{ serverTemplate: response, isEdit: true }} />
       )}
 
       <UploadExistingDialog />

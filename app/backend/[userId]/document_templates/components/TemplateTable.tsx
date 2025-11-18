@@ -188,12 +188,14 @@ export function TemplateTable({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onClick={() =>
+                onClick={() => {
                   editTemplate(
                     row.original.id as string,
                     row.original.type as string,
-                  )
-                }
+                  );
+
+                  toggleOpen?.(true, 'edit', { ...row.original });
+                }}
               >
                 <Pencil />
                 Edit info

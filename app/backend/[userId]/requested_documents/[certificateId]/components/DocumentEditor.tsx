@@ -34,6 +34,7 @@ interface DocumentEditor {
   certificateId?: string;
   serverTemplate?: TemplateDB;
   templates?: TemplateDB[];
+  isEdit?: boolean;
 }
 
 const serviceUrl = 'http://localhost:6002/api/documenteditor';

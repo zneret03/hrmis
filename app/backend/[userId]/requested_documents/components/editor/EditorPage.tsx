@@ -3,7 +3,7 @@
 import React, { useState, useRef, JSX, useTransition, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Document, pdfjs } from 'react-pdf';
-import { Plus, UploadCloud } from 'lucide-react';
+import { Plus, UploadCloud, Pencil } from 'lucide-react';
 import { Spinner } from '@/components/custom/Spinner';
 import { drawCheckmark } from '@/helpers/drawCheckBox';
 import { useCertificates } from '@/services/certificates/state/use-certificate';
@@ -44,12 +44,14 @@ interface PdfEditorPage {
   template?: TemplateDB;
   templates?: TemplateDB[];
   certificateId?: string;
+  isEdit?: boolean;
 }
 
 export function PdfEditorPage({
   template,
   templates,
   certificateId,
+  isEdit,
 }: PdfEditorPage): JSX.Element {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -134,6 +136,10 @@ export function PdfEditorPage({
           : f,
       ),
     );
+  };
+
+  const onHandleEdit = async (): Promise<void> => {
+    alert('clicked');
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -377,6 +383,11 @@ export function PdfEditorPage({
             >
               <UploadCloud /> Upload existing pdf
             </Button>
+            {isEdit && (
+              <Button onClick={onHandleEdit}>
+                <Pencil /> Update PDF
+              </Button>
+            )}
             <input
               ref={uploadPdfRef}
               onChange={onFileChange}
