@@ -7,7 +7,7 @@ import {
   Inject,
 } from '@syncfusion/ej2-react-documenteditor';
 import { CustomButton } from '@/components/custom/CustomButton';
-import { Plus, Pencil } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { registerLicense } from '@syncfusion/ej2-base';
 import { Button } from '@/components/ui/button';
@@ -60,10 +60,6 @@ export function DocumentEditor({
   const router = useRouter();
   const pathname = usePathname();
 
-  const onHandleEdit = (): void => {
-    toggleOpen?.(true, 'edit', data);
-  };
-
   const onApprove = async (): Promise<void> => {
     if (!editor.current?.documentEditor) {
       console.error('Document editor is not available.');
@@ -114,6 +110,15 @@ export function DocumentEditor({
       try {
         if (editor.current) {
           const docxBlob = await editorInstance.saveAsBlob('Docx');
+
+          if (isEdit) {
+            toggleOpen?.(true, 'edit', {
+              ...data,
+              blob: docxBlob as Blob,
+            });
+            return;
+          }
+
           toggleOpen?.(true, 'add', {
             blob: docxBlob as Blob,
             type: 'docx' as string,
@@ -191,6 +196,8 @@ export function DocumentEditor({
       ? templates
       : [serverTemplate];
 
+  const btnName = isEdit ? 'Update Template' : 'Save Template';
+
   return (
     <main className="space-y-4">
       {isDisableTemplate && (
@@ -213,11 +220,7 @@ export function DocumentEditor({
       <section className="text-right">
         {!!certificateId ? (
           <Button onClick={onApprove}>
-            <Plus /> Approve Document
-          </Button>
-        ) : isEdit ? (
-          <Button onClick={onHandleEdit}>
-            <Pencil /> Update Template
+            <Plus /> Approve Request
           </Button>
         ) : (
           <CustomButton
@@ -225,7 +228,7 @@ export function DocumentEditor({
             isLoading={isPending}
             onClick={onSave}
           >
-            <Plus /> Save Template
+            <Plus /> {btnName}
           </CustomButton>
         )}
       </section>
