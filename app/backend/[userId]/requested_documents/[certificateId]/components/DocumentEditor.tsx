@@ -7,7 +7,7 @@ import {
   Inject,
 } from '@syncfusion/ej2-react-documenteditor';
 import { CustomButton } from '@/components/custom/CustomButton';
-import { Plus } from 'lucide-react';
+import { Plus, Pencil } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { registerLicense } from '@syncfusion/ej2-base';
 import { Button } from '@/components/ui/button';
@@ -43,6 +43,7 @@ export function DocumentEditor({
   certificateId,
   serverTemplate,
   templates,
+  isEdit,
 }: DocumentEditor): JSX.Element {
   const [isPending, startTransition] = useTransition();
   const [template, setTemplate] = useState<TemplateDB | null>(null);
@@ -205,6 +206,10 @@ export function DocumentEditor({
         {!!certificateId ? (
           <Button onClick={onApprove}>
             <Plus /> Approve Document
+          </Button>
+        ) : isEdit ? (
+          <Button>
+            <Pencil /> Update Template
           </Button>
         ) : (
           <CustomButton
