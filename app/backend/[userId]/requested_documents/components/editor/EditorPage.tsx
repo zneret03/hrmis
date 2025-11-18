@@ -21,7 +21,7 @@ import {
 } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-
+import { useTemplateDialog } from '@/services/template/state/template-state';
 import { Toolbox } from './Toolbox';
 import { PdfPageDroppable } from './PdfPageDroppable';
 import {
@@ -33,6 +33,7 @@ import { Button } from '@/components/ui/button';
 import { PageCallback } from 'react-pdf/dist/shared/types.js';
 import { useShallow } from 'zustand/shallow';
 import { TemplateDB } from '@/lib/types/template';
+import { updatePdfTemplate } from '@/services/template/template.service';
 // import { downloadFile } from '@/helpers/downloadFile';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -66,6 +67,10 @@ export function PdfEditorPage({
 
   const pathname = usePathname();
   const router = useRouter();
+
+  const { data: templateData } = useTemplateDialog(
+    useShallow((state) => ({ data: state.data })),
+  );
 
   const { toggleOpen } = useCertificates(
     useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
@@ -136,10 +141,6 @@ export function PdfEditorPage({
           : f,
       ),
     );
-  };
-
-  const onHandleEdit = async (): Promise<void> => {
-    alert('clicked');
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -333,8 +334,18 @@ export function PdfEditorPage({
 
       // downloadFile(blob, pdfFile.name);
 
-      await approveCustomDocument(blob, certificateId as string);
       router.replace(parentPath(pathname));
+
+      if (templateData) {
+        await updatePdfTemplate(
+          templateData?.id as string,
+          blob,
+          templateData?.file as string,
+        );
+        return;
+      }
+
+      await approveCustomDocument(blob, certificateId as string);
     } catch (err) {
       console.error('Error saving PDF:', err);
       console.info(pageDimensions);
@@ -384,7 +395,7 @@ export function PdfEditorPage({
               <UploadCloud /> Upload existing pdf
             </Button>
             {isEdit && (
-              <Button onClick={onHandleEdit}>
+              <Button onClick={handleSave}>
                 <Pencil /> Update PDF
               </Button>
             )}

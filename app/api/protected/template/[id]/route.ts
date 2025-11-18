@@ -8,7 +8,7 @@ import { removeImageViaPath } from '@/app/api/helpers/image/image';
 import { getImagePath } from '@/app/api/helpers/image/image';
 import { TemplateDB } from '@/lib/types/template';
 import { createClient } from '@/config';
-import { updatePdfWithName } from '../../model/template';
+import { updatePdf, updatePdfWithName } from '../../model/template';
 
 export async function GET(
   req: NextRequest,
@@ -51,6 +51,10 @@ export async function PUT(
   const file = formData.get('file') as File;
   const type = formData.get('type') as string;
   const oldFile = formData.get('oldFile') as string;
+
+  if (routeType === 'update-pdf') {
+    return updatePdf({ id, file, oldFile });
+  }
 
   if (routeType === 'update-pdf-with-name') {
     return updatePdfWithName({

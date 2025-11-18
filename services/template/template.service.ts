@@ -26,6 +26,37 @@ export const getTemplates = async (params: string) => {
   }
 };
 
+export const updatePdfTemplate = async (
+  id: string,
+  file: Blob,
+  oldFile: string,
+) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('oldFile', oldFile);
+    formData.append('routeType', 'update-pdf');
+
+    const response = await axiosService.put(
+      `/api/protected/template/${id}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+
+    toast('Successfully', {
+      description: response.data.message,
+    });
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
 export const updateTemplate = async (
   id: string,
   name: string,
