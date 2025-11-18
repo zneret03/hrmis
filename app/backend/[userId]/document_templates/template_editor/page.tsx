@@ -1,21 +1,17 @@
 import { JSX } from 'react';
-import { PdfEditorPage } from '../components/editor/EditorPage';
-import { EditorSwitch } from '../components/editor/EditorSwitch';
-import { DocumentEditor } from './components/DocumentEditor';
+import PdfEditorPage from '../../requested_documents/components/editor/EditorPage';
+import { EditorSwitch } from '../../requested_documents/components/editor/EditorSwitch';
+import { DocumentEditor } from '../../requested_documents/[certificateId]/components/DocumentEditor';
 import { getTemplates } from '@/services/template/template.service';
-import { UploadExistingDialog } from '../components/editor/UploadExistingDialog';
-import { EditTemplateDialog } from './components/EditDocumentTemplate';
+import { UploadExistingDialog } from '../../requested_documents/components/editor/UploadExistingDialog';
 import { Container } from '@/components/custom/Container';
 
 export default async function EditorPage({
-  params,
   searchParams,
 }: {
-  params: Promise<{ certificateId: string }>;
   searchParams: Promise<{ page: string; document: string }>;
 }): Promise<JSX.Element> {
   const { page, document } = await searchParams;
-  const { certificateId } = await params;
 
   const pdf = document === 'pdf-editor' ? 'pdf' : 'docx';
 
@@ -32,9 +28,9 @@ export default async function EditorPage({
         <EditorSwitch document={document} />
       </section>
       {document === 'pdf-editor' ? (
-        <PdfEditorPage {...{ templates: response.templates, certificateId }} />
+        <PdfEditorPage {...{ templates: response.templates }} />
       ) : (
-        <DocumentEditor {...{ templates: response.templates, certificateId }} />
+        <DocumentEditor {...{ templates: response.templates }} />
       )}
 
       <UploadExistingDialog />

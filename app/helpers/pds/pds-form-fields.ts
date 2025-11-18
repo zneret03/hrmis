@@ -113,7 +113,7 @@ export const personalInfoFields: FormField[] = [
     y: 650,
     width: 8,
     height: 8,
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -4,
   },
   {
@@ -125,7 +125,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -6,
   },
   {
@@ -137,7 +137,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -4,
   },
   {
@@ -149,7 +149,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -6,
   },
   {
@@ -161,7 +161,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -4,
   },
   {
@@ -173,7 +173,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -8,
   },
   {
@@ -185,7 +185,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -4,
   },
   // Citizenship
@@ -198,7 +198,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -10,
   },
   {
@@ -210,7 +210,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -10,
   },
   {
@@ -222,7 +222,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -12,
   },
   {
@@ -234,7 +234,7 @@ export const personalInfoFields: FormField[] = [
     width: 8,
     height: 8,
 
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -12,
   },
   {
@@ -921,7 +921,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 135,
     height: 13,
 
-    marginHeight: 74,
+    marginHeight: 72,
     marginWidth: -10,
     fontSize: 0.6,
   },
@@ -934,7 +934,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 70,
     height: 13,
 
-    marginHeight: 74,
+    marginHeight: 72,
     marginWidth: -15,
     fontSize: 0.6,
   },
@@ -973,7 +973,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 135,
     height: 13,
 
-    marginHeight: 60,
+    marginHeight: 75,
     marginWidth: -10,
     fontSize: 0.6,
   },
@@ -986,7 +986,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 70,
     height: 13,
 
-    marginHeight: 60,
+    marginHeight: 75,
     marginWidth: -15,
     fontSize: 0.6,
   },
@@ -999,7 +999,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 135,
     height: 13,
 
-    marginHeight: 60,
+    marginHeight: 75,
     marginWidth: -10,
     fontSize: 0.6,
   },
@@ -1012,7 +1012,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 70,
     height: 13,
 
-    marginHeight: 60,
+    marginHeight: 75,
     marginWidth: -15,
     fontSize: 0.6,
   },
@@ -1077,7 +1077,7 @@ export const familyBackgroundFields: FormField[] = [
     width: 135,
     height: 13,
 
-    marginHeight: 72,
+    marginHeight: 74,
     marginWidth: -10,
     fontSize: 0.6,
   },
@@ -1125,16 +1125,16 @@ export const familyBackgroundFields: FormField[] = [
 export const educationalBackgroundFields: FormField[] = [
   {
     name: 'elementary',
-    type: 'text',
+    type: 'textarea',
     page: 1,
     x: 145,
     y: 214,
     width: 112,
     height: 18,
 
-    marginHeight: 78,
-    marginWidth: -8,
-    fontSize: 0.4,
+    marginHeight: 75,
+    marginWidth: -5,
+    fontSize: 0.35,
   },
   {
     name: 'elementaryBasicEdu',
@@ -1217,16 +1217,16 @@ export const educationalBackgroundFields: FormField[] = [
   //EDUCATIONAL Secondary
   {
     name: 'seconday',
-    type: 'text',
+    type: 'textarea',
     page: 1,
     x: 145,
     y: 195,
     width: 112,
     height: 18,
 
-    marginHeight: 80,
-    marginWidth: -8,
-    fontSize: 0.4,
+    marginHeight: 75,
+    marginWidth: -5,
+    fontSize: 0.35,
   },
   {
     name: 'secondaryBasicEdu',
@@ -1309,16 +1309,16 @@ export const educationalBackgroundFields: FormField[] = [
   // EDUCATIONAL Trade Course
   {
     name: 'vocational',
-    type: 'text',
+    type: 'textarea',
     page: 1,
     x: 145,
     y: 178,
     width: 112,
     height: 18,
 
-    marginHeight: 80,
-    marginWidth: -8,
-    fontSize: 0.4,
+    marginHeight: 75,
+    marginWidth: -5,
+    fontSize: 0.35,
   },
   {
     name: 'vocationalBasicEdu',
@@ -1401,16 +1401,16 @@ export const educationalBackgroundFields: FormField[] = [
   //EDUCATIONAL College
   {
     name: 'college',
-    type: 'text',
+    type: 'textarea',
     page: 1,
     x: 145,
     y: 160,
     width: 112,
     height: 18,
 
-    marginHeight: 80,
-    marginWidth: -8,
-    fontSize: 0.4,
+    marginHeight: 76,
+    marginWidth: -5,
+    fontSize: 0.35,
   },
   {
     name: 'collegeBasicEdu',
@@ -1493,16 +1493,16 @@ export const educationalBackgroundFields: FormField[] = [
   //GRADUATE STUDIES
   {
     name: 'graduate',
-    type: 'text',
+    type: 'textarea',
     page: 1,
     x: 145,
     y: 140,
     width: 112,
     height: 18,
 
-    marginHeight: 80,
+    marginHeight: 75,
     marginWidth: -8,
-    fontSize: 0.4,
+    fontSize: 0.35,
   },
   {
     name: 'graduateBasicEdu',
@@ -1638,7 +1638,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -12,
   },
   {
@@ -1650,7 +1650,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -12,
   },
   {
@@ -1662,7 +1662,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 58,
+    marginHeight: -58,
     marginWidth: -12,
   },
   {
@@ -1674,7 +1674,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 58,
+    marginHeight: -58,
     marginWidth: -12,
   },
   {
@@ -1701,7 +1701,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -10,
   },
   {
@@ -1713,7 +1713,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 60,
+    marginHeight: -60,
     marginWidth: -12,
   },
   {
@@ -1725,7 +1725,7 @@ export const otherStaticFields: FormField[] = [
     width: 155,
     height: 16,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -10,
     fontSize: 0.6,
   },
@@ -1738,7 +1738,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -10,
   },
   {
@@ -1750,7 +1750,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -12,
   },
   {
@@ -1790,7 +1790,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -10,
   },
   {
@@ -1802,7 +1802,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 62,
+    marginHeight: -62,
     marginWidth: -12,
   },
   {
@@ -1829,7 +1829,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 64,
+    marginHeight: -64,
     marginWidth: -12,
   },
   {
@@ -1841,7 +1841,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 64,
+    marginHeight: -64,
     marginWidth: -12,
   },
   {
@@ -1868,7 +1868,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 64,
+    marginHeight: -64,
     marginWidth: -12,
   },
   {
@@ -1880,7 +1880,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 64,
+    marginHeight: -64,
     marginWidth: -12,
   },
   {
@@ -1905,7 +1905,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 64,
+    marginHeight: -64,
     marginWidth: -12,
   },
   {
@@ -1917,7 +1917,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 64,
+    marginHeight: -64,
     marginWidth: -12,
   },
   {
@@ -1943,7 +1943,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 68,
+    marginHeight: -68,
     marginWidth: -12,
   },
   {
@@ -1955,7 +1955,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 69,
+    marginHeight: -69,
     marginWidth: -12,
   },
   {
@@ -1981,7 +1981,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 68,
+    marginHeight: -68,
     marginWidth: -12,
   },
   {
@@ -1993,7 +1993,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 68,
+    marginHeight: -68,
     marginWidth: -12,
   },
   {
@@ -2018,7 +2018,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 68,
+    marginHeight: -68,
     marginWidth: -12,
   },
   {
@@ -2030,7 +2030,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 68,
+    marginHeight: -68,
     marginWidth: -14,
   },
   {
@@ -2055,7 +2055,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 68,
+    marginHeight: -68,
     marginWidth: -12,
   },
   {
@@ -2067,7 +2067,7 @@ export const otherStaticFields: FormField[] = [
     width: 10,
     height: 10,
 
-    marginHeight: 68,
+    marginHeight: -68,
     marginWidth: -14,
   },
   {

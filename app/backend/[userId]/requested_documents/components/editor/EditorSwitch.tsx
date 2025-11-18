@@ -16,9 +16,15 @@ export function EditorSwitch({ document }: { document: string }): JSX.Element {
   const pdfEditor =
     document === 'pdf-editor' ? 'PDF Editor' : 'Document Editor';
 
+  const isPdfEditor = document === 'pdf-editor';
+
   return (
     <div className="flex items-center justify-end gap-2">
-      <Switch value={document} onCheckedChange={(e) => handleSwitchEditor(e)} />
+      <Switch
+        value={document}
+        checked={!isPdfEditor}
+        onCheckedChange={(e) => handleSwitchEditor(e)}
+      />
       <span className="font-semibold">{pdfEditor}</span>
     </div>
   );

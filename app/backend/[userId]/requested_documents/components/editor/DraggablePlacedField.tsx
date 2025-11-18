@@ -23,6 +23,7 @@ export function DraggablePlacedField({
   onUpdate,
 }: DraggablePlacedFieldProps) {
   const signatureInputRef = React.useRef<HTMLInputElement>(null);
+  const image = React.useRef<HTMLInputElement>(null);
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: field.id,
@@ -57,6 +58,18 @@ export function DraggablePlacedField({
   };
 
   const handleSignatureUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (loadEvent) => {
+      const base64Data = loadEvent.target?.result as string;
+      onUpdate(field.id, { value: base64Data });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -128,6 +141,32 @@ export function DraggablePlacedField({
               ref={signatureInputRef}
               className="hidden"
               onChange={handleSignatureUpload}
+            />
+          </>
+        );
+      case 'image':
+        return (
+          <>
+            <div
+              className="box-border flex h-full w-full cursor-pointer items-center justify-center border border-dashed border-blue-600 bg-blue-500/5 text-xs text-blue-600"
+              onClick={() => image.current?.click()}
+            >
+              {field.value ? (
+                <img
+                  src={field.value}
+                  alt="Signature"
+                  className="h-full w-full object-contain"
+                />
+              ) : (
+                'Click to Upload image'
+              )}
+            </div>
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              ref={image}
+              className="hidden"
+              onChange={handleImageUpload}
             />
           </>
         );

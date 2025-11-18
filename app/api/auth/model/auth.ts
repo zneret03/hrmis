@@ -18,8 +18,6 @@ export const signIn = async (body: SignIn) => {
       .limit(1)
       .single();
 
-    console.log(foundUserError);
-
     if (foundUserError?.code === 'PGRST116') {
       return unauthorizedResponse({
         error: 'Something went wrong to your account, please contact support.',

@@ -26,7 +26,13 @@ Make sure the following are installed on your machine:
    make setup-supabase
    ```
 
-3. Run the development server:
+3. Set up syncfusion docker
+
+   ```bash
+   docker compose up -d or docker-compose up -d
+   ```
+
+4. Run the development server:
    ```bash
    make run-dev
    ```

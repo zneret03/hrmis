@@ -21,16 +21,18 @@ export async function GET(req: NextRequest) {
     const sortBy = url.get('sortBy') || 'created_at';
     const search = url.get('search') || '';
     const limit = url.get('limit') || '';
+    const type = url.get('type') || '';
 
     const { data, error, count, totalPages, currentPage } =
       await paginatedData<TemplateDB>({
         tableName: 'document_templates',
         supabase,
-        columns: 'id, file, name, created_at, updated_at, archived_at',
+        columns: 'id, file, name, type, created_at, updated_at, archived_at',
         search: { column: 'file', query: search },
         page,
         perPage,
         sortBy,
+        specificTable: !type ? null : { column: 'type', tableId: type },
         limit: Number(limit) as number,
       });
 
@@ -58,7 +60,9 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const supabase = await createClient();
 
+    const name = formData.get('name') as string;
     const file = formData.get('file') as File;
+    const type = formData.get('type') as string;
 
     const { imageUrls, error } = await uploadImage(
       [file] as File[],
@@ -76,7 +80,8 @@ export async function POST(request: NextRequest) {
       .from('document_templates')
       .insert({
         file: imageUrls[0],
-        name: file.name,
+        type,
+        name: name,
       });
 
     if (templateError) {

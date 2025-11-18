@@ -1,11 +1,12 @@
 'use client';
 
-import { JSX, useRef } from 'react';
+import { JSX, useRef, useTransition, useEffect, useState } from 'react';
 import {
   DocumentEditorContainerComponent,
   Toolbar,
   Inject,
 } from '@syncfusion/ej2-react-documenteditor';
+import { CustomButton } from '@/components/custom/CustomButton';
 import { Plus } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { registerLicense } from '@syncfusion/ej2-base';
@@ -13,13 +14,11 @@ import { Button } from '@/components/ui/button';
 import { useRouter, usePathname } from 'next/navigation';
 import { approveCustomDocument } from '@/services/certificates/certificates.service';
 import { parentPath } from '@/helpers/parentPath';
-
-const customToolbarItem = {
-  prefixIcon: 'e-de-ctnr-open',
-  tooltipText: 'Import SFDT', // Updated tooltip
-  id: 'custom_import',
-  disabled: true, // Start as disabled
-};
+import { useTemplateDialog } from '@/services/template/state/template-state';
+import { useShallow } from 'zustand/shallow';
+import { AddTemplateDialog } from './UploadDocumentTemplate';
+import { EditTemplateDialog } from './EditDocumentTemplate';
+import { TemplateDB } from '@/lib/types/template';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const DocumentEditorContainerComponentSSR = dynamic(
@@ -33,16 +32,35 @@ const DocumentEditorContainerComponentSSR = dynamic(
 registerLicense(process.env.NEXT_PUBLIC_SYNCFUSION_KEY as string);
 
 interface DocumentEditor {
-  certificateId: string;
+  certificateId?: string;
+  serverTemplate?: TemplateDB;
+  templates?: TemplateDB[];
+  isEdit?: boolean;
 }
 
-export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
+const serviceUrl = 'http://localhost:6002/api/documenteditor';
+
+export function DocumentEditor({
+  certificateId,
+  serverTemplate,
+  templates,
+  isEdit,
+}: DocumentEditor): JSX.Element {
+  const [isPending, startTransition] = useTransition();
+  const [template, setTemplate] = useState<TemplateDB | null>(null);
   const editor = useRef<DocumentEditorContainerComponent | null>(null);
+
+  const { toggleOpen, data } = useTemplateDialog(
+    useShallow((state) => ({
+      toggleOpen: state.toggleOpenDialog,
+      data: state.data,
+    })),
+  );
 
   const router = useRouter();
   const pathname = usePathname();
 
-  const onSave = async (): Promise<void> => {
+  const onApprove = async (): Promise<void> => {
     if (!editor.current?.documentEditor) {
       console.error('Document editor is not available.');
       return;
@@ -58,7 +76,7 @@ export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
     try {
       if (editor.current) {
         const docxBlob = await editorInstance.saveAsBlob('Docx');
-        await approveCustomDocument(docxBlob, certificateId);
+        await approveCustomDocument(docxBlob, certificateId as string);
         router.replace(parentPath(pathname));
       }
     } catch (error) {
@@ -71,21 +89,162 @@ export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
     }
   };
 
+  const selectTemplate = (template: TemplateDB): void => {
+    setTemplate(template);
+  };
+
+  const onSave = async (): Promise<void> => {
+    startTransition(async () => {
+      if (!editor.current?.documentEditor) {
+        console.error('Document editor is not available.');
+        return;
+      }
+
+      const editorInstance = editor.current.documentEditor;
+
+      if (!editorInstance) {
+        alert('The document editor instance is not ready.');
+        return;
+      }
+
+      try {
+        if (editor.current) {
+          const docxBlob = await editorInstance.saveAsBlob('Docx');
+
+          if (isEdit) {
+            toggleOpen?.(true, 'edit', {
+              ...data,
+              blob: docxBlob as Blob,
+            });
+            return;
+          }
+
+          toggleOpen?.(true, 'add', {
+            blob: docxBlob as Blob,
+            type: 'docx' as string,
+          });
+        }
+      } catch (error) {
+        let errorMessage = 'Could not save the document.';
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        console.error('Save error:', errorMessage);
+        alert(`Error: ${errorMessage}`);
+      }
+    });
+  };
+
+  const renderNewTemplate = async (formData: FormData): Promise<void> => {
+    try {
+      const response = await fetch(`${serviceUrl}/Import`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error('Import failed');
+
+      const sfdt = await response.json();
+
+      editor.current?.documentEditor?.open(JSON.stringify(sfdt));
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const renderTemplate = async (): Promise<void> => {
+      try {
+        const formData = new FormData();
+        const responseOne = await fetch(template?.file as string);
+
+        const blob = await responseOne.blob();
+
+        const file = new File([blob], 'new-docx');
+        formData.append('files', file);
+
+        renderNewTemplate(formData);
+      } catch (error) {
+        console.error('Import error:', error);
+      }
+    };
+
+    const renderSingleTemplate = async (): Promise<void> => {
+      try {
+        const formData = new FormData();
+        const responseOne = await fetch(serverTemplate?.file as string);
+
+        const blob = await responseOne.blob();
+
+        const file = new File([blob], 'new-docx');
+        formData.append('files', file);
+
+        renderNewTemplate(formData);
+      } catch (error) {
+        console.error('Import error:', error);
+      }
+    };
+
+    if (serverTemplate) {
+      renderSingleTemplate();
+    }
+
+    if (template) {
+      renderTemplate();
+    }
+  }, [template, serverTemplate]);
+
+  const isDisableTemplate = !pathname.endsWith('template_editor');
+
+  const templateArr =
+    Object.keys((serverTemplate as TemplateDB) || []).length <= 0
+      ? templates
+      : [serverTemplate];
+
+  const btnName = isEdit ? 'Update Template' : 'Save Template';
+
   return (
     <main className="space-y-4">
+      {isDisableTemplate && (
+        <div className="space-y-2">
+          <h1 className="font-semibold">Templates</h1>
+
+          <section className="flex gap-2">
+            {(templateArr as TemplateDB[])?.map((item) => (
+              <div
+                key={item.id}
+                className="cursor-pointer rounded-sm px-4 py-2 font-semibold text-gray-500 ring ring-gray-500/50 hover:text-black hover:ring-gray-500 focus:text-black focus:ring-gray-500"
+                onClick={() => selectTemplate(item)}
+              >
+                {item?.name}
+              </div>
+            ))}
+          </section>
+        </div>
+      )}
       <section className="text-right">
-        <Button onClick={onSave}>
-          <Plus /> Approve Document
-        </Button>
+        {!!certificateId ? (
+          <Button onClick={onApprove}>
+            <Plus /> Approve Request
+          </Button>
+        ) : (
+          <CustomButton
+            disabled={isPending}
+            isLoading={isPending}
+            onClick={onSave}
+          >
+            <Plus /> {btnName}
+          </CustomButton>
+        )}
       </section>
       <DocumentEditorContainerComponentSSR
         ref={editor}
         id="container"
         height="800px"
         width="100%"
-        serviceUrl="/api/protected/document_request/"
+        serviceUrl={`${serviceUrl}/`}
         toolbarItems={[
-          customToolbarItem,
+          'Open',
           'Separator',
           'Undo',
           'Redo',
@@ -110,6 +269,9 @@ export function DocumentEditor({ certificateId }: DocumentEditor): JSX.Element {
       >
         <Inject services={[Toolbar]}></Inject>
       </DocumentEditorContainerComponentSSR>
+
+      <AddTemplateDialog />
+      <EditTemplateDialog />
     </main>
   );
 }

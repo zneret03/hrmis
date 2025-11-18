@@ -13,13 +13,7 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
-import {
-  ChevronDown,
-  MoreHorizontal,
-  CheckCircle,
-  Trash,
-  CircleX,
-} from 'lucide-react';
+import { ChevronDown, Plus, MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -36,40 +30,27 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+import { useTemplateDialog } from '@/services/template/state/template-state';
+import { useShallow } from 'zustand/shallow';
 import { format, subHours } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import {
-  CertificateType,
-  useCertificates,
-} from '@/services/certificates/state/use-certificate';
-import { Spinner } from '@/components/custom/Spinner';
-import { useShallow } from 'zustand/shallow';
 import { Pagination } from '@/components/custom/Pagination';
 import { Pagination as PaginationType } from '@/lib/types/pagination';
 import { useRouter, usePathname } from 'next/navigation';
 import { debounce } from 'lodash';
 import Link from 'next/link';
-import { useTemplateDialog } from '@/services/template/state/template-state';
-import { Certificates } from '@/lib/types/certificates';
+import { TemplateDB } from '@/lib/types/template';
 
-interface RequestedDocumentsTableData extends PaginationType {
-  certificates: Partial<Certificates>[];
+interface LeaveTableData extends PaginationType {
+  templates: TemplateDB[];
 }
 
-const certificateType: { [key: string]: string } = {
-  service_record: 'Service Record',
-  coe: 'Certificate of Employment',
-  nosa: 'NOSA',
-  coec: 'Certificate of Employment with Compensation',
-};
-
-export function CertificatesTable({
-  certificates: data,
+export function TemplateTable({
+  templates: data,
   totalPages,
   currentPage,
   count,
-}: RequestedDocumentsTableData) {
+}: LeaveTableData) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -77,14 +58,9 @@ export function CertificatesTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [isOpenEditor, setOpenEditor] = React.useState<boolean>(false);
 
-  const { toggleOpen } = useCertificates(
+  const { toggleOpen } = useTemplateDialog(
     useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
-  );
-
-  const { toggleTemplateDialog } = useTemplateDialog(
-    useShallow((state) => ({ toggleTemplateDialog: state.toggleOpenDialog })),
   );
 
   const pathname = usePathname();
@@ -108,63 +84,29 @@ export function CertificatesTable({
     onDebounce(value);
   };
 
-  const onApprove = React.useCallback(
-    (type: CertificateType, data: Certificates) => {
-      setOpenEditor(true);
-      if (type === 'service_record') {
-        toggleOpen?.(true, 'approve', type as CertificateType, {
-          ...(data as Certificates),
-        });
+  const addNewTemplate = (): void => {
+    router.push(`${pathname}/template_editor?document=pdf-editor`);
+  };
 
-        return;
-      }
-
-      router.push(`${pathname}/${data.id}?document=pdf-editor`);
-
-      setTimeout(() => {
-        setOpenEditor(false);
-      }, 10000);
+  const editTemplate = React.useCallback(
+    (templateId: string, type: string) => {
+      router.push(`${pathname}/${templateId}?type=${type}`);
     },
-    [pathname, router, toggleOpen],
+    [router, pathname],
   );
 
-  const columns: ColumnDef<Partial<Certificates>>[] = React.useMemo(
+  const columns: ColumnDef<TemplateDB>[] = React.useMemo(
     () => [
       {
-        accessorKey: 'user.email',
-        header: 'Email',
+        accessorKey: 'name',
+        header: 'Name',
         cell: function ({ row }) {
           return (
-            <div className="font-semibold">{row.original.users?.email}</div>
-          );
-        },
-      },
-      {
-        accessorKey: 'title',
-        header: 'Request Title',
-        cell: function ({ row }) {
-          return <div>{row.original.title}</div>;
-        },
-      },
-      {
-        accessorKey: 'certificated_type',
-        header: 'Requested Document',
-        cell: function ({ row }) {
-          return (
-            <Badge variant="outline">
-              {certificateType[row.original.certificate_type as string]}
-            </Badge>
-          );
-        },
-      },
-      {
-        accessorKey: 'certificated_status',
-        header: 'Status',
-        cell: function ({ row }) {
-          return (
-            <Badge variant="outline" className="capitalize">
-              {row.original.certificate_status}
-            </Badge>
+            <div className="flex items-center gap-2">
+              <div className="font-semibold capitalize">
+                {row.getValue('name')}
+              </div>
+            </div>
           );
         },
       },
@@ -185,6 +127,19 @@ export function CertificatesTable({
               ) : (
                 'N/A'
               )}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: 'type',
+        header: 'Type',
+        cell: function ({ row }) {
+          return (
+            <div className="flex items-center gap-2">
+              <div className="font-semibold capitalize">
+                {row.getValue('type')}
+              </div>
             </div>
           );
         },
@@ -232,48 +187,22 @@ export function CertificatesTable({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {['pending', 'disapproved'].includes(
-                row?.original?.certificate_status as string,
-              ) && (
-                <DropdownMenuItem
-                  onClick={() => {
-                    onApprove(
-                      row?.original?.certificate_type as CertificateType,
-                      {
-                        ...row.original,
-                      } as Certificates,
-                    );
-
-                    toggleTemplateDialog?.(false, null, null);
-                  }}
-                >
-                  <CheckCircle />
-                  Approve
-                </DropdownMenuItem>
-              )}
-
               <DropdownMenuItem
                 onClick={() => {
-                  toggleOpen?.(
-                    true,
-                    'disapprove',
-                    row.original.certificate_type as CertificateType,
-                    {
-                      ...(row.original as Certificates),
-                    },
+                  editTemplate(
+                    row.original.id as string,
+                    row.original.type as string,
                   );
 
-                  toggleTemplateDialog?.(false, null, null);
+                  toggleOpen?.(true, null, { ...row.original });
                 }}
               >
-                <CircleX />
-                Disapprove
+                <Pencil />
+                Edit info
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
-                  toggleOpen?.(true, 'delete', null, {
-                    ...(row.original as Certificates),
-                  })
+                  toggleOpen?.(true, 'delete', { ...row.original })
                 }
               >
                 <Trash />
@@ -284,7 +213,7 @@ export function CertificatesTable({
         ),
       },
     ],
-    [toggleOpen, onApprove],
+    [editTemplate, toggleOpen],
   );
 
   const table = useReactTable({
@@ -306,19 +235,11 @@ export function CertificatesTable({
     },
   });
 
-  if (isOpenEditor) {
-    return (
-      <div className="flex h-[85vh] items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
-
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Search document by title..."
+          placeholder="Search categories..."
           onChange={(event) => onSearch(event)}
           className="max-w-sm"
         />
@@ -350,6 +271,11 @@ export function CertificatesTable({
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Button onClick={addNewTemplate}>
+            <Plus className="h-5 w-5" />
+            Add templates
+          </Button>
         </div>
       </div>
       <div className="rounded-md border">
