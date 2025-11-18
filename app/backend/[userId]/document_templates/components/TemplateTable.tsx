@@ -194,7 +194,7 @@ export function TemplateTable({
                     row.original.type as string,
                   );
 
-                  toggleOpen?.(true, 'edit', { ...row.original });
+                  toggleOpen?.(true, null, { ...row.original });
                 }}
               >
                 <Pencil />

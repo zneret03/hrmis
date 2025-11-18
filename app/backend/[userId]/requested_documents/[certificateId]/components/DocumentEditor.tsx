@@ -17,6 +17,7 @@ import { parentPath } from '@/helpers/parentPath';
 import { useTemplateDialog } from '@/services/template/state/template-state';
 import { useShallow } from 'zustand/shallow';
 import { AddTemplateDialog } from './UploadDocumentTemplate';
+import { EditTemplateDialog } from './EditDocumentTemplate';
 import { TemplateDB } from '@/lib/types/template';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -49,12 +50,19 @@ export function DocumentEditor({
   const [template, setTemplate] = useState<TemplateDB | null>(null);
   const editor = useRef<DocumentEditorContainerComponent | null>(null);
 
-  const { toggleOpen } = useTemplateDialog(
-    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
+  const { toggleOpen, data } = useTemplateDialog(
+    useShallow((state) => ({
+      toggleOpen: state.toggleOpenDialog,
+      data: state.data,
+    })),
   );
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const onHandleEdit = (): void => {
+    toggleOpen?.(true, 'edit', data);
+  };
 
   const onApprove = async (): Promise<void> => {
     if (!editor.current?.documentEditor) {
@@ -208,7 +216,7 @@ export function DocumentEditor({
             <Plus /> Approve Document
           </Button>
         ) : isEdit ? (
-          <Button>
+          <Button onClick={onHandleEdit}>
             <Pencil /> Update Template
           </Button>
         ) : (
@@ -253,7 +261,9 @@ export function DocumentEditor({
       >
         <Inject services={[Toolbar]}></Inject>
       </DocumentEditorContainerComponentSSR>
+
       <AddTemplateDialog />
+      <EditTemplateDialog />
     </main>
   );
 }
