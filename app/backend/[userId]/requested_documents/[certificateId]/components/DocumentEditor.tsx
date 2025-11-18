@@ -136,15 +136,20 @@ export function DocumentEditor({
   };
 
   const renderNewTemplate = async (formData: FormData): Promise<void> => {
-    const response = await fetch(`${serviceUrl}/Import`, {
-      method: 'POST',
-      body: formData,
-    });
+    try {
+      const response = await fetch(`${serviceUrl}/Import`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    if (!response.ok) throw new Error('Import failed');
+      if (!response.ok) throw new Error('Import failed');
 
-    const sfdt = await response.json();
-    editor.current?.documentEditor?.open(JSON.stringify(sfdt));
+      const sfdt = await response.json();
+
+      editor.current?.documentEditor?.open(JSON.stringify(sfdt));
+    } catch (error) {
+      throw error;
+    }
   };
 
   useEffect(() => {

@@ -50,6 +50,7 @@ import { Pagination as PaginationType } from '@/lib/types/pagination';
 import { useRouter, usePathname } from 'next/navigation';
 import { debounce } from 'lodash';
 import Link from 'next/link';
+import { useTemplateDialog } from '@/services/template/state/template-state';
 import { Certificates } from '@/lib/types/certificates';
 
 interface RequestedDocumentsTableData extends PaginationType {
@@ -80,6 +81,10 @@ export function CertificatesTable({
 
   const { toggleOpen } = useCertificates(
     useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
+  );
+
+  const { toggleTemplateDialog } = useTemplateDialog(
+    useShallow((state) => ({ toggleTemplateDialog: state.toggleOpenDialog })),
   );
 
   const pathname = usePathname();
@@ -231,14 +236,16 @@ export function CertificatesTable({
                 row?.original?.certificate_status as string,
               ) && (
                 <DropdownMenuItem
-                  onClick={() =>
+                  onClick={() => {
                     onApprove(
                       row?.original?.certificate_type as CertificateType,
                       {
                         ...row.original,
                       } as Certificates,
-                    )
-                  }
+                    );
+
+                    toggleTemplateDialog?.(false, null, null);
+                  }}
                 >
                   <CheckCircle />
                   Approve
@@ -246,7 +253,7 @@ export function CertificatesTable({
               )}
 
               <DropdownMenuItem
-                onClick={() =>
+                onClick={() => {
                   toggleOpen?.(
                     true,
                     'disapprove',
@@ -254,8 +261,10 @@ export function CertificatesTable({
                     {
                       ...(row.original as Certificates),
                     },
-                  )
-                }
+                  );
+
+                  toggleTemplateDialog?.(false, null, null);
+                }}
               >
                 <CircleX />
                 Disapprove
