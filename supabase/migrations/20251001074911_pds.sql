@@ -1,6 +1,6 @@
 -- Personal Data Sheet (PDS) table based on CSC Form 212 Revised 2017
 CREATE TABLE public.pds (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     personal_information JSONB,
     family_background JSONB,

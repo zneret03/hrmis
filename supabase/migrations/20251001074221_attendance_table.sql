@@ -1,7 +1,10 @@
 
+-- Enabling necessary extensions
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Attendance table for monthly attendance records
 CREATE TABLE public.attendance (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     employee_id TEXT REFERENCES users(employee_id) ON DELETE CASCADE NOT NULL,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     month DATE NOT NULL,

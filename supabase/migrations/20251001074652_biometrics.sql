@@ -1,6 +1,6 @@
 -- Biometrics table for raw attendance logs
 CREATE TABLE public.biometrics (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     employee_id TEXT REFERENCES users(employee_id) ON DELETE CASCADE,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
     type INTEGER NOT NULL CHECK (type IN (1, 2, 15)), -- 1=login, 2=logout, 15=manual login

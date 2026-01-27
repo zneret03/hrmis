@@ -21,7 +21,7 @@ CREATE INDEX idx_users_role ON public.users(role);
 CREATE INDEX idx_users_archived_at ON public.users(archived_at);
 
 CREATE TABLE public.employee_loyalty_threshold (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     year_threshold INTEGER,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE
@@ -29,7 +29,7 @@ CREATE TABLE public.employee_loyalty_threshold (
 
 -- Leave Categories table
 CREATE TABLE public.leave_categories (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,
@@ -42,7 +42,7 @@ CREATE INDEX idx_leave_categories_archived_at ON public.leave_categories(archive
 
 -- Leave Applications table
 CREATE TABLE public.leave_applications (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     leave_id UUID REFERENCES leave_categories(id) NOT NULL,
     start_date DATE NOT NULL,
@@ -64,7 +64,7 @@ CREATE INDEX idx_leave_applications_archived_at ON public.leave_applications(arc
 
 -- Certificates table for storing generated certificate data
 CREATE TABLE public.certificates (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     title TEXT NOT NULL,
     reason TEXT NOT NULL,

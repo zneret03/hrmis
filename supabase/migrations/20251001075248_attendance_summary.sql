@@ -1,6 +1,6 @@
 
 CREATE TABLE public.attendance_summary (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     employee_id TEXT REFERENCES users(employee_id) ON DELETE CASCADE,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,

@@ -1,7 +1,7 @@
 
 -- Leave Credits table
 CREATE TABLE public.leave_credits (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     credits INTEGER NOT NULL DEFAULT 0,
     max_credits INTEGER NOT NULL DEFAULT 10,
