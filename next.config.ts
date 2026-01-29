@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY:
       process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
     NEXT_PUBLIC_SYNCFUSION_KEY: process.env.NEXT_PUBLIC_SYNCFUSION_KEY,
+    NEXT_PUBLIC_SUPABASE_TOKEN: process.env.NEXT_PUBLIC_SUPABASE_TOKEN,
   },
   images: {
     remotePatterns: [new URL(`${process.env.NEXT_IMAGE_PUBLIC_URL}`)],
