@@ -13,6 +13,13 @@ type UserDialogType =
   | 'update-pdf'
   | null;
 
+type UserDialogSteps =
+  | 'account-identity'
+  | 'personal-information'
+  | 'contact-address'
+  | 'employment-details'
+  | 'goverment-ids';
+
 export type UserData = Pick<
   Users,
   'username' | 'role' | 'employee_id' | 'avatar' | 'email' | 'id'
@@ -30,6 +37,8 @@ export interface UserDialog {
     type: UserDialogType,
     data: UserData | null,
   ) => void;
+  onStep?: (step: UserDialogSteps) => void;
+  steps: UserDialogSteps;
 }
 
 const initialState: UserDialog = {
@@ -45,6 +54,7 @@ const initialState: UserDialog = {
   },
   open: false,
   type: null,
+  steps: 'account-identity',
 };
 
 export const useUserDialog = create<UserDialog>()(
@@ -61,6 +71,12 @@ export const useUserDialog = create<UserDialog>()(
           open: isOpen,
           type,
           data,
+        }));
+      },
+      onStep: (step: UserDialogSteps) => {
+        set((state) => ({
+          ...state,
+          step,
         }));
       },
     }),
