@@ -56,8 +56,8 @@ export function UserDetails({
   return (
     <main className="space-y-6">
       <section className="w-full p-8">
-        <div className="flex gap-6 md:flex-col lg:flex-col xl:flex-row">
-          <section className="flex items-center gap-4">
+        <div className="mb-16 flex justify-center">
+          <section className="flex flex-col items-center gap-2 text-center">
             <Avatar className="md:h-15 md:w-15 lg:h-20 lg:w-20 xl:h-30 xl:w-30">
               <AvatarImage
                 className="object-cover"
@@ -87,7 +87,8 @@ export function UserDetails({
               )}
             </div>
           </section>
-
+        </div>
+        <div className="flex gap-6 md:flex-col lg:flex-col xl:flex-row">
           <div className="flex w-full items-center gap-2">
             {userSummary.map((item) => (
               <CardSummary key={item?.title} {...item} />
