@@ -85,10 +85,32 @@ export function AddUserDialog(): JSX.Element {
   };
 
   const onSubmit = async (data: AddUserDialog): Promise<void> => {
-    const { email, username, role, employee_id, avatar } = data;
+    const {
+      email,
+      username,
+      role,
+      employee_id,
+      avatar,
+      first_name,
+      last_name,
+      middle_name,
+      birthdate,
+      gender,
+      civil_status,
+      contact_number,
+      address,
+      position,
+      employment_status,
+      date_of_original_appointment,
+      bp_number,
+      philhealth,
+      pagibig,
+      tin,
+      password,
+      confirmPassword,
+    } = data;
     startTransition(async () => {
       try {
-        const { password, confirmPassword } = data;
         if (password !== confirmPassword) {
           setError('confirmPassword', {
             message: "password doesn't matched",
@@ -96,14 +118,31 @@ export function AddUserDialog(): JSX.Element {
           return;
         }
 
-        await signUp({
+        const newData = {
           email,
           username: username?.toLowerCase() as string,
           password,
           role,
           employee_id,
           avatar: avatar || [],
-        } as UserFormData);
+          first_name,
+          last_name,
+          middle_name,
+          birthdate,
+          gender,
+          civil_status,
+          contact_number,
+          address,
+          position,
+          employment_status,
+          date_of_original_appointment,
+          bp_number,
+          philhealth,
+          pagibig,
+          tin,
+        };
+
+        await signUp(newData as UserFormData);
         resetVariable();
       } catch (error) {
         setMessage(error as string);
@@ -320,7 +359,7 @@ export function AddUserDialog(): JSX.Element {
               Employee Status
             </Label>
             <Controller
-              name="role"
+              name="employment_status"
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Select
@@ -342,6 +381,13 @@ export function AddUserDialog(): JSX.Element {
             />
           </div>
         </div>
+
+        <Input
+          type="date"
+          title="Date of original employment"
+          {...register('date_of_original_appointment')}
+          isOptional
+        />
 
         <h1 className="text-xl font-medium">Statutory / Government IDs</h1>
         <Separator />

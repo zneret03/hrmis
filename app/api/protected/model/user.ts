@@ -153,6 +153,29 @@ export const signUp = async (body: SignUp) => {
   try {
     const supabase = await createClient();
 
+    const {
+      email,
+      employee_id,
+      role,
+      username,
+      avatar,
+      first_name,
+      last_name,
+      middle_name,
+      birthdate,
+      gender,
+      civil_status,
+      contact_number,
+      address,
+      position,
+      employment_status,
+      date_of_original_appointment,
+      bp_number,
+      philhealth,
+      pagibig,
+      tin,
+    } = body;
+
     const { data: foundUser, error: foundUserError } = await supabase
       .from('users')
       .select('email')
@@ -200,11 +223,26 @@ export const signUp = async (body: SignUp) => {
     const { error: userError } = await supabase.from('users').upsert(
       {
         id: data.user.id,
-        email: body.email as string,
-        employee_id: body.employee_id as string,
-        role: body.role as string,
-        username: body.username as string,
-        avatar: body.avatar as string,
+        email,
+        employee_id,
+        role,
+        username,
+        avatar,
+        first_name,
+        last_name,
+        middle_name,
+        birthdate,
+        gender,
+        civil_status,
+        contact_number,
+        address,
+        position,
+        employment_status,
+        date_of_original_appointment,
+        bp_number,
+        philhealth,
+        pagibig,
+        tin,
       },
       { onConflict: 'id' },
     );
