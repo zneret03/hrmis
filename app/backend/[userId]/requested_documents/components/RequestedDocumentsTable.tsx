@@ -284,7 +284,7 @@ export function CertificatesTable({
         ),
       },
     ],
-    [toggleOpen, onApprove],
+    [toggleOpen, onApprove, toggleTemplateDialog],
   );
 
   const table = useReactTable({
