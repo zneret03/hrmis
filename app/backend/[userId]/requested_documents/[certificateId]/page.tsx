@@ -4,7 +4,6 @@ import { EditorSwitch } from '../components/editor/EditorSwitch';
 import { DocumentEditor } from './components/DocumentEditor';
 import { getTemplates } from '@/services/template/template.service';
 import { UploadExistingDialog } from '../components/editor/UploadExistingDialog';
-import { EditTemplateDialog } from './components/EditDocumentTemplate';
 import { Container } from '@/components/custom/Container';
 
 export default async function EditorPage({
