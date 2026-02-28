@@ -103,6 +103,28 @@ export const revokeUser = async (
 
 export const updateUserInfo = async (body: UpdateUserInfo, id: string) => {
   try {
+    const {
+      email,
+      employee_id,
+      role,
+      username,
+      avatar,
+      first_name,
+      last_name,
+      middle_name,
+      birthdate,
+      gender,
+      civil_status,
+      contact_number,
+      address,
+      position,
+      employment_status,
+      date_of_original_appointment,
+      bp_number,
+      philhealth,
+      pagibig,
+      tin,
+    } = body;
     const supabase = await createClient();
     const isEqualAvatar = body.oldAvatar !== body.avatar && !!body.oldAvatar;
 
@@ -112,11 +134,26 @@ export const updateUserInfo = async (body: UpdateUserInfo, id: string) => {
     }
 
     const newData = {
-      username: body.username,
-      role: body.role,
-      avatar: body.avatar,
-      employee_id: body.employee_id,
-      email: body.email,
+      email,
+      employee_id,
+      role,
+      username,
+      avatar,
+      first_name,
+      last_name,
+      middle_name,
+      birthdate,
+      gender,
+      civil_status,
+      contact_number,
+      address,
+      position,
+      employment_status,
+      date_of_original_appointment,
+      bp_number,
+      philhealth,
+      pagibig,
+      tin,
     };
 
     const { error: userError } = await supabase

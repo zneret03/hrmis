@@ -26,8 +26,11 @@ export async function GET(req: NextRequest) {
       await paginatedData<Users>({
         tableName: 'users',
         supabase,
-        columns:
-          'id, employee_id, username, email, role, avatar, created_at, updated_at, archived_at',
+        columns: `id, employee_id, username, first_name, last_name, middle_name,
+          birthdate, gender, civil_status, address, contact_number,
+          position, employment_date, date_of_original_appointment,
+          bp_number, philhealth, pagibig, tin,
+           email, role, avatar, created_at, updated_at, archived_at`,
         search: { column: 'username', query: search },
         page,
         perPage,

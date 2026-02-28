@@ -31,6 +31,7 @@ import { useRouter } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 import { signUp } from '@/services/users/users.services';
 import { ImageUpload } from '@/components/custom/ImageUpload';
+import { isEmpty } from 'lodash';
 import {
   employmentStatus,
   roleTypes,
@@ -109,6 +110,7 @@ export function AddUserDialog(): JSX.Element {
       password,
       confirmPassword,
     } = data;
+
     startTransition(async () => {
       try {
         if (password !== confirmPassword) {
@@ -128,14 +130,16 @@ export function AddUserDialog(): JSX.Element {
           first_name,
           last_name,
           middle_name,
-          birthdate,
+          birthdate: isEmpty(birthdate) ? null : '',
           gender,
           civil_status,
           contact_number,
           address,
           position,
           employment_status,
-          date_of_original_appointment,
+          date_of_original_appointment: isEmpty(date_of_original_appointment)
+            ? null
+            : '',
           bp_number,
           philhealth,
           pagibig,
