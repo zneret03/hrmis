@@ -164,6 +164,13 @@ CREATE POLICY admin_all_employee_loyalty_threshold ON public.employee_loyalty_th
     );
 
 -- Users table policies
+
+CREATE POLICY users_fetched_info ON public.users
+    FOR SELECT
+    USING (
+      true
+    );
+
 CREATE POLICY admin_all_users ON public.users
     FOR ALL
     TO authenticated
@@ -241,6 +248,7 @@ CREATE POLICY employee_own_leave_applications ON public.leave_applications
     TO authenticated
     USING (user_id = auth.uid() AND archived_at IS NULL)
     WITH CHECK (user_id = auth.uid());
+
 
 -- Certificates table policies
 CREATE POLICY admin_all_certificates ON public.certificates

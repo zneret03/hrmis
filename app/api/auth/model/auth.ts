@@ -68,6 +68,7 @@ export const signIn = async (body: SignIn) => {
     });
   } catch (error) {
     const newError = error as Error;
+    console.error(newError);
     return generalErrorResponse({ error: newError.message });
   }
 };

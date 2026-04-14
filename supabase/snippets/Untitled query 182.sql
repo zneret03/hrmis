@@ -1,0 +1,1 @@
+SELECT email from users WHERE users.username LIKE '%hrmis_admin%'
