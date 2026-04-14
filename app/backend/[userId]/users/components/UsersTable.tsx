@@ -239,7 +239,6 @@ export function UsersTable({
               <DropdownMenuItem
                 onClick={(event) => {
                   event.stopPropagation();
-                  console.log(row.original);
                   toggleOpen?.(true, 'edit', {
                     ...row.original?.users,
                     credits: row.original.credits,

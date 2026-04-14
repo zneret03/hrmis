@@ -19,7 +19,13 @@ export async function GET(
     const { error, data } = await supabase
       .from('leave_credits')
       .select(
-        `id, credits, users!inner(id, email, username, role, employee_id), created_at, updated_at, archived_at`,
+        `id, credits, users!inner(
+          id, employee_id, username, first_name, last_name, middle_name,
+          birthdate, gender, civil_status, address, contact_number,
+          position, employment_status, date_of_original_appointment,
+          bp_number, philhealth, pagibig, tin,
+          email, role, avatar, created_at, updated_at, archived_at
+          ), created_at, updated_at, archived_at`,
       )
       .eq('user_id', userId)
       .single()

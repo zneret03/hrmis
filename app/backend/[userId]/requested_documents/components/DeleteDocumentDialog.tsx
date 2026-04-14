@@ -28,7 +28,10 @@ export function DeleteDocumentDialog(): JSX.Element {
   const onDeleteDocument = async (): Promise<void> => {
     startTransition(async () => {
       const today = new Date();
-      await updateDocument({ archived_at: today }, data?.id as string);
+      await updateDocument(
+        { archived_at: today.toString() },
+        data?.id as string,
+      );
       resetVariables();
     });
   };

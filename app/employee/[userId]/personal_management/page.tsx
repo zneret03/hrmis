@@ -6,6 +6,9 @@ import { fetchUserWitHCredits } from '@/services/leave_credits/leave_credits.ser
 import { Container } from '@/components/custom/Container';
 import { LeaveCard } from '@/app/components/LeaveCard';
 
+import { format } from 'date-fns';
+import { AtSign, Briefcase, User, IdCardLanyard } from 'lucide-react';
+import { EmployeeInformation } from './components/EmployeeInformation';
 import { getAttendanceSummary } from '@/services/attendance/attendance.services';
 import { getLeaveCategories } from '@/services/leave_categories/leave-categories.services';
 import { getLeaveApplications } from '@/services/leave_applications/leave-applications.services';
@@ -19,6 +22,7 @@ import { fetchUserPds } from '@/services/pds/pds.service';
 import { AwardDialog } from '@/app/components/AwardDialog';
 import { unreadAwards } from '@/services/awards/awards.service';
 import { Banner } from '@/app/components/Banner';
+import { MenuOptions } from '@/lib/types/MenuOptions';
 
 export default async function PersonalManagement({
   params,
@@ -49,6 +53,57 @@ export default async function PersonalManagement({
   const category = await getLeaveCategories('');
   const unreadRewards = unopenAwards.awards.length;
 
+  const contactInformation: MenuOptions[] = [
+    { label: 'Email', value: response.users.email },
+    { label: 'Mobile Number', value: response.users.contact_number },
+    { label: 'Permanent Address', value: response.users.address },
+  ];
+
+  const personalInformation: MenuOptions[] = [
+    {
+      label: 'Name',
+      value: `${response.users.first_name} ${response.users.middle_name} ${response.users.last_name}`,
+    },
+    {
+      label: 'Birth date',
+      value: response.users.birthdate,
+    },
+    {
+      label: 'Gender',
+      value: response.users.gender,
+    },
+    {
+      label: 'Civil Status',
+      value: response.users.civil_status,
+    },
+  ];
+
+  const employmentDetails: MenuOptions[] = [
+    { label: 'Position', value: response.users.position },
+    { label: 'Employment Status', value: response.users.employment_status },
+    {
+      label: 'Date of Original Appointment',
+      value: format(
+        response.users.date_of_original_appointment,
+        'MMMM d, yyyy, h:mm:ss a',
+      ),
+    },
+  ];
+
+  const governemntIdsDetails: MenuOptions[] = [
+    { label: 'BP Number', value: response.users.bp_number },
+    { label: 'Philhealth', value: response.users.philhealth },
+    {
+      label: 'Pagibig',
+      value: response.users.pagibig,
+    },
+
+    {
+      label: 'Tin',
+      value: response.users.tin,
+    },
+  ];
+
   return (
     <Container
       title="Personal Data Management"
@@ -73,6 +128,31 @@ export default async function PersonalManagement({
           isAdmin: false,
         }}
       />
+
+      <section className="grid grid-cols-4 gap-2 py-4">
+        <EmployeeInformation
+          title="Contact Information"
+          icon={<AtSign className="text-blue-500" />}
+          employeeInfo={contactInformation}
+        />
+        <EmployeeInformation
+          title="Personal Information"
+          icon={<Briefcase className="text-blue-500" />}
+          employeeInfo={personalInformation}
+        />
+
+        <EmployeeInformation
+          title="Employment Information"
+          icon={<User className="text-blue-500" />}
+          employeeInfo={employmentDetails}
+        />
+
+        <EmployeeInformation
+          title="Government Ids Details"
+          icon={<IdCardLanyard className="text-blue-500" />}
+          employeeInfo={governemntIdsDetails}
+        />
+      </section>
 
       <section className="flex gap-2">
         <div className="flex-1">

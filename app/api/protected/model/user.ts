@@ -196,17 +196,25 @@ export const signUp = async (body: SignUp) => {
       role,
       username,
       avatar,
+
+      //Personal Information
       first_name,
       last_name,
       middle_name,
       birthdate,
       gender,
       civil_status,
+
+      //Contact & Address
       contact_number,
       address,
+
+      //Employment Details
       position,
       employment_status,
       date_of_original_appointment,
+
+      //Statory / Government IDs
       bp_number,
       philhealth,
       pagibig,
