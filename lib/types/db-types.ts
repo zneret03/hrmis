@@ -1,12 +1,10 @@
-export type Json = Record<
-  string,
+export type Json =
   | string
   | number
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[]
->;
+  | Json[];
 
 export type Database = {
   graphql_public: {
@@ -42,10 +40,10 @@ export type Database = {
           created_at: string | null;
           days_absent: number;
           days_present: number;
-          employee_id: string | null;
+          employee_id: string;
           id: string;
           month: string;
-          tardiness_count: number;
+          tardiness_count: number | null;
           updated_at: string | null;
           user_id: string | null;
         };
@@ -54,10 +52,10 @@ export type Database = {
           created_at?: string | null;
           days_absent: number;
           days_present: number;
-          employee_id?: string | null;
+          employee_id: string;
           id?: string;
           month: string;
-          tardiness_count: number;
+          tardiness_count?: number | null;
           updated_at?: string | null;
           user_id?: string | null;
         };
@@ -66,10 +64,10 @@ export type Database = {
           created_at?: string | null;
           days_absent?: number;
           days_present?: number;
-          employee_id?: string | null;
+          employee_id?: string;
           id?: string;
           month?: string;
-          tardiness_count?: number;
+          tardiness_count?: number | null;
           updated_at?: string | null;
           user_id?: string | null;
         };
@@ -90,88 +88,90 @@ export type Database = {
           },
         ];
       };
-      employee_loyalty_threshold: {
-        Row: {
-          id: string;
-          year_threshold: number;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string | null;
-          year_threshold?: number | null;
-          created_at?: string | null;
-          updated_at?: string | null;
-        };
-        Update: {
-          id?: string | null;
-          year_threshold?: number | null;
-          created_at?: string | null;
-          updated_at?: string | null;
-        };
-      };
       attendance_summary: {
         Row: {
+          archived_at: string | null;
+          created_at: string | null;
+          employee_id: string | null;
           id: string;
+          status: string;
           timestamp: string;
           total_hours: number;
-          status: string;
-          archived_at: string;
-          created_at: string;
-          updated_at: string;
+          updated_at: string | null;
+          user_id: string | null;
         };
         Insert: {
-          id?: string | null;
-          timestamp?: string | null;
-          total_hours?: number | null;
-          status?: string | null;
           archived_at?: string | null;
           created_at?: string | null;
+          employee_id?: string | null;
+          id?: string;
+          status: string;
+          timestamp: string;
+          total_hours: number;
           updated_at?: string | null;
+          user_id?: string | null;
         };
         Update: {
-          id?: string;
-          timestamp?: string | null;
-          total_hours?: number | null;
-          status?: string | null;
           archived_at?: string | null;
           created_at?: string | null;
+          employee_id?: string | null;
+          id?: string;
+          status?: string;
+          timestamp?: string;
+          total_hours?: number;
           updated_at?: string | null;
+          user_id?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'attendance_summary_employee_id_fkey';
+            columns: ['employee_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['employee_id'];
+          },
+          {
+            foreignKeyName: 'attendance_summary_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       awards: {
         Row: {
-          title: string | null;
-          description: string | null;
-          read: string | Date | null;
-          archived_at: string | Date | null;
+          archived_at: string | null;
           award_type: string;
           created_at: string | null;
+          description: string | null;
           id: string;
+          read: string | null;
+          title: string | null;
           updated_at: string | null;
           user_id: string | null;
           year: number;
         };
         Insert: {
-          title?: string | null;
-          description?: string | null;
-          read?: string | Date | null;
-          archived_at?: string | Date | null;
+          archived_at?: string | null;
           award_type: string;
           created_at?: string | null;
+          description?: string | null;
           id?: string;
+          read?: string | null;
+          title?: string | null;
           updated_at?: string | null;
           user_id?: string | null;
           year: number;
         };
         Update: {
-          title?: string | null;
-          description?: string | null;
-          read?: string | Date | null;
-          archived_at?: string | Date | null;
+          archived_at?: string | null;
           award_type?: string;
           created_at?: string | null;
+          description?: string | null;
           id?: string;
+          read?: string | null;
+          title?: string | null;
           updated_at?: string | null;
           user_id?: string | null;
           year?: number;
@@ -188,6 +188,7 @@ export type Database = {
       };
       biometrics: {
         Row: {
+          archived_at: string | null;
           created_at: string | null;
           employee_id: string | null;
           id: string;
@@ -196,6 +197,7 @@ export type Database = {
           updated_at: string | null;
         };
         Insert: {
+          archived_at?: string | null;
           created_at?: string | null;
           employee_id?: string | null;
           id?: string;
@@ -204,6 +206,7 @@ export type Database = {
           updated_at?: string | null;
         };
         Update: {
+          archived_at?: string | null;
           created_at?: string | null;
           employee_id?: string | null;
           id?: string;
@@ -223,41 +226,41 @@ export type Database = {
       };
       certificates: {
         Row: {
-          archived_at: string | Date | null;
-          certificate_type: string;
+          archived_at: string | null;
           certificate_status: string;
+          certificate_type: string;
           created_at: string | null;
-          title: string | null;
-          reason: string | null;
-          data: Json;
-          file: string;
+          data: Json | null;
+          file: string | null;
           id: string;
+          reason: string;
+          title: string;
           updated_at: string | null;
           user_id: string | null;
         };
         Insert: {
-          archived_at?: string | Date | null;
-          certificate_type: string;
+          archived_at?: string | null;
           certificate_status: string;
+          certificate_type: string;
           created_at?: string | null;
-          title?: string | null;
-          reason?: string | null;
           data?: Json | null;
-          file?: string;
+          file?: string | null;
           id?: string;
+          reason: string;
+          title: string;
           updated_at?: string | null;
           user_id?: string | null;
         };
         Update: {
-          archived_at?: string | Date | null;
-          certificate_type?: string;
+          archived_at?: string | null;
           certificate_status?: string;
+          certificate_type?: string;
           created_at?: string | null;
-          title?: string | null;
-          reason?: string | null;
-          data?: Json;
+          data?: Json | null;
           file?: string | null;
           id?: string;
+          reason?: string;
+          title?: string;
           updated_at?: string | null;
           user_id?: string | null;
         };
@@ -271,15 +274,66 @@ export type Database = {
           },
         ];
       };
+      document_templates: {
+        Row: {
+          archived_at: string | null;
+          created_at: string | null;
+          file: string;
+          id: string;
+          name: string;
+          type: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          archived_at?: string | null;
+          created_at?: string | null;
+          file: string;
+          id?: string;
+          name: string;
+          type?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          archived_at?: string | null;
+          created_at?: string | null;
+          file?: string;
+          id?: string;
+          name?: string;
+          type?: string | null;
+          updated_at?: string | null;
+        };
+        Relationships: [];
+      };
+      employee_loyalty_threshold: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          updated_at: string | null;
+          year_threshold: number | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          id?: string;
+          updated_at?: string | null;
+          year_threshold?: number | null;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          updated_at?: string | null;
+          year_threshold?: number | null;
+        };
+        Relationships: [];
+      };
       leave_applications: {
         Row: {
           archived_at: string | null;
           created_at: string | null;
-          end_date: string | Date;
+          end_date: string;
           id: string;
           leave_id: string;
           remarks: string | null;
-          start_date: string | Date;
+          start_date: string;
           status: string;
           updated_at: string | null;
           user_id: string | null;
@@ -364,7 +418,7 @@ export type Database = {
           created_at?: string | null;
           credits?: number;
           id?: string;
-          max_credits: number;
+          max_credits?: number;
           updated_at?: string | null;
           user_id?: string | null;
         };
@@ -373,7 +427,7 @@ export type Database = {
           created_at?: string | null;
           credits?: number;
           id?: string;
-          max_credits: number;
+          max_credits?: number;
           updated_at?: string | null;
           user_id?: string | null;
         };
@@ -381,7 +435,7 @@ export type Database = {
           {
             foreignKeyName: 'leave_credits_user_id_fkey';
             columns: ['user_id'];
-            isOneToOne: false;
+            isOneToOne: true;
             referencedRelation: 'users';
             referencedColumns: ['id'];
           },
@@ -390,57 +444,57 @@ export type Database = {
       pds: {
         Row: {
           archived_at: string | null;
+          civil_service_eligibility: Json | null;
           created_at: string | null;
           educational_background: Json | null;
           family_background: Json | null;
+          file: string | null;
           id: string;
+          other_information: Json | null;
+          other_static_data: Json | null;
+          pds_references: Json | null;
           personal_information: Json | null;
+          training_programs: Json | null;
           updated_at: string | null;
           user_id: string | null;
-          file: string | null;
-          other_static_data: Json | null;
-          voluntary_work: Json[] | null;
-          civil_service_eligibility: Json[] | null;
-          training_programs: Json[] | null;
-          other_information: Json[] | null;
-          pds_references: Json[] | null;
-          work_experience: Json[] | null;
+          voluntary_work: Json | null;
+          work_experience: Json | null;
         };
         Insert: {
           archived_at?: string | null;
+          civil_service_eligibility?: Json | null;
           created_at?: string | null;
           educational_background?: Json | null;
           family_background?: Json | null;
+          file?: string | null;
           id?: string;
-          personal_information: Json;
+          other_information?: Json | null;
+          other_static_data?: Json | null;
+          pds_references?: Json | null;
+          personal_information?: Json | null;
+          training_programs?: Json | null;
           updated_at?: string | null;
           user_id?: string | null;
-          file?: string | null;
-          other_static_data?: Json | null;
-          voluntary_work?: Json[] | null;
-          civil_service_eligibility?: Json[] | null;
-          training_programs?: Json[] | null;
-          other_information?: Json[] | null;
-          pds_references: Json[] | null;
-          work_experience?: Json[] | null;
+          voluntary_work?: Json | null;
+          work_experience?: Json | null;
         };
         Update: {
           archived_at?: string | null;
+          civil_service_eligibility?: Json | null;
           created_at?: string | null;
           educational_background?: Json | null;
           family_background?: Json | null;
+          file?: string | null;
           id?: string;
-          personal_information?: Json;
+          other_information?: Json | null;
+          other_static_data?: Json | null;
+          pds_references?: Json | null;
+          personal_information?: Json | null;
+          training_programs?: Json | null;
           updated_at?: string | null;
           user_id?: string | null;
-          file?: string | null;
-          other_static_data?: Json | null;
-          voluntary_work?: Json[] | null;
-          civil_service_eligibility?: Json[] | null;
-          training_programs?: Json[] | null;
-          other_information?: Json[] | null;
-          pds_references: Json[] | null;
-          work_experience?: Json[] | null;
+          voluntary_work?: Json | null;
+          work_experience?: Json | null;
         };
         Relationships: [
           {
@@ -452,68 +506,84 @@ export type Database = {
           },
         ];
       };
-      document_templates: {
-        Row: {
-          id: string;
-          file: string;
-          name: string;
-          type: string;
-          archived_at: string | null;
-          created_at: string | null;
-          updated_at: string | null;
-        };
-        Insert: {
-          id: string | null;
-          file: string;
-          name: string;
-          type: string | null;
-          archived_at: string | null;
-          created_at: string | null;
-          updated_at: string | null;
-        };
-        Update: {
-          id?: string | null;
-          file?: string | null;
-          name?: string | null;
-          type?: string | null;
-          archived_at?: string | null;
-          created_at?: string | null;
-          updated_at?: string | null;
-        };
-      };
       users: {
         Row: {
+          address: string | null;
           archived_at: string | null;
           avatar: string | null;
-          username: string | null;
+          birthdate: string | null;
+          bp_number: string | null;
+          civil_status: string | null;
+          contact_number: string | null;
           created_at: string | null;
+          date_of_original_appointment: string | null;
           email: string;
           employee_id: string | null;
+          employment_status: string | null;
+          first_name: string | null;
+          gender: string | null;
           id: string;
+          last_name: string | null;
+          middle_name: string | null;
+          pagibig: string | null;
+          philhealth: string | null;
+          position: string | null;
           role: string;
+          tin: string | null;
           updated_at: string | null;
+          username: string | null;
         };
         Insert: {
+          address?: string | null;
           archived_at?: string | null;
           avatar?: string | null;
+          birthdate?: string | null;
+          bp_number?: string | null;
+          civil_status?: string | null;
+          contact_number?: string | null;
           created_at?: string | null;
+          date_of_original_appointment?: string | null;
           email: string;
-          username: string;
           employee_id?: string | null;
+          employment_status?: string | null;
+          first_name?: string | null;
+          gender?: string | null;
           id: string;
+          last_name?: string | null;
+          middle_name?: string | null;
+          pagibig?: string | null;
+          philhealth?: string | null;
+          position?: string | null;
           role: string;
+          tin?: string | null;
           updated_at?: string | null;
+          username?: string | null;
         };
         Update: {
+          address?: string | null;
           archived_at?: string | null;
           avatar?: string | null;
+          birthdate?: string | null;
+          bp_number?: string | null;
+          civil_status?: string | null;
+          contact_number?: string | null;
           created_at?: string | null;
+          date_of_original_appointment?: string | null;
           email?: string;
-          username?: string;
           employee_id?: string | null;
+          employment_status?: string | null;
+          first_name?: string | null;
+          gender?: string | null;
           id?: string;
+          last_name?: string | null;
+          middle_name?: string | null;
+          pagibig?: string | null;
+          philhealth?: string | null;
+          position?: string | null;
           role?: string;
+          tin?: string | null;
           updated_at?: string | null;
+          username?: string | null;
         };
         Relationships: [];
       };
@@ -522,14 +592,20 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      generate_yearly_awards: {
-        Args: { p_year: number };
+      calculate_year_end_awards: {
+        Args: { award_year: number };
         Returns: undefined;
       };
-      import_attendance_dat: {
-        Args: { p_dat_data: string };
+      decrement_update_credits: {
+        Args: { count_dates: number; p_user_id: string };
         Returns: undefined;
       };
+      generate_yearly_awards: { Args: { p_year: number }; Returns: undefined };
+      increment_update_credits: {
+        Args: { count_dates: number; p_user_id: string };
+        Returns: undefined;
+      };
+      update_credits_for_latest_month: { Args: never; Returns: string };
     };
     Enums: {
       [_ in never]: never;

@@ -16,7 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Plus } from 'lucide-react';
 import { Controller } from 'react-hook-form';
+import { Separator } from '@/components/ui/separator';
 import { Label } from '@radix-ui/react-label';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
@@ -28,8 +30,14 @@ import { UserForm } from '@/lib/types/users';
 import { useRouter } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 import { signUp } from '@/services/users/users.services';
-import { roleTypes } from '@/app/auth/sign-in/helpers/constants';
 import { ImageUpload } from '@/components/custom/ImageUpload';
+import { isEmpty } from 'lodash';
+import {
+  employmentStatus,
+  roleTypes,
+  civilStatus,
+  genderStatus,
+} from '@/app/auth/sign-in/helpers/constants';
 
 interface AddUserDialog extends UserForm {
   password: string;
@@ -78,10 +86,33 @@ export function AddUserDialog(): JSX.Element {
   };
 
   const onSubmit = async (data: AddUserDialog): Promise<void> => {
-    const { email, username, role, employee_id, avatar } = data;
+    const {
+      email,
+      username,
+      role,
+      employee_id,
+      avatar,
+      first_name,
+      last_name,
+      middle_name,
+      birthdate,
+      gender,
+      civil_status,
+      contact_number,
+      address,
+      position,
+      employment_status,
+      date_of_original_appointment,
+      bp_number,
+      philhealth,
+      pagibig,
+      tin,
+      password,
+      confirmPassword,
+    } = data;
+
     startTransition(async () => {
       try {
-        const { password, confirmPassword } = data;
         if (password !== confirmPassword) {
           setError('confirmPassword', {
             message: "password doesn't matched",
@@ -89,14 +120,33 @@ export function AddUserDialog(): JSX.Element {
           return;
         }
 
-        await signUp({
+        const newData = {
           email,
           username: username?.toLowerCase() as string,
           password,
           role,
           employee_id,
           avatar: avatar || [],
-        } as UserFormData);
+          first_name,
+          last_name,
+          middle_name,
+          birthdate: isEmpty(birthdate) ? null : '',
+          gender,
+          civil_status,
+          contact_number,
+          address,
+          position,
+          employment_status,
+          date_of_original_appointment: isEmpty(date_of_original_appointment)
+            ? null
+            : '',
+          bp_number,
+          philhealth,
+          pagibig,
+          tin,
+        };
+
+        await signUp(newData as UserFormData);
         resetVariable();
       } catch (error) {
         setMessage(error as string);
@@ -111,7 +161,7 @@ export function AddUserDialog(): JSX.Element {
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className="sm:max-w-[40rem]">
+      <DialogContent className="overflow-auto sm:max-h-[40rem] sm:max-w-[70rem]">
         <DialogHeader>
           <DialogTitle>Add New User</DialogTitle>
         </DialogHeader>
@@ -202,8 +252,8 @@ export function AddUserDialog(): JSX.Element {
 
         <div className="space-y-2">
           <Controller
-            name="avatar"
             control={control}
+            name="avatar"
             render={({ field: { onChange, value } }) => (
               <ImageUpload
                 title="Image"
@@ -214,9 +264,148 @@ export function AddUserDialog(): JSX.Element {
               />
             )}
           />
-          {!!errors.avatar && (
-            <h1 className="text-sm text-red-500">{errors.avatar.message}</h1>
-          )}
+        </div>
+
+        <h1 className="text-xl font-medium">Personal Information</h1>
+        <Separator />
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="First Name" isOptional {...register('first_name')} />
+
+          <Input isOptional title="Middle Name" {...register('middle_name')} />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="Last Name" isOptional {...register('last_name')} />
+
+          <Input
+            type="date"
+            isOptional
+            title="Birth date"
+            {...register('birthdate')}
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
+            <Label className="mb-1.5 text-sm font-medium">Civil Status</Label>
+            <Controller
+              name="civil_status"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  value={value as string}
+                  onValueChange={(e) => onChange(e)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select civil status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {civilStatus.map((item, index) => (
+                      <SelectItem key={`${item}-${index}`} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="mb-1.5 text-sm font-medium">Gender</Label>
+            <Controller
+              name="gender"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  value={value as string}
+                  onValueChange={(e) => onChange(e)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select gender status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {genderStatus.map((item, index) => (
+                      <SelectItem key={`${item}-${index}`} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+        </div>
+
+        <h1 className="text-xl font-medium">Contact & Address</h1>
+        <Separator />
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input
+            title="Contact Number"
+            type="number"
+            isOptional
+            {...register('contact_number')}
+          />
+
+          <Input isOptional title="Address" {...register('address')} />
+        </div>
+
+        <h1 className="text-xl font-medium">Employment Details</h1>
+        <Separator />
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="Position" {...register('position')} isOptional />
+
+          <div className="space-y-2">
+            <Label className="mb-1.5 text-sm font-medium">
+              Employee Status
+            </Label>
+            <Controller
+              name="employment_status"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  value={value as string}
+                  onValueChange={(e) => onChange(e)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select employment status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {employmentStatus.map((item, index) => (
+                      <SelectItem key={`${item}-${index}`} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+        </div>
+
+        <Input
+          type="date"
+          title="Date of original employment"
+          {...register('date_of_original_appointment')}
+          isOptional
+        />
+
+        <h1 className="text-xl font-medium">Statutory / Government IDs</h1>
+        <Separator />
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="BP Number" {...register('bp_number')} isOptional />
+
+          <Input title="Philhealth" {...register('philhealth')} isOptional />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="Pagibig" {...register('pagibig')} isOptional />
+
+          <Input title="Tin" {...register('tin')} isOptional />
         </div>
         {!!message && <p className="text-sm text-red-500">{message}</p>}
         <DialogFooter>
@@ -237,7 +426,8 @@ export function AddUserDialog(): JSX.Element {
               disabled={isPending}
               isLoading={isPending}
             >
-              Create
+              <Plus />
+              Register
             </CustomButton>
           </DialogClose>
         </DialogFooter>

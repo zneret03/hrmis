@@ -17,7 +17,26 @@ interface UsersResponse extends Pagination {
 export interface UpdateUserInfo
   extends Pick<
     UpdateUser,
-    'id' | 'username' | 'employee_id' | 'role' | 'email'
+    | 'id'
+    | 'username'
+    | 'employee_id'
+    | 'role'
+    | 'email'
+    | 'first_name'
+    | 'last_name'
+    | 'middle_name'
+    | 'birthdate'
+    | 'gender'
+    | 'civil_status'
+    | 'contact_number'
+    | 'address'
+    | 'position'
+    | 'employment_status'
+    | 'date_of_original_appointment'
+    | 'bp_number'
+    | 'philhealth'
+    | 'pagibig'
+    | 'tin'
   > {
   avatar: File[];
   oldAvatar: string;
@@ -118,6 +137,21 @@ export const updateUserInfo = async ({
   email,
   avatar,
   oldAvatar,
+  first_name,
+  last_name,
+  middle_name,
+  birthdate,
+  gender,
+  civil_status,
+  contact_number,
+  address,
+  position,
+  employment_status,
+  date_of_original_appointment,
+  bp_number,
+  philhealth,
+  pagibig,
+  tin,
 }: UpdateUserInfo): Promise<void> => {
   try {
     let responseImage: AxiosResponse | null = null;
@@ -146,6 +180,21 @@ export const updateUserInfo = async ({
         avatar: responseImage?.data.url ?? avatar,
         oldAvatar: oldAvatar ?? null,
         type: 'update-user-info',
+        first_name,
+        last_name,
+        middle_name,
+        birthdate,
+        gender,
+        civil_status,
+        contact_number,
+        address,
+        position,
+        employment_status,
+        date_of_original_appointment,
+        bp_number,
+        philhealth,
+        pagibig,
+        tin,
       },
     );
 
@@ -169,6 +218,21 @@ export const signUp = async ({
   employee_id,
   role,
   avatar,
+  first_name,
+  last_name,
+  middle_name,
+  birthdate,
+  gender,
+  civil_status,
+  contact_number,
+  address,
+  position,
+  employment_status,
+  date_of_original_appointment,
+  bp_number,
+  philhealth,
+  pagibig,
+  tin,
 }: UserFormData): Promise<UserForm | undefined> => {
   try {
     const formData = new FormData();
@@ -194,6 +258,21 @@ export const signUp = async ({
         password,
         employee_id: isEmpty(employee_id) ? null : employee_id,
         role,
+        first_name,
+        last_name,
+        middle_name,
+        birthdate,
+        gender,
+        civil_status,
+        contact_number,
+        address,
+        position,
+        employment_status,
+        date_of_original_appointment,
+        bp_number,
+        philhealth,
+        pagibig,
+        tin,
         avatar: responseImage?.data.url ?? null,
         type: 'sign-up',
       },

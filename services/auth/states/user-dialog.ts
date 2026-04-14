@@ -13,9 +13,9 @@ type UserDialogType =
   | 'update-pdf'
   | null;
 
-export type UserData = Pick<
+export type UserData = Omit<
   Users,
-  'username' | 'role' | 'employee_id' | 'avatar' | 'email' | 'id'
+  'created_at' | 'updated_at' | 'archived_at'
 > & {
   credits?: number;
   maxCredits?: number;
