@@ -130,7 +130,7 @@ export function AddUserDialog(): JSX.Element {
           first_name,
           last_name,
           middle_name,
-          birthdate: isEmpty(birthdate) ? null : '',
+          birthdate: isEmpty(birthdate) ? null : birthdate,
           gender,
           civil_status,
           contact_number,
@@ -139,7 +139,7 @@ export function AddUserDialog(): JSX.Element {
           employment_status,
           date_of_original_appointment: isEmpty(date_of_original_appointment)
             ? null
-            : '',
+            : birthdate,
           bp_number,
           philhealth,
           pagibig,

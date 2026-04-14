@@ -322,6 +322,7 @@ export const signUp = async (body: SignUp) => {
     });
   } catch (error) {
     const newError = error as Error;
+    console.error(error);
     return generalErrorResponse({ error: newError.message });
   }
 };
