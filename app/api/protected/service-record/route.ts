@@ -18,7 +18,13 @@ export async function POST(request: Request) {
   try {
     const supabase = await createClient();
 
-    const { formValuesSR, initialState, certificateId, fileBucketPath } = body;
+    const {
+      formValuesSR,
+      initialState,
+      certificateId,
+      fileBucketPath,
+      remarks,
+    } = body;
 
     const pdfPath = path.join(
       process.cwd(),
@@ -112,6 +118,7 @@ export async function POST(request: Request) {
       },
       file: publicUrl,
       certificate_status: 'approved',
+      remarks,
     };
 
     const { error } = await supabase
