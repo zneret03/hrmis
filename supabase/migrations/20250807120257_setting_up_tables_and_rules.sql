@@ -72,6 +72,7 @@ CREATE TABLE public.certificates (
     data JSONB,
     certificate_status TEXT NOT NULL CHECK (certificate_status IN('pending', 'approved', 'cancelled', 'disapproved')),
     file TEXT,
+    remarks TEXT,
     read_at TIMESTAMP,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE,

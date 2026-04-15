@@ -6,6 +6,20 @@ import {
 } from '@/lib/types/certificates';
 import { toast } from 'sonner';
 
+export const getUnreadCertificatesById = async (userId: string) => {
+  try {
+    const response = await axiosService.get(
+      `/api/protected/documents/${userId}`,
+    );
+
+    return response.data.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
 export const getCertificates = async (params: string) => {
   try {
     const response = await axiosService.get(

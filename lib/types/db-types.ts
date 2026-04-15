@@ -237,6 +237,8 @@ export type Database = {
           title: string;
           updated_at: string | null;
           user_id: string | null;
+          readt_at: string | null;
+          remarks: string | null;
         };
         Insert: {
           archived_at?: string | null;
@@ -250,6 +252,8 @@ export type Database = {
           title: string;
           updated_at?: string | null;
           user_id?: string | null;
+          readt_at?: string | null;
+          remarks?: string | null;
         };
         Update: {
           archived_at?: string | null;
@@ -263,6 +267,8 @@ export type Database = {
           title?: string;
           updated_at?: string | null;
           user_id?: string | null;
+          readt_at?: string | null;
+          remarks?: string | null;
         };
         Relationships: [
           {

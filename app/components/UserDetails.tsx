@@ -24,6 +24,7 @@ interface UserDetails {
     daysAbsent: number;
     tardiness_count: number;
   };
+  unreadDocuments?: number;
   credits: number;
   isAdmin?: boolean;
 }
@@ -32,6 +33,7 @@ export function UserDetails({
   users,
   attendance,
   credits,
+  unreadDocuments,
   isAdmin = false,
 }: UserDetails): JSX.Element {
   const { daysPresent, daysAbsent, tardiness_count } = attendance;
@@ -60,7 +62,7 @@ export function UserDetails({
     {
       title: 'Unread Document Requests',
       icon: <Bell className="text-gray-500" />,
-      count: credits,
+      count: unreadDocuments,
     },
   ];
 

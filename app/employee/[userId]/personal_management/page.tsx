@@ -23,6 +23,7 @@ import { AwardDialog } from '@/app/components/AwardDialog';
 import { unreadAwards } from '@/services/awards/awards.service';
 import { Banner } from '@/app/components/Banner';
 import { MenuOptions } from '@/lib/types/MenuOptions';
+import { getUnreadCertificatesById } from '@/services/certificates/certificates.service';
 
 export default async function PersonalManagement({
   params,
@@ -40,6 +41,8 @@ export default async function PersonalManagement({
   const pdsInfo = await fetchUserPds(userId);
 
   const unopenAwards = await unreadAwards();
+
+  const unreadDocuments = await getUnreadCertificatesById(userId);
 
   const attendanceResponse = await getAttendanceSummary(
     employeeId,
@@ -126,6 +129,7 @@ export default async function PersonalManagement({
           },
           credits: attendanceResponse.userCredits?.credits,
           isAdmin: false,
+          unreadDocuments: unreadDocuments.count || 0,
         }}
       />
 

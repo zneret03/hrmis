@@ -16,10 +16,11 @@ export async function GET(
     const { id } = await params;
     const supabase = await createClient();
 
-    const { data, error } = await supabase
+    const { data, error, count } = await supabase
       .from('certificates')
-      .select('id, title, reasons')
+      .select('id, title, reason', { count: 'exact' })
       .eq('user_id', id)
+      .eq('certificate_status', 'approved')
       .is('read_at', null);
 
     if (error) {
@@ -28,7 +29,10 @@ export async function GET(
 
     return successResponse({
       message: 'Successfully fetch certificates',
-      data,
+      data: {
+        ...data,
+        count,
+      },
     });
   } catch (error) {
     return generalErrorResponse({ error: error });
