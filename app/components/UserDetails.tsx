@@ -1,5 +1,11 @@
 import { JSX } from 'react';
-import { FileSpreadsheet, CalendarDays, Plane, ClockAlert } from 'lucide-react';
+import {
+  FileSpreadsheet,
+  CalendarDays,
+  Plane,
+  ClockAlert,
+  Bell,
+} from 'lucide-react';
 import { avatarName } from '@/helpers/avatarName';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -49,6 +55,11 @@ export function UserDetails({
     {
       title: 'Leave Credits',
       icon: <Plane className="text-gray-500" />,
+      count: credits,
+    },
+    {
+      title: 'Unread Document Requests',
+      icon: <Bell className="text-gray-500" />,
       count: credits,
     },
   ];

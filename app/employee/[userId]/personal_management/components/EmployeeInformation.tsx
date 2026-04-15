@@ -28,7 +28,7 @@ export async function EmployeeInformation({
               <label className="text-xs font-medium text-gray-400">
                 {item.label}
               </label>
-              <h1 className="text-lg font-medium">{item.value}</h1>
+              <h1 className="text-lg font-medium">{item.value || 'N/A'}</h1>
             </div>
           ))}
         </CardContent>
