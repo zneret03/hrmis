@@ -3,6 +3,8 @@ import { Container } from '@/components/custom/Container';
 import { getCertificates } from '@/services/certificates/certificates.service';
 import { RequestDocumentDialog } from './components/RequestDocumentDialog';
 import { CancelDocumentDialog } from './components/CancelDocument';
+import { CertificateDialog } from './components/CertificationDialog';
+import { getUnreadCertificatesById } from '@/services/certificates/certificates.service';
 import { Certificates } from './components/Cerficiates';
 
 export default async function Documents({
@@ -19,6 +21,8 @@ export default async function Documents({
     `?page=${page || 1}&perPage=10&search=${search}&sortBy=created_at`,
   );
 
+  const unreadDocuments = await getUnreadCertificatesById(userId);
+
   return (
     <Container
       title="Document Request"
@@ -30,11 +34,13 @@ export default async function Documents({
           totalPages: response.totalPages,
           currentPage: response.currentPage,
           count: response.count,
+          unreadDocuments: unreadDocuments.count || 0,
         }}
       />
 
       <RequestDocumentDialog userId={userId} />
       <CancelDocumentDialog />
+      <CertificateDialog />
     </Container>
   );
 }

@@ -11,6 +11,7 @@ type CertificatesDialogType =
   | 'delete'
   | 'cancel'
   | 'upload-existing'
+  | 'view-document-request'
   | null;
 
 export type CertificateType = 'ceo' | 'service_record' | 'nosa' | 'coec' | null;

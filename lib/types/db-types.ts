@@ -237,7 +237,7 @@ export type Database = {
           title: string;
           updated_at: string | null;
           user_id: string | null;
-          readt_at: string | null;
+          read_at: string | Date | null;
           remarks: string | null;
         };
         Insert: {
@@ -252,7 +252,7 @@ export type Database = {
           title: string;
           updated_at?: string | null;
           user_id?: string | null;
-          readt_at?: string | null;
+          read_at?: string | Date | null;
           remarks?: string | null;
         };
         Update: {
@@ -267,7 +267,7 @@ export type Database = {
           title?: string;
           updated_at?: string | null;
           user_id?: string | null;
-          readt_at?: string | null;
+          read_at?: string | Date | null;
           remarks?: string | null;
         };
         Relationships: [

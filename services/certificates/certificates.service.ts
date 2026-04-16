@@ -54,6 +54,7 @@ export const requestDocument = async (data: CertificatesRequestForm) => {
 export const updateDocument = async (
   data: Partial<Certificates>,
   id: string,
+  hasToast = true,
 ) => {
   try {
     const response = await axiosService.put(`/api/protected/documents/${id}`, {
@@ -61,9 +62,11 @@ export const updateDocument = async (
       type: 'update-document',
     });
 
-    toast('Successfully', {
-      description: response.data.message,
-    });
+    if (hasToast) {
+      toast('Successfully', {
+        description: response.data.message,
+      });
+    }
   } catch (e) {
     if (axios.isAxiosError(e)) {
       throw e.response?.data.error;

@@ -18,7 +18,7 @@ export async function GET(
 
     const { data, error, count } = await supabase
       .from('certificates')
-      .select('id, title, reason', { count: 'exact' })
+      .select('id, title, reason, remarks, created_at', { count: 'exact' })
       .eq('user_id', id)
       .eq('certificate_status', 'approved')
       .is('read_at', null);
@@ -30,7 +30,7 @@ export async function GET(
     return successResponse({
       message: 'Successfully fetch certificates',
       data: {
-        ...data,
+        data,
         count,
       },
     });
