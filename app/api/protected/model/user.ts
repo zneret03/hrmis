@@ -103,6 +103,28 @@ export const revokeUser = async (
 
 export const updateUserInfo = async (body: UpdateUserInfo, id: string) => {
   try {
+    const {
+      email,
+      employee_id,
+      role,
+      username,
+      avatar,
+      first_name,
+      last_name,
+      middle_name,
+      birthdate,
+      gender,
+      civil_status,
+      contact_number,
+      address,
+      position,
+      employment_status,
+      date_of_original_appointment,
+      bp_number,
+      philhealth,
+      pagibig,
+      tin,
+    } = body;
     const supabase = await createClient();
     const isEqualAvatar = body.oldAvatar !== body.avatar && !!body.oldAvatar;
 
@@ -112,11 +134,26 @@ export const updateUserInfo = async (body: UpdateUserInfo, id: string) => {
     }
 
     const newData = {
-      username: body.username,
-      role: body.role,
-      avatar: body.avatar,
-      employee_id: body.employee_id,
-      email: body.email,
+      email,
+      employee_id,
+      role,
+      username,
+      avatar,
+      first_name,
+      last_name,
+      middle_name,
+      birthdate,
+      gender,
+      civil_status,
+      contact_number,
+      address,
+      position,
+      employment_status,
+      date_of_original_appointment,
+      bp_number,
+      philhealth,
+      pagibig,
+      tin,
     };
 
     const { error: userError } = await supabase
@@ -152,6 +189,37 @@ export const updateUserInfo = async (body: UpdateUserInfo, id: string) => {
 export const signUp = async (body: SignUp) => {
   try {
     const supabase = await createClient();
+
+    const {
+      email,
+      employee_id,
+      role,
+      username,
+      avatar,
+
+      //Personal Information
+      first_name,
+      last_name,
+      middle_name,
+      birthdate,
+      gender,
+      civil_status,
+
+      //Contact & Address
+      contact_number,
+      address,
+
+      //Employment Details
+      position,
+      employment_status,
+      date_of_original_appointment,
+
+      //Statory / Government IDs
+      bp_number,
+      philhealth,
+      pagibig,
+      tin,
+    } = body;
 
     const { data: foundUser, error: foundUserError } = await supabase
       .from('users')
@@ -200,11 +268,26 @@ export const signUp = async (body: SignUp) => {
     const { error: userError } = await supabase.from('users').upsert(
       {
         id: data.user.id,
-        email: body.email as string,
-        employee_id: body.employee_id as string,
-        role: body.role as string,
-        username: body.username as string,
-        avatar: body.avatar as string,
+        email,
+        employee_id,
+        role,
+        username,
+        avatar,
+        first_name,
+        last_name,
+        middle_name,
+        birthdate,
+        gender,
+        civil_status,
+        contact_number,
+        address,
+        position,
+        employment_status,
+        date_of_original_appointment,
+        bp_number,
+        philhealth,
+        pagibig,
+        tin,
       },
       { onConflict: 'id' },
     );
@@ -247,6 +330,7 @@ export const signUp = async (body: SignUp) => {
     });
   } catch (error) {
     const newError = error as Error;
+    console.error(error);
     return generalErrorResponse({ error: newError.message });
   }
 };

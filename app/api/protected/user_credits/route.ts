@@ -26,8 +26,15 @@ export async function GET(req: NextRequest) {
       await paginatedData<LeaveCreditsForm>({
         tableName: 'leave_credits',
         supabase,
-        columns:
-          'id, credits, max_credits, users!inner(id, avatar, email, username, role, employee_id, created_at, updated_at, archived_at), created_at, updated_at, archived_at',
+        columns: `id, credits, max_credits, 
+           users!inner(
+          id, employee_id, username, first_name, last_name, middle_name,
+          birthdate, gender, civil_status, address, contact_number,
+          position, employment_status, date_of_original_appointment,
+          bp_number, philhealth, pagibig, tin,
+          email, role, avatar, created_at, updated_at, archived_at
+          ), 
+          created_at, updated_at, archived_at`,
         search: { column: 'users.email', query: search },
         page,
         perPage,

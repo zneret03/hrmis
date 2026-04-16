@@ -28,7 +28,7 @@ export function DeleteAward(): JSX.Element {
 
   const onDeleteAward = async (): Promise<void> => {
     startTransition(async () => {
-      await updateAward({ archived_at: today }, data?.id as string);
+      await updateAward({ archived_at: today.toString() }, data?.id as string);
       resetVariables();
     });
   };

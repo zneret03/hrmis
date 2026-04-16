@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import { RotateCcw } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { avatarName } from '@/helpers/avatarName';
@@ -31,7 +32,12 @@ import { UpdateUser } from '@/lib/types/users';
 import { useRouter } from 'next/navigation';
 import { updateUserInfo } from '@/services/users/users.services';
 import { useShallow } from 'zustand/react/shallow';
-import { roleTypes } from '@/app/auth/sign-in/helpers/constants';
+import {
+  roleTypes,
+  civilStatus,
+  employmentStatus,
+  genderStatus,
+} from '@/app/auth/sign-in/helpers/constants';
 import { ImageUpload } from '@/components/custom/ImageUpload';
 import { toPercentage } from '@/helpers/convertToPercent';
 import { isEqual } from 'lodash';
@@ -77,6 +83,21 @@ export function EditUserDialog(): JSX.Element {
     role: data?.role,
     username: data?.username,
     email: data?.email,
+    first_name: data?.first_name,
+    last_name: data?.last_name,
+    middle_name: data?.middle_name,
+    birthdate: data?.birthdate,
+    gender: data?.gender,
+    civil_status: data?.civil_status,
+    contact_number: data?.contact_number,
+    address: data?.address,
+    position: data?.position,
+    employment_status: data?.employment_status,
+    date_of_original_appointment: data?.date_of_original_appointment,
+    bp_number: data?.bp_number,
+    philhealth: data?.philhealth,
+    pagibig: data?.pagibig,
+    tin: data?.tin,
   };
 
   const {
@@ -144,12 +165,27 @@ export function EditUserDialog(): JSX.Element {
   useEffect(() => {
     if (!!data) {
       reset({
-        avatar: data.avatar as string,
-        username: data.username as string,
-        role: data.role,
-        employee_id: data.employee_id,
-        oldAvatar: data.avatar as string,
-        email: data.email as string,
+        avatar: data?.avatar as string,
+        employee_id: data?.employee_id,
+        oldAvatar: data?.avatar as string,
+        role: data?.role,
+        username: data?.username,
+        email: data?.email,
+        first_name: data?.first_name,
+        last_name: data?.last_name,
+        middle_name: data?.middle_name,
+        birthdate: data?.birthdate,
+        gender: data?.gender,
+        civil_status: data?.civil_status,
+        contact_number: data?.contact_number,
+        address: data?.address,
+        position: data?.position,
+        employment_status: data?.employment_status,
+        date_of_original_appointment: data?.date_of_original_appointment,
+        bp_number: data?.bp_number,
+        philhealth: data?.philhealth,
+        pagibig: data?.pagibig,
+        tin: data?.tin,
       });
       setNewCredit(data?.credits as number);
       setNewMaxCredits(data?.maxCredits as number);
@@ -163,7 +199,7 @@ export function EditUserDialog(): JSX.Element {
       open={isOpenDialog}
       onOpenChange={() => toggleOpen?.(false, null, null)}
     >
-      <DialogContent className="overflow-auto sm:max-h-[20rem] sm:max-w-[40rem] md:max-h-[30rem] lg:max-h-[40rem] xl:max-h-[45rem]">
+      <DialogContent className="overflow-auto sm:max-h-[20rem] sm:max-w-[70rem] md:max-h-[30rem] lg:max-h-[40rem] xl:max-h-[45rem]">
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>
 
@@ -292,6 +328,148 @@ export function EditUserDialog(): JSX.Element {
           {!!errors.avatar && (
             <h1 className="text-sm text-red-500">{errors.avatar.message}</h1>
           )}
+        </div>
+
+        <h1 className="text-xl font-medium">Personal Information</h1>
+        <Separator />
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="First Name" isOptional {...register('first_name')} />
+
+          <Input isOptional title="Middle Name" {...register('middle_name')} />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="Last Name" isOptional {...register('last_name')} />
+
+          <Input
+            type="date"
+            isOptional
+            title="Birth date"
+            {...register('birthdate')}
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
+            <Label className="mb-1.5 text-sm font-medium">Civil Status</Label>
+            <Controller
+              name="civil_status"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  value={value as string}
+                  onValueChange={(e) => onChange(e)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select civil status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {civilStatus.map((item, index) => (
+                      <SelectItem key={`${item}-${index}`} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="mb-1.5 text-sm font-medium">Gender</Label>
+            <Controller
+              name="gender"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  value={value as string}
+                  onValueChange={(e) => onChange(e)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select gender status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {genderStatus.map((item, index) => (
+                      <SelectItem key={`${item}-${index}`} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+        </div>
+
+        <h1 className="text-xl font-medium">Contact & Address</h1>
+        <Separator />
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input
+            title="Contact Number"
+            type="number"
+            isOptional
+            {...register('contact_number')}
+          />
+
+          <Input isOptional title="Address" {...register('address')} />
+        </div>
+
+        <h1 className="text-xl font-medium">Employment Details</h1>
+        <Separator />
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="Position" {...register('position')} isOptional />
+
+          <div className="space-y-2">
+            <Label className="mb-1.5 text-sm font-medium">
+              Employee Status
+            </Label>
+            <Controller
+              name="employment_status"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  value={value as string}
+                  onValueChange={(e) => onChange(e)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select employment status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {employmentStatus.map((item, index) => (
+                      <SelectItem key={`${item}-${index}`} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+        </div>
+
+        <Input
+          type="date"
+          title="Date of original employment"
+          {...register('date_of_original_appointment')}
+          isOptional
+        />
+
+        <h1 className="text-xl font-medium">Statutory / Government IDs</h1>
+        <Separator />
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="BP Number" {...register('bp_number')} isOptional />
+
+          <Input title="Philhealth" {...register('philhealth')} isOptional />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <Input title="Pagibig" {...register('pagibig')} isOptional />
+
+          <Input title="Tin" {...register('tin')} isOptional />
         </div>
         {!!message && errorMessage(message)}
         <DialogFooter>

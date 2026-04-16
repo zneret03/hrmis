@@ -1,6 +1,13 @@
 'use client';
 
-import { JSX, useState, useCallback, Fragment, useEffect } from 'react';
+import {
+  JSX,
+  useState,
+  useCallback,
+  Fragment,
+  useEffect,
+  ChangeEvent,
+} from 'react';
 import {
   Dialog,
   DialogContent,
@@ -20,6 +27,7 @@ import {
   PDF_A4_HEIGHT,
   type FormField,
 } from '../../helpers/service-record/service-record-form-fields';
+import { Textarea } from '@/components/ui/textarea';
 import { useRouter } from 'next/navigation';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import { Button } from '@/components/ui/button';
@@ -64,6 +72,8 @@ export function ServiceRecordDialog(): JSX.Element {
   );
 
   const router = useRouter();
+
+  const [remarks, setRemarks] = useState<string>('');
 
   const [formValuesSR, setFormValues] = useState<Json>(
     (data?.data?.formFields as Json) ?? {},
@@ -284,6 +294,7 @@ export function ServiceRecordDialog(): JSX.Element {
           initialState,
           certificateId: data?.id,
           fileBucketPath: data?.file?.split('certificates/')[1],
+          remarks,
         }),
       });
 
@@ -349,8 +360,8 @@ export function ServiceRecordDialog(): JSX.Element {
                     onClick={addSR}
                     className="absolute z-20 rounded-md bg-blue-500 p-1 text-white hover:bg-blue-700"
                     style={{
-                      top: `${(PDF_A4_HEIGHT - 510) * scale}px`,
-                      left: `${15 * scale}px`,
+                      top: `${(PDF_A4_HEIGHT - 552) * scale}px`,
+                      left: `${-20 * scale}px`,
                       cursor: 'pointer',
                     }}
                   >
@@ -360,6 +371,14 @@ export function ServiceRecordDialog(): JSX.Element {
               </div>
             ))}
           </Document>
+
+          <Textarea
+            title="Remarks"
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+              setRemarks(e.target.value)
+            }
+            placeholder="Remarks here..."
+          />
         </div>
         <DialogFooter>
           <DialogClose asChild>

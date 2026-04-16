@@ -1,7 +1,43 @@
 import { NextRequest } from 'next/server';
 import { isEmpty } from 'lodash';
-import { validationErrorNextResponse } from '@/app/api/helpers/response';
+import { createClient } from '@/config';
+import {
+  generalErrorResponse,
+  successResponse,
+  validationErrorNextResponse,
+} from '@/app/api/helpers/response';
 import { updateDocument } from '../../model/certificates';
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const supabase = await createClient();
+
+    const { data, error, count } = await supabase
+      .from('certificates')
+      .select('id, title, reason, remarks, created_at', { count: 'exact' })
+      .eq('user_id', id)
+      .eq('certificate_status', 'approved')
+      .is('read_at', null);
+
+    if (error) {
+      return generalErrorResponse({ error: error });
+    }
+
+    return successResponse({
+      message: 'Successfully fetch certificates',
+      data: {
+        data,
+        count,
+      },
+    });
+  } catch (error) {
+    return generalErrorResponse({ error: error });
+  }
+}
 
 export async function PUT(
   req: NextRequest,

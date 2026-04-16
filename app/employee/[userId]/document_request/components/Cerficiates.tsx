@@ -51,12 +51,13 @@ export function Certificates({
 
   return (
     <main className="space-y-8">
-      <div className="flex items-center">
+      <div className="flex items-center justify-between">
         <Input
           placeholder="Search document by title..."
           onChange={(event) => onSearch(event)}
           className="max-w-sm"
         />
+
         <Button onClick={() => toggleDialog?.(true, 'add', null, null)}>
           <PlusIcon /> Request Document
         </Button>

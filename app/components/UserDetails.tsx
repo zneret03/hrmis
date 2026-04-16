@@ -1,5 +1,11 @@
 import { JSX } from 'react';
-import { FileSpreadsheet, CalendarDays, Plane, ClockAlert } from 'lucide-react';
+import {
+  FileSpreadsheet,
+  CalendarDays,
+  Plane,
+  ClockAlert,
+  Bell,
+} from 'lucide-react';
 import { avatarName } from '@/helpers/avatarName';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,6 +24,7 @@ interface UserDetails {
     daysAbsent: number;
     tardiness_count: number;
   };
+  unreadDocuments?: number;
   credits: number;
   isAdmin?: boolean;
 }
@@ -26,6 +33,7 @@ export function UserDetails({
   users,
   attendance,
   credits,
+  unreadDocuments,
   isAdmin = false,
 }: UserDetails): JSX.Element {
   const { daysPresent, daysAbsent, tardiness_count } = attendance;
@@ -51,13 +59,18 @@ export function UserDetails({
       icon: <Plane className="text-gray-500" />,
       count: credits,
     },
+    {
+      title: 'Unread Document Requests',
+      icon: <Bell className="text-gray-500" />,
+      count: unreadDocuments,
+    },
   ];
 
   return (
     <main className="space-y-6">
       <section className="w-full p-8">
-        <div className="flex gap-6 md:flex-col lg:flex-col xl:flex-row">
-          <section className="flex items-center gap-4">
+        <div className="mb-16 flex justify-center">
+          <section className="flex flex-col items-center gap-2 text-center">
             <Avatar className="md:h-15 md:w-15 lg:h-20 lg:w-20 xl:h-30 xl:w-30">
               <AvatarImage
                 className="object-cover"
@@ -87,7 +100,8 @@ export function UserDetails({
               )}
             </div>
           </section>
-
+        </div>
+        <div className="flex gap-6 md:flex-col lg:flex-col xl:flex-row">
           <div className="flex w-full items-center gap-2">
             {userSummary.map((item) => (
               <CardSummary key={item?.title} {...item} />
