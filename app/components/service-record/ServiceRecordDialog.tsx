@@ -298,7 +298,9 @@ export function ServiceRecordDialog(): JSX.Element {
         }),
       });
 
-      // const blob = new Blob([newResponse], { type: 'application/pdf' });
+      // const blobResponse = await response.blob();
+      //
+      // const blob = new Blob([blobResponse], { type: 'application/pdf' });
       // const url = URL.createObjectURL(blob);
       //
       // const link = document.createElement('a');
@@ -320,7 +322,7 @@ export function ServiceRecordDialog(): JSX.Element {
 
         console.log(newResponse);
 
-        // resetVariables();
+        resetVariables();
       }
     } catch (error) {
       console.error('Failed to generate and download PDF:', error);
