@@ -7,7 +7,6 @@ import { Container } from '@/components/custom/Container';
 import { LeaveCard } from '@/app/components/LeaveCard';
 
 import { format } from 'date-fns';
-import { NotificationCenter } from './components/NotificationCenter';
 import { AtSign, Briefcase, User, IdCardLanyard } from 'lucide-react';
 import { EmployeeInformation } from './components/EmployeeInformation';
 import { getAttendanceSummary } from '@/services/attendance/attendance.services';

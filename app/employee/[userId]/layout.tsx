@@ -23,8 +23,6 @@ export default async function Layout({
   const { userId } = await params;
   const unreadDocuments = await getUnreadCertificatesById(userId);
 
-  console.log(unreadDocuments);
-
   const unreadDocs = unreadDocuments?.data?.map(
     (item: Partial<Certificates>) => ({
       id: item.id,

@@ -16,7 +16,6 @@ import { useShallow } from 'zustand/shallow';
 
 interface Certificate extends PaginationTypes {
   certificate: CertificatesType[];
-  unreadDocuments: number;
 }
 
 export function Certificates({
@@ -24,7 +23,6 @@ export function Certificates({
   totalPages,
   currentPage,
   count,
-  unreadDocuments,
 }: Certificate): JSX.Element {
   const { toggleDialog } = useCertificates(
     useShallow((state) => ({ toggleDialog: state.toggleOpenDialog })),

@@ -145,7 +145,7 @@ export function NotificationCenter({ data }: NotificationCenter) {
             <div className="flex h-full flex-col items-center justify-center space-y-3 p-6 text-center">
               <Bell className="text-muted-foreground/50 h-8 w-8" />
               <p className="text-muted-foreground text-sm">
-                You're all caught up! No new notifications.
+                You&apos;re all caught up! No new notifications.
               </p>
             </div>
           )}
