@@ -10,6 +10,7 @@ import {
   Award,
   Medal,
   LayoutTemplate,
+  ChartSpline,
 } from 'lucide-react';
 
 export const adminMenus = (id: string): SideMenu[] => {
@@ -18,6 +19,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       title: 'Dashboard',
       url: `/backend/${id}/dashboard`,
       icon: LayoutDashboard,
+      isActive: true,
+    },
+    {
+      title: 'Charts',
+      url: `/backend/${id}/charts`,
+      icon: ChartSpline,
       isActive: true,
     },
     {
