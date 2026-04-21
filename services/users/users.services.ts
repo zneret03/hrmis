@@ -42,6 +42,32 @@ export interface UpdateUserInfo
   oldAvatar: string;
 }
 
+export const fetchAgeStatistics = async () => {
+  try {
+    const response = await axiosService.get(`/api/protected/users/age-stats`);
+
+    return response.data.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
+export const fetchGenderStatistics = async () => {
+  try {
+    const response = await axiosService.get(
+      `/api/protected/users/gender-stats`,
+    );
+
+    return response.data.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
 export const fetchAllUsers = async () => {
   try {
     const response = await axiosService.get(`/api/protected/users/all`);

@@ -122,6 +122,7 @@ export const ImageUpload = ({
             width={500}
             height={500}
             alt="preview image"
+            unoptimized
             className="h-full w-full object-cover"
           />
           <button
@@ -147,6 +148,7 @@ export const ImageUpload = ({
                 height={500}
                 src={preview.url}
                 alt={`New upload ${index + 1}`}
+                unoptimized
                 className="h-full w-full object-cover"
               />
               <div className="absolute top-0 left-0 bg-blue-500 px-1 text-xs text-white">

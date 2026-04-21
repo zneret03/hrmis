@@ -14,6 +14,122 @@ CREATE TABLE public.users (
     archived_at TIMESTAMP WITH TIME ZONE
 );
 
+CREATE OR REPLACE FUNCTION get_loyalty_award_statistics()
+RETURNS TABLE (
+    years_of_service TEXT,
+    no_of_employees BIGINT,
+    percentage NUMERIC,
+    total BIGINT
+) AS $$
+BEGIN
+    RETURN QUERY
+    WITH ServiceYears AS (
+        SELECT 
+            -- Calculate years of service based on date_of_original_appointment and current date
+            CASE
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.date_of_original_appointment)) BETWEEN 10 AND 14 THEN '10 years loyalty award'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.date_of_original_appointment)) BETWEEN 15 AND 19 THEN '15 years loyalty award'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.date_of_original_appointment)) BETWEEN 20 AND 24 THEN '20 years loyalty award'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.date_of_original_appointment)) BETWEEN 25 AND 29 THEN '25 years loyalty award'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.date_of_original_appointment)) BETWEEN 30 AND 34 THEN '30 years loyalty award'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.date_of_original_appointment)) >= 35 THEN '35+ years loyalty award'
+                ELSE 'Not eligible yet (< 10 years)'
+            END AS award_bracket
+        FROM 
+            public.users u
+        WHERE 
+            u.date_of_original_appointment IS NOT NULL 
+            AND u.archived_at IS NULL -- Excludes soft-deleted users
+    )
+    SELECT 
+        award_bracket AS years_of_service,
+        COUNT(*)::BIGINT AS no_of_employees,
+        ROUND((COUNT(*) * 100.0) / NULLIF(SUM(COUNT(*)) OVER(), 0), 2) AS percentage,
+        SUM(COUNT(*)) OVER()::BIGINT AS total
+    FROM 
+        ServiceYears
+    GROUP BY 
+        award_bracket
+    ORDER BY 
+        -- Custom sorting to ensure the brackets appear in a logical order
+        CASE award_bracket
+            WHEN 'Not eligible yet (< 10 years)' THEN 1
+            WHEN '10 years loyalty award' THEN 2
+            WHEN '15 years loyalty award' THEN 3
+            WHEN '20 years loyalty award' THEN 4
+            WHEN '25 years loyalty award' THEN 5
+            WHEN '30 years loyalty award' THEN 6
+            WHEN '35+ years loyalty award' THEN 7
+            ELSE 8
+        END ASC;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION get_age_bracket_statistics()
+RETURNS TABLE (
+    age_brackets TEXT,
+    no_of_employees BIGINT,
+    percentage NUMERIC,
+    total BIGINT
+) AS $$
+BEGIN
+    RETURN QUERY
+    WITH UserAges AS (
+        SELECT 
+            -- Calculate age based on birthdate and current date
+            CASE
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.birthdate)) BETWEEN 18 AND 24 THEN '18-24, Entry Level / Fresh Graduate'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.birthdate)) BETWEEN 25 AND 34 THEN '25-34, Early career'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.birthdate)) BETWEEN 35 AND 44 THEN '35-44, Mid Career'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.birthdate)) BETWEEN 45 AND 54 THEN '45-54, Experienced Workforce'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.birthdate)) BETWEEN 55 AND 64 THEN '55-64, Pre-retirement'
+                WHEN EXTRACT(YEAR FROM age(CURRENT_DATE, u.birthdate)) >= 65 THEN '65+, Post Retirement'
+                ELSE 'Under 18 / Unknown'
+            END AS bracket
+        FROM 
+            public.users u
+        WHERE 
+            u.birthdate IS NOT NULL 
+            AND u.archived_at IS NULL -- Excludes soft-deleted users
+    )
+    SELECT 
+        bracket AS age_brackets,
+        COUNT(*)::BIGINT AS no_of_employees,
+        ROUND((COUNT(*) * 100.0) / NULLIF(SUM(COUNT(*)) OVER(), 0), 2) AS percentage,
+        SUM(COUNT(*)) OVER()::BIGINT AS total
+    FROM 
+        UserAges
+    GROUP BY 
+        bracket
+    ORDER BY 
+        bracket ASC;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION get_gender_statistics()
+RETURNS TABLE (
+    gender TEXT,
+    gender_count BIGINT,
+    total_count BIGINT,
+    percentage NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        u.gender,
+        COUNT(u.id) AS gender_count,
+        SUM(COUNT(u.id)) OVER()::BIGINT AS total_count,
+        ROUND((COUNT(u.id) * 100.0) / NULLIF(SUM(COUNT(u.id)) OVER(), 0), 2) AS percentage
+    FROM 
+        public.users u
+    WHERE 
+        u.gender IS NOT NULL 
+        AND u.archived_at IS NULL -- Excludes soft-deleted users
+    GROUP BY 
+        u.gender;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- Indexes for users table
 CREATE INDEX idx_users_employee_id ON public.users(employee_id);
 CREATE INDEX idx_users_email ON public.users(email);
