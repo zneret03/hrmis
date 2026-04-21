@@ -298,10 +298,29 @@ export function ServiceRecordDialog(): JSX.Element {
         }),
       });
 
+      // const blobResponse = await response.blob();
+      //
+      // const blob = new Blob([blobResponse], { type: 'application/pdf' });
+      // const url = URL.createObjectURL(blob);
+      //
+      // const link = document.createElement('a');
+      // link.href = url;
+      // link.download = 'generated-document.pdf'; // Suggested file name
+      // document.body.appendChild(link);
+      // link.click();
+      //
+      // // 5. Cleanup
+      // document.body.removeChild(link);
+      // URL.revokeObjectURL(url);
+
       if (response.ok) {
         toast('Successfully', {
           description: 'Successfully updated Service Record file',
         });
+
+        const newResponse = await response.json();
+
+        console.log(newResponse);
 
         resetVariables();
       }

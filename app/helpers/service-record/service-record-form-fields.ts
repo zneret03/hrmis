@@ -38,7 +38,7 @@ export const formValues: FormField[] = [
     width: 90,
     height: 13,
 
-    marginHeight: -154,
+    marginHeight: -80,
     marginWidth: -10,
     fontSize: 0.8,
   },
@@ -51,7 +51,7 @@ export const formValues: FormField[] = [
     width: 90,
     height: 13,
 
-    marginHeight: -154,
+    marginHeight: -80,
     marginWidth: -10,
     fontSize: 0.8,
   },
@@ -64,7 +64,7 @@ export const formValues: FormField[] = [
     width: 45,
     height: 13,
 
-    marginHeight: -154,
+    marginHeight: -80,
     marginWidth: -10,
     fontSize: 0.8,
   },
@@ -77,7 +77,7 @@ export const formValues: FormField[] = [
     width: 90,
     height: 13,
 
-    marginHeight: -150,
+    marginHeight: -75,
     marginWidth: -10,
     fontSize: 0.8,
   },
@@ -90,7 +90,7 @@ export const formValues: FormField[] = [
     width: 140,
     height: 13,
 
-    marginHeight: -150,
+    marginHeight: -75,
     marginWidth: -10,
     fontSize: 0.8,
   },
@@ -103,7 +103,7 @@ export const formValues: FormField[] = [
     width: 100,
     height: 13,
 
-    marginHeight: -134,
+    marginHeight: -60,
     marginWidth: -10,
     fontSize: 0.8,
   },
@@ -162,7 +162,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 10,
       width: 50,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -2,
       fontSize: 0.5,
     },
@@ -171,7 +171,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 70,
       width: 50,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -2,
       fontSize: 0.5,
     },
@@ -180,7 +180,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 128,
       width: 66,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -4,
       fontSize: 0.5,
     },
@@ -189,7 +189,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 200,
       width: 44,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -6,
       fontSize: 0.5,
     },
@@ -198,7 +198,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 255,
       width: 60,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -6,
       fontSize: 0.5,
     },
@@ -207,7 +207,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 324,
       width: 60,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -10,
       fontSize: 0.5,
     },
@@ -216,7 +216,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 390,
       width: 36,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -12,
       fontSize: 0.5,
     },
@@ -225,7 +225,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 430,
       width: 32,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -12,
       fontSize: 0.5,
     },
@@ -234,7 +234,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 468,
       width: 44,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -14,
       fontSize: 0.5,
     },
@@ -243,7 +243,7 @@ export const serviceRecordFieldTemplate: DynamicFieldTemplate = {
       x: 520,
       width: 60,
 
-      marginHeight: -148,
+      marginHeight: -80,
       marginWidth: -14,
       fontSize: 0.5,
     },
