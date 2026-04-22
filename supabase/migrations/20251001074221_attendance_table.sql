@@ -48,3 +48,39 @@ CREATE POLICY employee_own_attendance ON public.attendance
     FOR SELECT
     TO authenticated
     USING (user_id = auth.uid() AND archived_at IS NULL);
+
+CREATE OR REPLACE FUNCTION get_tardiness_statistics()
+RETURNS TABLE (
+    name TEXT,
+    no_of_employees BIGINT,
+    percentage NUMERIC
+) AS $$
+BEGIN
+    RETURN QUERY
+    WITH EmployeeTardiness AS (
+        SELECT
+            a.user_id,
+            CASE
+                WHEN SUM(COALESCE(a.tardiness_count, 0)) > 0 THEN 'With Tardiness'
+                ELSE 'Without Tardiness'
+            END AS tardiness_category
+        FROM
+            public.attendance a
+        WHERE
+            a.archived_at IS NULL
+            AND a.user_id IS NOT NULL
+        GROUP BY
+            a.user_id
+    )
+    SELECT
+        tardiness_category AS name,
+        COUNT(*)::BIGINT AS no_of_employees,
+        ROUND((COUNT(*) * 100.0) / NULLIF(SUM(COUNT(*)) OVER(), 0), 2) AS percentage
+    FROM
+        EmployeeTardiness
+    GROUP BY
+        tardiness_category
+    ORDER BY
+        tardiness_category ASC;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;

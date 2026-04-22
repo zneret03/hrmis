@@ -31,22 +31,23 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 
-interface Gender {
-  gender: string;
-  gender_count: number;
+interface LoyaltyAward {
+  years_of_service: string;
+  no_of_employees: number;
   percentage: number;
 }
 
-interface GenderTableData {
-  gender: Gender[];
+interface LoyaltyAwardsTableData {
+  loyaltyAwards: LoyaltyAward[];
 }
 
-export function GenderStatisticsTable({ gender: data }: GenderTableData) {
+export function LoyaltyAwardsTable({
+  loyaltyAwards: data,
+}: LoyaltyAwardsTableData) {
   const totalEmployees = React.useMemo(
-    () => data.reduce((sum, row) => sum + Number(row.gender_count), 0),
+    () => data.reduce((sum, row) => sum + Number(row.no_of_employees), 0),
     [data],
   );
-
   const totalPercentage = React.useMemo(
     () =>
       Math.round(
@@ -54,7 +55,6 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
       ) / 100,
     [data],
   );
-
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -63,24 +63,24 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const columns: ColumnDef<Gender>[] = React.useMemo(
+  const columns: ColumnDef<LoyaltyAward>[] = React.useMemo(
     () => [
       {
-        accessorKey: 'gender',
-        header: 'Gender',
+        accessorKey: 'years_of_service',
+        header: 'No. Of Years in Service',
         cell: function ({ row }) {
           return (
             <div className="flex items-center gap-2">
-              {row.getValue('gender')}
+              {row.getValue('years_of_service')}
             </div>
           );
         },
       },
       {
-        accessorKey: 'gender_count',
-        header: 'No. Of Employee',
+        accessorKey: 'no_of_employees',
+        header: 'No. of Employee',
         cell: function ({ row }) {
-          return <div>{row.getValue('gender_count')}</div>;
+          return <div>{row.getValue('no_of_employees')}</div>;
         },
       },
       {
@@ -115,7 +115,7 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
 
   return (
     <div className="w-full">
-      <h1 className="text-3xl font-bold">Gender Statistics</h1>
+      <h1 className="text-3xl font-bold">Loyalty Award Statistics</h1>
       <div className="flex items-center py-4">
         <div className="flex items-center gap-2">
           <DropdownMenu>

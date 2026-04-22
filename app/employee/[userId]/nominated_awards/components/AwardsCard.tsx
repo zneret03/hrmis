@@ -21,7 +21,7 @@ export function AwardCard(
   );
 
   const onReadAward = async (): Promise<void> => {
-    await updateAward({ read: today }, id);
+    await updateAward({ read: today as Date }, id);
     toggleDialog?.(true, 'read', { ...args });
   };
 

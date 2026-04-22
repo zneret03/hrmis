@@ -124,71 +124,90 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
 
   const router = useRouter();
 
-  const [personalInfoData, setPersonalInfoData] = useState<Json>(
-    (data?.personal_information as Json) ?? {},
-  );
-  const [familyBackgroundData, setFamilyBackgroundData] = useState<Json>(
-    (data?.family_background as Json) ?? {},
-  );
-  const [educationalBackgroundData, setEducationalBackgroundData] =
-    useState<Json>((data?.educational_background as Json) ?? {});
-  const [otherStaticData, setOtherStaticData] = useState<Json>(
-    (data?.other_static_data as Json) ?? {},
+  const [personalInfoData, setPersonalInfoData] = useState<
+    Record<string, Json>
+  >((data?.personal_information as Record<string, Json>) ?? {});
+  const [familyBackgroundData, setFamilyBackgroundData] = useState<
+    Record<string, Json>
+  >((data?.family_background as Record<string, Json>) ?? {});
+  const [educationalBackgroundData, setEducationalBackgroundData] = useState<
+    Record<string, Json>
+  >((data?.educational_background as Record<string, Json>) ?? {});
+  const [otherStaticData, setOtherStaticData] = useState<Record<string, Json>>(
+    (data?.other_static_data as Record<string, Json>) ?? {},
   );
 
   // --- STATES FOR DYNAMIC DATA ---
-  const [eligibilities, setEligibilities] = useState<Eligibility[] | Json[]>(
-    data?.civil_service_eligibility || [initialStateEligibilities],
+  const [eligibilities, setEligibilities] = useState<Eligibility[]>(
+    (data?.civil_service_eligibility as Eligibility[]) || [
+      initialStateEligibilities,
+    ],
   );
 
-  const [workExperiences, setWorkExperiences] = useState<
-    WorkExperience[] | Json[]
-  >(data?.work_experience || [initialStateWorkExperience]);
+  const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>(
+    (data?.work_experience as WorkExperience[]) || [initialStateWorkExperience],
+  );
 
-  const [voluntaryWorks, setVoluntaryWorks] = useState<
-    VoluntaryWork[] | Json[]
-  >(data?.voluntary_work || [initialStateVoluntaryWork]);
+  const [voluntaryWorks, setVoluntaryWorks] = useState<VoluntaryWork[]>(
+    (data?.voluntary_work as VoluntaryWork[]) || [initialStateVoluntaryWork],
+  );
   const [learningAndDevelopment, setLearningAndDevelopment] = useState<
-    LearningAndDevelopment[] | Json[]
-  >(data?.training_programs || [initialStateLearningDevelopment]);
+    LearningAndDevelopment[]
+  >(
+    (data?.training_programs as LearningAndDevelopment[]) || [
+      initialStateLearningDevelopment,
+    ],
+  );
 
-  const [otherInformation, setOtherInformation] = useState<
-    OtherInformation[] | Json[]
-  >(data?.other_information || [initialStateOtherInfo]);
+  const [otherInformation, setOtherInformation] = useState<OtherInformation[]>(
+    (data?.other_information as OtherInformation[]) || [initialStateOtherInfo],
+  );
 
-  const [references, setReferences] = useState<References[] | Json[]>(
-    data?.pds_references || [initialStatePdsReference],
+  const [references, setReferences] = useState<References[]>(
+    (data?.pds_references as References[]) || [initialStatePdsReference],
   );
 
   useEffect(() => {
     if (data) {
-      setPersonalInfoData((data?.personal_information as Json) ?? {});
-      setFamilyBackgroundData((data?.family_background as Json) ?? {});
-      setEducationalBackgroundData(
-        (data?.educational_background as Json) ?? {},
+      setPersonalInfoData(
+        (data?.personal_information as Record<string, Json>) ?? {},
       );
-      setOtherStaticData((data?.other_static_data as Json) ?? {});
+      setFamilyBackgroundData(
+        (data?.family_background as Record<string, Json>) ?? {},
+      );
+      setEducationalBackgroundData(
+        (data?.educational_background as Record<string, Json>) ?? {},
+      );
+      setOtherStaticData(
+        (data?.other_static_data as Record<string, Json>) ?? {},
+      );
       setEligibilities(
-        (data?.civil_service_eligibility as Json[]) ?? [
+        (data?.civil_service_eligibility as Eligibility[]) ?? [
           initialStateEligibilities,
         ],
       );
       setWorkExperiences(
-        (data?.work_experience as Json[]) ?? [initialStateWorkExperience],
+        (data?.work_experience as WorkExperience[]) ?? [
+          initialStateWorkExperience,
+        ],
       );
       setVoluntaryWorks(
-        (data?.voluntary_work as Json[]) ?? [initialStateVoluntaryWork],
+        (data?.voluntary_work as VoluntaryWork[]) ?? [
+          initialStateVoluntaryWork,
+        ],
       );
       setLearningAndDevelopment(
-        (data?.training_programs as Json[]) ?? [
+        (data?.training_programs as LearningAndDevelopment[]) ?? [
           initialStateLearningDevelopment,
         ],
       );
       setOtherInformation(
-        (data?.other_information as Json[]) ?? [initialStateOtherInfo],
+        (data?.other_information as OtherInformation[]) ?? [
+          initialStateOtherInfo,
+        ],
       );
       setReferences(
-        (data?.pds_references as Json[]) ?? [initialStatePdsReference],
+        (data?.pds_references as References[]) ?? [initialStatePdsReference],
       );
     }
   }, [data]);
@@ -239,7 +258,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   ) => {
     const { name, value } = e.target;
     const newArr = [...references];
-    newArr[index] = { ...newArr[index], [name]: value };
+    newArr[index] = { ...newArr[index], [name]: value } as References;
     setReferences(newArr);
   };
 
@@ -266,7 +285,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   ) => {
     const { name, value } = e.target;
     const newArr = [...otherInformation];
-    newArr[index] = { ...newArr[index], [name]: value };
+    newArr[index] = { ...newArr[index], [name]: value } as OtherInformation;
     setOtherInformation(newArr);
   };
 
@@ -297,7 +316,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   ): void => {
     const { name, value } = e.target;
     const newArr = [...eligibilities];
-    newArr[index] = { ...newArr[index], [name]: value };
+    newArr[index] = { ...newArr[index], [name]: value } as Eligibility;
     setEligibilities(newArr);
   };
 
@@ -330,7 +349,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   ) => {
     const { name, value } = e.target;
     const newArr = [...workExperiences];
-    newArr[index] = { ...newArr[index], [name]: value };
+    newArr[index] = { ...newArr[index], [name]: value } as WorkExperience;
     setWorkExperiences(newArr);
   };
 
@@ -360,7 +379,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   ) => {
     const { name, value } = e.target;
     const newArr = [...voluntaryWorks];
-    newArr[index] = { ...newArr[index], [name]: value };
+    newArr[index] = { ...newArr[index], [name]: value } as VoluntaryWork;
     setVoluntaryWorks(newArr);
   };
 
@@ -390,7 +409,10 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   ): void => {
     const { name, value } = e.target;
     const newArr = [...learningAndDevelopment];
-    newArr[index] = { ...newArr[index], [name]: value };
+    newArr[index] = {
+      ...newArr[index],
+      [name]: value,
+    } as LearningAndDevelopment;
     setLearningAndDevelopment(newArr);
   };
 
@@ -415,7 +437,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   const renderStaticFields = (
     pageNumber: number,
     fields: FormField[],
-    data: Json,
+    data: Record<string, Json>,
   ) =>
     fields
       .filter((field) => field.page === pageNumber)
@@ -487,7 +509,7 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
   const renderDynamicFields = (
     pageNumber: number,
     template: DynamicFieldTemplate,
-    data: Record<string, string>[] | Json[],
+    data: Record<string, string>[],
     changeHandler: (
       index: number,
       e: React.ChangeEvent<HTMLInputElement>,
@@ -640,42 +662,42 @@ export function UpdatePDFDialog({ userId }: UpdatePDFDialog): JSX.Element {
                 {renderDynamicFields(
                   index + 1,
                   eligibilityFieldTemplate,
-                  eligibilities,
+                  eligibilities as unknown as Record<string, string>[],
                   handleEligibilityChange,
                   removeEligibilityRow,
                 )}
                 {renderDynamicFields(
                   index + 1,
                   workExperienceFieldTemplate,
-                  workExperiences,
+                  workExperiences as unknown as Record<string, string>[],
                   handleWorkExperienceChange,
                   removeWorkExperienceRow,
                 )}
                 {renderDynamicFields(
                   index + 1,
                   voluntaryWorkFieldTemplate,
-                  voluntaryWorks,
+                  voluntaryWorks as unknown as Record<string, string>[],
                   handleVoluntaryWorkChange,
                   removeVoluntaryWorkRow,
                 )}
                 {renderDynamicFields(
                   index + 1,
                   learningAndDevelopmentFieldTemplate,
-                  learningAndDevelopment,
+                  learningAndDevelopment as unknown as Record<string, string>[],
                   handleLdChange,
                   removeLdRow,
                 )}
                 {renderDynamicFields(
                   index + 1,
                   otherInformationFieldTemplate,
-                  otherInformation,
+                  otherInformation as unknown as Record<string, string>[],
                   handleOtherInformationChange,
                   removeOtherInformationRow,
                 )}
                 {renderDynamicFields(
                   index + 1,
                   referencesFieldTemplate,
-                  references,
+                  references as unknown as Record<string, string>[],
                   handleReferencesChange,
                   removeReferencesRow,
                 )}

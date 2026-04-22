@@ -11,6 +11,7 @@ import {
   Medal,
   LayoutTemplate,
   ChartSpline,
+  Clock,
 } from 'lucide-react';
 
 export const adminMenus = (id: string): SideMenu[] => {
@@ -78,6 +79,12 @@ export const employeeMenus = (id: string): SideMenu[] => {
       title: 'Personal Management',
       url: `/employee/${id}/personal_management`,
       icon: FileStack,
+      isActive: true,
+    },
+    {
+      title: 'Daily Time Record',
+      url: `/employee/${id}/daily_time_record`,
+      icon: Clock,
       isActive: true,
     },
     {

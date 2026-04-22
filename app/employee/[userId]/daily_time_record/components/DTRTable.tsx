@@ -7,13 +7,12 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Download } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -24,37 +23,27 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { DTRDayRecord, DTRMonth } from '@/lib/types/biometrics';
+import { DTREmployee } from '@/services/biometrics/biometrics.services';
+import { buildPrintHTML } from '../helpers/DTRHtml';
 
-interface Gender {
-  gender: string;
-  gender_count: number;
-  percentage: number;
+interface DTRTableProps {
+  dtr: DTRMonth[];
+  employee: DTREmployee;
 }
 
-interface GenderTableData {
-  gender: Gender[];
-}
-
-export function GenderStatisticsTable({ gender: data }: GenderTableData) {
-  const totalEmployees = React.useMemo(
-    () => data.reduce((sum, row) => sum + Number(row.gender_count), 0),
-    [data],
-  );
-
-  const totalPercentage = React.useMemo(
-    () =>
-      Math.round(
-        data.reduce((sum, row) => sum + Number(row.percentage), 0) * 100,
-      ) / 100,
-    [data],
-  );
-
+function DTRMonthSection({
+  month,
+  employee,
+}: {
+  month: DTRMonth;
+  employee: DTREmployee;
+}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -63,31 +52,59 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const columns: ColumnDef<Gender>[] = React.useMemo(
+  const columns: ColumnDef<DTRDayRecord>[] = React.useMemo(
     () => [
       {
-        accessorKey: 'gender',
-        header: 'Gender',
+        accessorKey: 'day',
+        header: () => <div className="text-center">Day</div>,
         cell: function ({ row }) {
           return (
-            <div className="flex items-center gap-2">
-              {row.getValue('gender')}
+            <div className="text-center font-medium">{row.getValue('day')}</div>
+          );
+        },
+      },
+      {
+        accessorKey: 'morning_in',
+        header: () => <div className="text-center">AM Arrival</div>,
+        cell: function ({ row }) {
+          return (
+            <div className="text-center">
+              {row.getValue('morning_in') ?? '—'}
             </div>
           );
         },
       },
       {
-        accessorKey: 'gender_count',
-        header: 'No. Of Employee',
+        accessorKey: 'morning_out',
+        header: () => <div className="text-center">AM Departure</div>,
         cell: function ({ row }) {
-          return <div>{row.getValue('gender_count')}</div>;
+          return (
+            <div className="text-center">
+              {row.getValue('morning_out') ?? '—'}
+            </div>
+          );
         },
       },
       {
-        accessorKey: 'percentage',
-        header: 'Percentage',
+        accessorKey: 'afternoon_in',
+        header: () => <div className="text-center">PM Arrival</div>,
         cell: function ({ row }) {
-          return <div>{row.getValue('percentage')}</div>;
+          return (
+            <div className="text-center">
+              {row.getValue('afternoon_in') ?? '—'}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: 'afternoon_out',
+        header: () => <div className="text-center">PM Departure</div>,
+        cell: function ({ row }) {
+          return (
+            <div className="text-center">
+              {row.getValue('afternoon_out') ?? '—'}
+            </div>
+          );
         },
       },
     ],
@@ -95,12 +112,11 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
   );
 
   const table = useReactTable({
-    data,
+    data: month.records,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
@@ -113,14 +129,25 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
     },
   });
 
+  const handleDownload = () => {
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) return;
+    printWindow.document.write(buildPrintHTML(month, employee));
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 300);
+  };
+
   return (
     <div className="w-full">
-      <h1 className="text-3xl font-bold">Gender Statistics</h1>
+      <h2 className="text-xl font-semibold">{month.month_label}</h2>
       <div className="flex items-center py-4">
-        <div className="flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
+              <Button variant="outline">
                 Columns <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -144,6 +171,10 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
+          <Button variant="outline" onClick={handleDownload}>
+            <Download className="mr-2 h-4 w-4" />
+            Download PDF
+          </Button>
         </div>
       </div>
       <div className="rounded-md border">
@@ -194,15 +225,26 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
               </TableRow>
             )}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell>Total</TableCell>
-              <TableCell>{totalEmployees}</TableCell>
-              <TableCell>{totalPercentage}%</TableCell>
-            </TableRow>
-          </TableFooter>
         </Table>
       </div>
+    </div>
+  );
+}
+
+export function DTRTable({ dtr, employee }: DTRTableProps) {
+  if (!dtr.length) {
+    return (
+      <p className="text-muted-foreground py-8 text-center">
+        No time records found.
+      </p>
+    );
+  }
+
+  return (
+    <div className="space-y-8">
+      {dtr.map((month) => (
+        <DTRMonthSection key={month.month} month={month} employee={employee} />
+      ))}
     </div>
   );
 }

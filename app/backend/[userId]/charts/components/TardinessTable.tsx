@@ -31,19 +31,19 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 
-interface Gender {
-  gender: string;
-  gender_count: number;
+interface Tardiness {
+  name: string;
+  no_of_employees: number;
   percentage: number;
 }
 
-interface GenderTableData {
-  gender: Gender[];
+interface TardinessTableData {
+  tardiness: Tardiness[];
 }
 
-export function GenderStatisticsTable({ gender: data }: GenderTableData) {
+export function TardinessTable({ tardiness: data }: TardinessTableData) {
   const totalEmployees = React.useMemo(
-    () => data.reduce((sum, row) => sum + Number(row.gender_count), 0),
+    () => data.reduce((sum, row) => sum + Number(row.no_of_employees), 0),
     [data],
   );
 
@@ -63,24 +63,24 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const columns: ColumnDef<Gender>[] = React.useMemo(
+  const columns: ColumnDef<Tardiness>[] = React.useMemo(
     () => [
       {
-        accessorKey: 'gender',
-        header: 'Gender',
+        accessorKey: 'name',
+        header: 'Name',
         cell: function ({ row }) {
           return (
             <div className="flex items-center gap-2">
-              {row.getValue('gender')}
+              {row.getValue('name')}
             </div>
           );
         },
       },
       {
-        accessorKey: 'gender_count',
-        header: 'No. Of Employee',
+        accessorKey: 'no_of_employees',
+        header: 'No. of Employee',
         cell: function ({ row }) {
-          return <div>{row.getValue('gender_count')}</div>;
+          return <div>{row.getValue('no_of_employees')}</div>;
         },
       },
       {
@@ -115,7 +115,7 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
 
   return (
     <div className="w-full">
-      <h1 className="text-3xl font-bold">Gender Statistics</h1>
+      <h1 className="text-3xl font-bold">Tardiness Statistics</h1>
       <div className="flex items-center py-4">
         <div className="flex items-center gap-2">
           <DropdownMenu>

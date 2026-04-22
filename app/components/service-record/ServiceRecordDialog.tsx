@@ -37,6 +37,24 @@ import { toast } from 'sonner';
 import { Json } from '@/lib/types/db-types';
 import { useCertificates } from '@/services/certificates/state/use-certificate';
 
+type ServiceRecordDynamic = {
+  from: string;
+  to: string;
+  designation: string;
+  status: string;
+  salaray: string;
+  placeOfAssignment: string;
+  branch: string;
+  withOrWithoutPay: string;
+  date: string;
+  cause: string;
+};
+
+type ServiceRecordDataShape = {
+  formFields: Record<string, Json>;
+  service_record: ServiceRecordDynamic[];
+};
+
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
   import.meta.url,
@@ -75,19 +93,22 @@ export function ServiceRecordDialog(): JSX.Element {
 
   const [remarks, setRemarks] = useState<string>('');
 
-  const [formValuesSR, setFormValues] = useState<Json>(
-    (data?.data?.formFields as Json) ?? {},
+  const [formValuesSR, setFormValues] = useState<Record<string, Json>>(
+    (data?.data as ServiceRecordDataShape | null)?.formFields ?? {},
   );
 
   // --- STATES FOR DYNAMIC DATA ---
-  const [initialState, setInitialState] = useState<Json[]>(
-    (data?.data?.service_record as Json[]) || [initialStateServiceRecord],
+  const [initialState, setInitialState] = useState<ServiceRecordDynamic[]>(
+    (data?.data as ServiceRecordDataShape | null)?.service_record || [
+      initialStateServiceRecord,
+    ],
   );
 
   useEffect(() => {
     if (data?.data) {
-      setFormValues(data?.data?.formFields as Json);
-      setInitialState(data?.data?.service_record as Json[]);
+      const shaped = data.data as ServiceRecordDataShape;
+      setFormValues(shaped.formFields ?? {});
+      setInitialState(shaped.service_record ?? [initialStateServiceRecord]);
     }
   }, [data?.data]);
 
@@ -114,7 +135,7 @@ export function ServiceRecordDialog(): JSX.Element {
   ) => {
     const { name, value } = e.target;
     const newArr = [...initialState];
-    newArr[index] = { ...newArr[index], [name]: value };
+    newArr[index] = { ...newArr[index], [name]: value } as ServiceRecordDynamic;
     setInitialState(newArr);
   };
 
@@ -149,7 +170,7 @@ export function ServiceRecordDialog(): JSX.Element {
   const renderStaticFields = (
     pageNumber: number,
     fields: FormField[],
-    data: Json,
+    data: Record<string, Json>,
   ) =>
     fields
       .filter((field) => field.page === pageNumber)
@@ -221,7 +242,7 @@ export function ServiceRecordDialog(): JSX.Element {
   const renderDynamicFields = (
     pageNumber: number,
     template: DynamicFieldTemplate,
-    data: Record<string, string>[] | Json[],
+    data: Record<string, string>[],
     changeHandler: (
       index: number,
       e: React.ChangeEvent<HTMLInputElement>,
@@ -318,10 +339,6 @@ export function ServiceRecordDialog(): JSX.Element {
           description: 'Successfully updated Service Record file',
         });
 
-        const newResponse = await response.json();
-
-        console.log(newResponse);
-
         resetVariables();
       }
     } catch (error) {
@@ -369,7 +386,7 @@ export function ServiceRecordDialog(): JSX.Element {
                 {renderDynamicFields(
                   index + 1,
                   serviceRecordFieldTemplate,
-                  initialState,
+                  initialState as unknown as Record<string, string>[],
                   handleServiceRecordChange,
                   removeSR,
                 )}

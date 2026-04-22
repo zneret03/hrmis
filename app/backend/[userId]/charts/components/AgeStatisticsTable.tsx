@@ -24,18 +24,16 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useTemplateDialog } from '@/services/template/state/template-state';
-import { useShallow } from 'zustand/shallow';
 import { Button } from '@/components/ui/button';
 
 interface Age {
   age_brackets: string;
   no_of_employees: number;
-  total: number;
   percentage: number;
 }
 
@@ -44,6 +42,19 @@ interface AgeTableData {
 }
 
 export function AgeStatisticsTable({ age: data }: AgeTableData) {
+  const totalEmployees = React.useMemo(
+    () => data.reduce((sum, row) => sum + Number(row.no_of_employees), 0),
+    [data],
+  );
+
+  const totalPercentage = React.useMemo(
+    () =>
+      Math.round(
+        data.reduce((sum, row) => sum + Number(row.percentage), 0) * 100,
+      ) / 100,
+    [data],
+  );
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -51,10 +62,6 @@ export function AgeStatisticsTable({ age: data }: AgeTableData) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-
-  const { toggleOpen } = useTemplateDialog(
-    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
-  );
 
   const columns: ColumnDef<Age>[] = React.useMemo(
     () => [
@@ -83,15 +90,8 @@ export function AgeStatisticsTable({ age: data }: AgeTableData) {
           return <div>{row.getValue('percentage')}</div>;
         },
       },
-      {
-        accessorKey: 'total',
-        header: 'Total',
-        cell: function ({ row }) {
-          return <div>{row.getValue('total')}</div>;
-        },
-      },
     ],
-    [toggleOpen],
+    [],
   );
 
   const table = useReactTable({
@@ -168,7 +168,7 @@ export function AgeStatisticsTable({ age: data }: AgeTableData) {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row, index) => (
+              table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
@@ -194,6 +194,13 @@ export function AgeStatisticsTable({ age: data }: AgeTableData) {
               </TableRow>
             )}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell>Total</TableCell>
+              <TableCell>{totalEmployees}</TableCell>
+              <TableCell>{totalPercentage}%</TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </div>
     </div>
