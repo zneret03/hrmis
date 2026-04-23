@@ -11,7 +11,11 @@ export type LeaveStatus = 'approved' | 'disapproved' | 'pending' | 'cancelled';
 export type LeaveApplicationsData = Omit<
   LeaveApplications,
   'user_id' | 'leave_id'
->;
+> & {
+  hr_comment?: string | null;
+  reviewed_by?: string | null;
+  reviewed_at?: string | null;
+};
 
 export interface LeaveApplicationsForm extends LeaveApplicationsData {
   users: Pick<Users, 'email' | 'username' | 'id'>;
@@ -20,4 +24,7 @@ export interface LeaveApplicationsForm extends LeaveApplicationsData {
 
 export interface LeaveApplicationsFormData extends LeaveApplications {
   dateRange: DateRange | undefined;
+  hr_comment?: string | null;
+  reviewed_by?: string | null;
+  reviewed_at?: string | null;
 }

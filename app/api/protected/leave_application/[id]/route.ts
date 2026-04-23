@@ -24,6 +24,8 @@ export async function PUT(
       body.userId,
       leaveId,
       body.countDates,
+      body.reviewedBy,
+      body.hrComment,
     );
   }
 

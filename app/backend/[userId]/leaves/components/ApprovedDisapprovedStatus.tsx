@@ -1,15 +1,29 @@
 'use client';
 
-import { JSX, useTransition } from 'react';
+import { JSX, useTransition, useState } from 'react';
 import { useLeaveApplicationDialog } from '@/services/leave_applications/states/leave-application-dialog';
-import { DialogAlert } from '@/components/custom/DialogAlert';
 import { useRouter } from 'next/navigation';
 import { useShallow } from 'zustand/shallow';
 import { approveDisapprovestatus } from '@/services/leave_applications/leave-applications.services';
 import { convertFromAndToDate } from '@/helpers/convertFromAndToDate';
+import { useAuth } from '@/services/auth/states/auth-state';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { CustomButton } from '@/components/custom/CustomButton';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 export function ApproveDisapproveDialog(): JSX.Element {
   const [isPending, startTransition] = useTransition();
+  const [hrComment, setHrComment] = useState('');
+  const { id: reviewerId } = useAuth();
+
   const { open, type, toggleOpen, data } = useLeaveApplicationDialog(
     useShallow((state) => ({
       open: state.open,
@@ -28,50 +42,76 @@ export function ApproveDisapproveDialog(): JSX.Element {
 
   const resetVariables = (): void => {
     toggleOpen?.(false, null, null);
+    setHrComment('');
     router.refresh();
   };
 
-  const onApproveLeaveRequest = async (): Promise<void> => {
-    startTransition(async () => {
-      await approveDisapprovestatus(
-        'approved',
-        data?.users?.id as string,
-        data?.id as string,
-        countDates,
-      );
-      resetVariables();
-    });
-  };
-
-  const onDisapproveLeaveRequest = async (): Promise<void> => {
-    startTransition(async () => {
-      await approveDisapprovestatus(
-        'disapproved',
-        data?.users?.id as string,
-        data?.id as string,
-        countDates,
-      );
-      resetVariables();
-    });
-  };
-
   const isApprove = data?.status === 'approved';
-  const callback = isApprove ? onDisapproveLeaveRequest : onApproveLeaveRequest;
+
+  const onAction = async (): Promise<void> => {
+    startTransition(async () => {
+      await approveDisapprovestatus(
+        isApprove ? 'disapproved' : 'approved',
+        data?.users?.id as string,
+        data?.id as string,
+        countDates,
+        reviewerId ?? undefined,
+        hrComment || undefined,
+      );
+      resetVariables();
+    });
+  };
+
+  const dialogTitle = isApprove ? 'Disapprove Leave Request' : 'Approve Leave Request';
   const description = isApprove
-    ? 'Do you want to cancel leave request?'
-    : 'Do you want to approved leave request?';
-  const dialogType = isApprove ? 'error' : 'success';
-  const dialogTitle = isApprove ? 'Cancel' : 'Approve';
+    ? 'Are you sure you want to disapprove this leave request?'
+    : 'Are you sure you want to approve this leave request?';
+  const actionLabel = isApprove ? 'Disapprove' : 'Approve';
+  const actionVariant = isApprove ? 'destructive' : 'default';
 
   return (
-    <DialogAlert
+    <Dialog
       open={open && type === 'approve'}
-      title={`${dialogTitle} leave request?`}
-      description={description}
-      callback={callback}
-      cancel={() => toggleOpen?.(false, null, null)}
-      isLoading={isPending}
-      type={dialogType}
-    />
+      onOpenChange={() => toggleOpen?.(false, null, null)}
+    >
+      <DialogContent className="sm:max-w-[32rem]">
+        <DialogHeader>
+          <DialogTitle>{dialogTitle}</DialogTitle>
+        </DialogHeader>
+
+        <p className="text-sm text-muted-foreground">{description}</p>
+
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">
+            HR Comment <span className="text-muted-foreground">(optional)</span>
+          </Label>
+          <Textarea
+            placeholder="Leave a comment for the employee..."
+            rows={3}
+            value={hrComment}
+            onChange={(e) => setHrComment(e.target.value)}
+            className="resize-none"
+          />
+        </div>
+
+        <DialogFooter>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => toggleOpen?.(false, null, null)}
+          >
+            Cancel
+          </Button>
+          <CustomButton
+            type="button"
+            variant={actionVariant}
+            isLoading={isPending}
+            onClick={onAction}
+          >
+            {actionLabel}
+          </CustomButton>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
