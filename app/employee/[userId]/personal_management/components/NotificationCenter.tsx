@@ -20,7 +20,10 @@ import { useShallow } from 'zustand/shallow';
 import { parentPath } from '@/helpers/parentPath';
 import { Certificates } from '@/lib/types/certificates';
 
-type NotificationType = 'document_request' | 'leave_approved' | 'leave_disapproved';
+type NotificationType =
+  | 'document_request'
+  | 'leave_approved'
+  | 'leave_disapproved';
 
 type Notification = {
   id: string;

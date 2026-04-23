@@ -55,16 +55,16 @@ export function AdminNotificationCenter({
         >
           {unreadCount > 0 ? (
             <>
-              <BellRing className="h-5 w-5 text-foreground" />
+              <BellRing className="text-foreground h-5 w-5" />
               <Badge
                 variant="destructive"
-                className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs"
+                className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs"
               >
                 {unreadCount}
               </Badge>
             </>
           ) : (
-            <Bell className="h-5 w-5 text-muted-foreground" />
+            <Bell className="text-muted-foreground h-5 w-5" />
           )}
         </Button>
       </PopoverTrigger>
@@ -88,7 +88,7 @@ export function AdminNotificationCenter({
                 <button
                   key={notification.id}
                   onClick={() => handleClick(notification)}
-                  className={`flex cursor-pointer flex-col items-start gap-1 border-b px-4 py-3 text-left transition-colors hover:bg-muted/50 ${
+                  className={`hover:bg-muted/50 flex cursor-pointer flex-col items-start gap-1 border-b px-4 py-3 text-left transition-colors ${
                     !notification.read_at ? 'bg-muted/20' : ''
                   }`}
                 >
@@ -103,13 +103,13 @@ export function AdminNotificationCenter({
                       {TYPE_LABELS[notification.type] ?? notification.type}
                     </span>
                     {!notification.read_at && (
-                      <span className="mt-1.5 flex h-2 w-2 flex-shrink-0 rounded-full bg-primary" />
+                      <span className="bg-primary mt-1.5 flex h-2 w-2 flex-shrink-0 rounded-full" />
                     )}
                   </div>
-                  <p className="line-clamp-2 text-xs text-muted-foreground">
+                  <p className="text-muted-foreground line-clamp-2 text-xs">
                     {notification.message}
                   </p>
-                  <span className="mt-1 text-[10px] text-muted-foreground/80">
+                  <span className="text-muted-foreground/80 mt-1 text-[10px]">
                     {formatDistanceToNow(
                       new Date(notification.created_at as string),
                       { addSuffix: true },
@@ -120,8 +120,8 @@ export function AdminNotificationCenter({
             </div>
           ) : (
             <div className="flex h-full flex-col items-center justify-center space-y-3 p-6 text-center">
-              <Bell className="h-8 w-8 text-muted-foreground/50" />
-              <p className="text-sm text-muted-foreground">
+              <Bell className="text-muted-foreground/50 h-8 w-8" />
+              <p className="text-muted-foreground text-sm">
                 No new notifications.
               </p>
             </div>

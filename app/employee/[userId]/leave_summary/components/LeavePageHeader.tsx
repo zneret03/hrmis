@@ -13,7 +13,7 @@ export function LeavePageHeader(): JSX.Element {
 
   return (
     <div className="mb-4 flex items-center justify-between">
-      <p className="text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-sm">
         File a leave request and track its status below.
       </p>
       <Button onClick={() => toggleOpen?.(true, 'add', null)}>

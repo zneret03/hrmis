@@ -47,7 +47,7 @@ export function EmployeeLeaveCardList({
   return (
     <div className="space-y-4">
       <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
         <Input
           className="pl-9"
           placeholder="Search employees..."
@@ -57,7 +57,7 @@ export function EmployeeLeaveCardList({
       </div>
 
       {filtered.length === 0 ? (
-        <p className="py-8 text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground py-8 text-center text-sm">
           No employees found.
         </p>
       ) : (
@@ -71,7 +71,7 @@ export function EmployeeLeaveCardList({
               <CardContent className="flex items-center gap-3 py-4">
                 <Avatar>
                   <AvatarImage src="" alt={emp.users?.email} />
-                  <AvatarFallback className="bg-blue-400 font-semibold capitalize text-white">
+                  <AvatarFallback className="bg-blue-400 font-semibold text-white capitalize">
                     {avatarName(emp.users?.email ?? '')}
                   </AvatarFallback>
                 </Avatar>
@@ -80,7 +80,7 @@ export function EmployeeLeaveCardList({
                   <p className="truncate font-medium capitalize">
                     {emp.users?.username ?? '—'}
                   </p>
-                  <p className="truncate text-xs text-muted-foreground">
+                  <p className="text-muted-foreground truncate text-xs">
                     {emp.users?.email}
                   </p>
                   {emp.users?.employee_id && (
@@ -90,7 +90,7 @@ export function EmployeeLeaveCardList({
                   )}
                 </div>
 
-                <ChevronRight className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                <ChevronRight className="text-muted-foreground h-4 w-4 flex-shrink-0" />
               </CardContent>
             </Card>
           ))}

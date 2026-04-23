@@ -33,20 +33,35 @@ import {
 import { LeaveCardEntryInsert } from '@/lib/types/leave_card_entries';
 
 const MONTHS = [
-  'January','February','March','April','May','June',
-  'July','August','September','October','November','December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 const currentYear = new Date().getFullYear();
 const YEARS = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
-type FormValues = Omit<LeaveCardEntryInsert, 'user_id' | 'encoded_by' | 'leave_application_id'>;
+type FormValues = Omit<
+  LeaveCardEntryInsert,
+  'user_id' | 'encoded_by' | 'leave_application_id'
+>;
 
 interface LeaveCardEntryDialogProps {
   targetUserId: string;
 }
 
-export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps): JSX.Element {
+export function LeaveCardEntryDialog({
+  targetUserId,
+}: LeaveCardEntryDialogProps): JSX.Element {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { id: encodedBy } = useAuth();
@@ -162,7 +177,8 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
   };
 
   const isOpen = open && (type === 'add' || type === 'edit');
-  const title = type === 'add' ? 'Add Leave Card Entry' : 'Edit Leave Card Entry';
+  const title =
+    type === 'add' ? 'Add Leave Card Entry' : 'Edit Leave Card Entry';
 
   const numericField = (
     label: string,
@@ -179,14 +195,14 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
         {...register(name, { valueAsNumber: true })}
       />
       {errors[name] && (
-        <p className="text-xs text-destructive">{errors[name]?.message}</p>
+        <p className="text-destructive text-xs">{errors[name]?.message}</p>
       )}
     </div>
   );
 
   return (
     <Dialog open={isOpen} onOpenChange={() => toggleOpen?.(false, null, null)}>
-      <DialogContent className="sm:max-w-[56rem] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[56rem]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
@@ -246,7 +262,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
 
           {/* No. of Days Leave Earned */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
               No. of Days Leave Earned
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -257,7 +273,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
 
           {/* Leave Enjoyed */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
               Leave Enjoyed
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -268,7 +284,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
 
           {/* Tardy */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
               Tardiness
             </p>
             {numericField('No. Tardy for 5 mins. or more', 'tardy_count', '1')}
@@ -276,7 +292,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
 
           {/* Undertime */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
               Undertime
             </p>
             <div className="grid grid-cols-3 gap-4">
@@ -288,7 +304,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
 
           {/* Total Leave Spent */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
               Total Leave Spent
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -299,7 +315,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
 
           {/* Leave Without Pay */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
               Leave Without Pay
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -310,7 +326,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
 
           {/* Balance */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
               Balance
             </p>
             <div className="grid grid-cols-2 gap-4">
@@ -321,7 +337,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
 
           {/* Maternity Leave */}
           <div>
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
               Maternity Leave
             </p>
             {numericField('Days', 'maternity_leave')}

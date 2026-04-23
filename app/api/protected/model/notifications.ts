@@ -31,7 +31,9 @@ export const insertLeaveNotificationsForAdmins = async (args: {
       message: `${args.senderEmail} filed a new leave application.`,
     }));
 
-    const { error } = await supabase.from('notifications').insert(notifications);
+    const { error } = await supabase
+      .from('notifications')
+      .insert(notifications);
 
     if (error) {
       return generalErrorResponse({ error: error.message });
