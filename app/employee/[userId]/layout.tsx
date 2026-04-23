@@ -50,7 +50,8 @@ export default async function Layout({
   const leaveNotifications = (leaveNotificationsResult.data ?? []).map(
     (item) => ({
       id: item.id,
-      title: item.type === 'leave_approved' ? 'Leave Approved' : 'Leave Disapproved',
+      title:
+        item.type === 'leave_approved' ? 'Leave Approved' : 'Leave Disapproved',
       message: item.message,
       read_at: !!item.read_at,
       timestamp: new Date(item.created_at as string),

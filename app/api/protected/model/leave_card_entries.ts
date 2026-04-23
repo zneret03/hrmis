@@ -1,8 +1,5 @@
 import { createClient } from '@/config';
-import {
-  generalErrorResponse,
-  successResponse,
-} from '../../helpers/response';
+import { generalErrorResponse, successResponse } from '../../helpers/response';
 import { LeaveCardEntryInsert } from '@/lib/types/leave_card_entries';
 
 export const addLeaveCardEntry = async (data: LeaveCardEntryInsert) => {
@@ -38,7 +35,9 @@ export const updateLeaveCardEntry = async (
       return generalErrorResponse({ error: error.message });
     }
 
-    return successResponse({ message: 'Successfully updated leave card entry.' });
+    return successResponse({
+      message: 'Successfully updated leave card entry.',
+    });
   } catch (error) {
     const newError = error as Error;
     return generalErrorResponse({ error: newError.message });
@@ -58,7 +57,9 @@ export const deleteLeaveCardEntry = async (id: string) => {
       return generalErrorResponse({ error: error.message });
     }
 
-    return successResponse({ message: 'Successfully deleted leave card entry.' });
+    return successResponse({
+      message: 'Successfully deleted leave card entry.',
+    });
   } catch (error) {
     const newError = error as Error;
     return generalErrorResponse({ error: newError.message });

@@ -16,7 +16,9 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 export default async function Layout({ children }: { children: ReactNode }) {
   const supabase = await createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   let notifications: NotificationWithSender[] = [];
 

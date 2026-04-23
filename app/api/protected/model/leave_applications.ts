@@ -5,7 +5,10 @@ import {
   successResponse,
 } from '../../helpers/response';
 import { createClient } from '@/config';
-import { insertLeaveNotificationsForAdmins, notifyEmployee } from './notifications';
+import {
+  insertLeaveNotificationsForAdmins,
+  notifyEmployee,
+} from './notifications';
 
 type LeaveApplicationRequest = Omit<
   LeaveApplications,
@@ -53,7 +56,7 @@ export const addLeaveRequest = async (
 
     await insertLeaveNotificationsForAdmins({
       senderId: data.user_id as string,
-      senderEmail: sender?.email ?? data.user_id as string,
+      senderEmail: sender?.email ?? (data.user_id as string),
       leaveApplicationId: inserted.id,
     });
 

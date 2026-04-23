@@ -1,6 +1,9 @@
 import { Users } from './users';
 
-export type NotificationType = 'leave_filed' | 'leave_approved' | 'leave_disapproved';
+export type NotificationType =
+  | 'leave_filed'
+  | 'leave_approved'
+  | 'leave_disapproved';
 
 export interface Notification {
   id: string;

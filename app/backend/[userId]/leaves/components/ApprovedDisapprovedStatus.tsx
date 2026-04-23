@@ -62,7 +62,9 @@ export function ApproveDisapproveDialog(): JSX.Element {
     });
   };
 
-  const dialogTitle = isApprove ? 'Disapprove Leave Request' : 'Approve Leave Request';
+  const dialogTitle = isApprove
+    ? 'Disapprove Leave Request'
+    : 'Approve Leave Request';
   const description = isApprove
     ? 'Are you sure you want to disapprove this leave request?'
     : 'Are you sure you want to approve this leave request?';
@@ -79,7 +81,7 @@ export function ApproveDisapproveDialog(): JSX.Element {
           <DialogTitle>{dialogTitle}</DialogTitle>
         </DialogHeader>
 
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground text-sm">{description}</p>
 
         <div className="space-y-2">
           <Label className="text-sm font-medium">

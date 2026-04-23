@@ -12,7 +12,6 @@ import { createClient } from '@/config/client';
 import { User } from '@supabase/supabase-js';
 import { useAuth } from '@/services/auth/states/auth-state';
 import { useShallow } from 'zustand/shallow';
-import { UserForm } from '@/lib/types/users';
 
 interface Users extends User {
   userRole: string;
@@ -72,7 +71,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
       }
 
       setUser({ ...session?.user, userRole: data.role } as Users);
-      setUserInfo({ ...data } as UserForm);
+      setUserInfo({ ...data });
       setMount(false);
     };
 

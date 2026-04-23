@@ -12,7 +12,14 @@ import { useShallow } from 'zustand/shallow';
 import { cardStatus } from '../helpers/constants';
 
 export function LeaveCard(args: LeaveApplicationsForm): JSX.Element {
-  const { leave_categories, start_date, end_date, remarks, status, hr_comment } = args;
+  const {
+    leave_categories,
+    start_date,
+    end_date,
+    remarks,
+    status,
+    hr_comment,
+  } = args;
 
   const { toggleOpen } = useLeaveApplicationDialog(
     useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
@@ -32,9 +39,7 @@ export function LeaveCard(args: LeaveApplicationsForm): JSX.Element {
           </Badge>
         </CardTitle>
 
-        {remarks && (
-          <p className="text-sm opacity-90">{remarks}</p>
-        )}
+        {remarks && <p className="text-sm opacity-90">{remarks}</p>}
 
         <div className="text-sm">
           <span>{format(start_date as string, 'MMMM dd, yyyy')}</span> -{' '}
