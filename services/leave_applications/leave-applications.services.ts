@@ -81,6 +81,8 @@ export const approveDisapprovestatus = async (
   userId: string,
   id: string,
   countDates: number | null,
+  reviewedBy?: string,
+  hrComment?: string,
 ) => {
   try {
     const response = await axiosService.put(
@@ -89,6 +91,8 @@ export const approveDisapprovestatus = async (
         status,
         userId,
         countDates,
+        reviewedBy,
+        hrComment,
         type: 'update-leave-status',
       },
     );

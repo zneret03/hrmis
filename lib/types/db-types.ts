@@ -146,7 +146,7 @@ export type Database = {
           created_at: string | null;
           description: string | null;
           id: string;
-          read: string | null;
+          read: string | null | Date;
           title: string | null;
           updated_at: string | null;
           user_id: string | null;
@@ -158,7 +158,7 @@ export type Database = {
           created_at?: string | null;
           description?: string | null;
           id?: string;
-          read?: string | null;
+          read?: string | null | Date;
           title?: string | null;
           updated_at?: string | null;
           user_id?: string | null;
@@ -170,7 +170,7 @@ export type Database = {
           created_at?: string | null;
           description?: string | null;
           id?: string;
-          read?: string | null;
+          read?: string | null | Date;
           title?: string | null;
           updated_at?: string | null;
           user_id?: string | null;

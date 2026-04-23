@@ -5,6 +5,7 @@ import {
   successResponse,
 } from '../../helpers/response';
 import { createClient } from '@/config';
+import { insertLeaveNotificationsForAdmins, notifyEmployee } from './notifications';
 
 type LeaveApplicationRequest = Omit<
   LeaveApplications,
@@ -34,11 +35,27 @@ export const addLeaveRequest = async (
       });
     }
 
-    const { error } = await supabase.from('leave_applications').insert(data);
+    const { data: inserted, error } = await supabase
+      .from('leave_applications')
+      .insert(data)
+      .select('id')
+      .single();
 
     if (error) {
       return generalErrorResponse({ error: error.message });
     }
+
+    const { data: sender } = await supabase
+      .from('users')
+      .select('email')
+      .eq('id', data.user_id as string)
+      .maybeSingle();
+
+    await insertLeaveNotificationsForAdmins({
+      senderId: data.user_id as string,
+      senderEmail: sender?.email ?? data.user_id as string,
+      leaveApplicationId: inserted.id,
+    });
 
     return successResponse({
       message: 'Successfully added leave request.',
@@ -79,6 +96,8 @@ export const approveDisapproveLeave = async (
   userId: string,
   id: string,
   countDates: number,
+  reviewedBy?: string,
+  hrComment?: string,
 ) => {
   try {
     const supabase = await createClient();
@@ -127,11 +146,23 @@ export const approveDisapproveLeave = async (
       .from('leave_applications')
       .update({
         status,
+        ...(hrComment !== undefined && { hr_comment: hrComment }),
+        ...(reviewedBy && { reviewed_by: reviewedBy }),
+        reviewed_at: new Date().toISOString(),
       })
       .eq('id', id);
 
     if (error) {
       return generalErrorResponse({ error: error.message });
+    }
+
+    if ((status === 'approved' || status === 'disapproved') && reviewedBy) {
+      await notifyEmployee({
+        recipientId: userId,
+        senderId: reviewedBy,
+        leaveApplicationId: id,
+        status,
+      });
     }
 
     return successResponse({

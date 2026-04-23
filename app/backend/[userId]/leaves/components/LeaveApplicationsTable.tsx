@@ -161,6 +161,21 @@ export function LeaveApplicationsTable({
         },
       },
       {
+        accessorKey: 'hr_comment',
+        header: 'HR Comment',
+        cell: function ({ row }) {
+          const comment = row.original.hr_comment;
+          if (!comment) return <span className="text-muted-foreground text-xs">—</span>;
+          return (
+            <TooltipComponent value={comment}>
+              <div className="line-clamp-1 w-32 text-ellipsis text-sm">
+                {comment}
+              </div>
+            </TooltipComponent>
+          );
+        },
+      },
+      {
         id: 'actions',
         header: 'Actions',
         enableHiding: false,

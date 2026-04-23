@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
         tableName: 'leave_applications',
         supabase,
         columns:
-          'id, users!inner(email, username, id), leave_categories(name, id), start_date, end_date, status, remarks, created_at, updated_at, archived_at',
+          'id, users!leave_applications_user_id_fkey!inner(email, username, id), leave_categories(name, id), start_date, end_date, status, remarks, hr_comment, reviewed_by, reviewed_at, created_at, updated_at, archived_at',
         search: { column: 'users.email', query: search },
         page,
         perPage,

@@ -10,6 +10,9 @@ import {
   Award,
   Medal,
   LayoutTemplate,
+  ChartSpline,
+  Clock,
+  BookOpen,
 } from 'lucide-react';
 
 export const adminMenus = (id: string): SideMenu[] => {
@@ -18,6 +21,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       title: 'Dashboard',
       url: `/backend/${id}/dashboard`,
       icon: LayoutDashboard,
+      isActive: true,
+    },
+    {
+      title: 'Charts',
+      url: `/backend/${id}/charts`,
+      icon: ChartSpline,
       isActive: true,
     },
     {
@@ -51,6 +60,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       isActive: true,
     },
     {
+      title: 'Personnel Leave Card',
+      url: `/backend/${id}/leave-card`,
+      icon: BookOpen,
+      isActive: true,
+    },
+    {
       title: 'Leave Categories',
       url: `/backend/${id}/leave-categories?page=1`,
       icon: TowerControl,
@@ -71,6 +86,18 @@ export const employeeMenus = (id: string): SideMenu[] => {
       title: 'Personal Management',
       url: `/employee/${id}/personal_management`,
       icon: FileStack,
+      isActive: true,
+    },
+    {
+      title: 'Leave Application',
+      url: `/employee/${id}/leave_summary?page=1`,
+      icon: Plane,
+      isActive: true,
+    },
+    {
+      title: 'Daily Time Record',
+      url: `/employee/${id}/daily_time_record`,
+      icon: Clock,
       isActive: true,
     },
     {

@@ -42,6 +42,74 @@ export interface UpdateUserInfo
   oldAvatar: string;
 }
 
+export const fetchTardinessStatistics = async () => {
+  try {
+    const response = await axiosService.get(
+      `/api/protected/attendance/tardiness`,
+    );
+
+    return response.data.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
+export const fetchEmploymentStatusStatistics = async () => {
+  try {
+    const response = await axiosService.get(
+      `/api/protected/users/employment-status`,
+    );
+
+    return response.data.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
+export const fetchLoyaltyAwards = async () => {
+  try {
+    const response = await axiosService.get(
+      `/api/protected/users/loyalty-awards`,
+    );
+
+    return response.data.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
+export const fetchAgeStatistics = async () => {
+  try {
+    const response = await axiosService.get(`/api/protected/users/age-stats`);
+
+    return response.data.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
+export const fetchGenderStatistics = async () => {
+  try {
+    const response = await axiosService.get(
+      `/api/protected/users/gender-stats`,
+    );
+
+    return response.data.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw e.response?.data.error;
+    }
+  }
+};
+
 export const fetchAllUsers = async () => {
   try {
     const response = await axiosService.get(`/api/protected/users/all`);

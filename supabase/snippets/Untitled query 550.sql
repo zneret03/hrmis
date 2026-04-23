@@ -1,0 +1,1 @@
+SELECT * FROM get_age_bracket_statistics()

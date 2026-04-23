@@ -11,6 +11,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { updateDocument } from '@/services/certificates/certificates.service';
+import { markNotificationRead } from '@/services/notifications/notifications.services';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCertificates } from '@/services/certificates/state/use-certificate';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -19,17 +20,26 @@ import { useShallow } from 'zustand/shallow';
 import { parentPath } from '@/helpers/parentPath';
 import { Certificates } from '@/lib/types/certificates';
 
+type NotificationType = 'document_request' | 'leave_approved' | 'leave_disapproved';
+
 type Notification = {
   id: string;
   title: string;
   message: string;
   timestamp: Date;
   read_at: boolean;
+  type?: NotificationType;
 };
 
 interface NotificationCenter {
   data: Notification[];
 }
+
+const TYPE_LABELS: Record<NotificationType, string> = {
+  document_request: 'Document Request',
+  leave_approved: 'Leave Approved',
+  leave_disapproved: 'Leave Disapproved',
+};
 
 export function NotificationCenter({ data }: NotificationCenter) {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,6 +54,16 @@ export function NotificationCenter({ data }: NotificationCenter) {
   const unreadCount = data.filter((n) => !n.read_at).length;
 
   const handleNotificationClick = async (args: Notification): Promise<void> => {
+    setIsOpen(false);
+
+    if (args.type === 'leave_approved' || args.type === 'leave_disapproved') {
+      await markNotificationRead(args.id);
+      router.push(`${parentPath(pathname)}/leave_summary?page=1`);
+      router.refresh();
+      return;
+    }
+
+    // default: certificate / document request
     const today = new Date();
     await updateDocument({ read_at: today }, args.id as string, false);
     toggleOpen?.(true, 'view-document-request', null, {
@@ -52,7 +72,6 @@ export function NotificationCenter({ data }: NotificationCenter) {
     } as Certificates);
     router.replace(`${parentPath(pathname)}/document_request?page=1`);
     router.refresh();
-    setIsOpen(false);
   };
 
   return (
@@ -81,7 +100,6 @@ export function NotificationCenter({ data }: NotificationCenter) {
       </PopoverTrigger>
 
       <PopoverContent className="w-80 p-0 sm:w-96" align="end">
-        {/* Header Section */}
         <div className="flex items-center justify-between border-b px-4 py-3">
           <div className="flex items-center gap-2">
             <h4 className="text-sm font-semibold">Notifications</h4>
@@ -91,20 +109,8 @@ export function NotificationCenter({ data }: NotificationCenter) {
               </Badge>
             )}
           </div>
-          {/* {unreadCount > 0 && ( */}
-          {/*   <Button */}
-          {/*     variant="ghost" */}
-          {/*     size="sm" */}
-          {/*     onClick={handleMarkAllAsRead} */}
-          {/*     className="text-muted-foreground hover:text-primary h-auto p-0 text-xs" */}
-          {/*   > */}
-          {/*     <Check className="mr-1 h-3 w-3" /> */}
-          {/*     Mark all read */}
-          {/*   </Button> */}
-          {/* )} */}
         </div>
 
-        {/* Notifications List */}
         <ScrollArea className="h-[300px] sm:h-[400px]">
           {data.length > 0 ? (
             <div className="flex flex-col">
@@ -124,7 +130,9 @@ export function NotificationCenter({ data }: NotificationCenter) {
                           : 'text-muted-foreground'
                       }`}
                     >
-                      {notification.title}
+                      {notification.type
+                        ? TYPE_LABELS[notification.type]
+                        : notification.title}
                     </span>
                     {!notification.read_at && (
                       <span className="bg-primary mt-1.5 flex h-2 w-2 flex-shrink-0 rounded-full" />
