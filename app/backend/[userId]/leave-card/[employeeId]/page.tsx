@@ -38,18 +38,18 @@ export default async function EmployeeLeaveCardPage({
       title="Personnel Leave Card"
       description="Leave card ledger encoded by HR/Admin."
     >
+      <PreviousButton />
       <>
-        <div className="mb-4 flex flex-col gap-1">
-          <PreviousButton />
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-lg font-semibold capitalize">
+        <div className="flex flex-col gap-1">
+          <div className="space-y-4">
+            <span className="text-3xl font-semibold capitalize">
               {employee?.username ?? '—'}
             </span>
-            <span className="text-sm text-muted-foreground">
-              {employee?.email}
-            </span>
+            <p className="text-muted-foreground text-sm">{employee?.email}</p>
             {employee?.employee_id && (
-              <Badge variant="outline">ID: {employee.employee_id}</Badge>
+              <Badge variant="outline" className="text-xl">
+                ID: {employee.employee_id}
+              </Badge>
             )}
           </div>
         </div>

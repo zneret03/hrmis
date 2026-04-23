@@ -145,6 +145,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
     startTransition(async () => {
       const payload: LeaveCardEntryInsert = {
         ...values,
+        tardy_count: Math.trunc(values.tardy_count),
         user_id: targetUserId,
         encoded_by: encodedBy ?? null,
         leave_application_id: null,
@@ -166,7 +167,7 @@ export function LeaveCardEntryDialog({ targetUserId }: LeaveCardEntryDialogProps
   const numericField = (
     label: string,
     name: keyof FormValues,
-    step = '0.001',
+    step = 'any',
   ) => (
     <div className="space-y-1">
       <Label className="text-xs">{label}</Label>
