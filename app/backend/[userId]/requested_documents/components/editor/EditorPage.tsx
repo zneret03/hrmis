@@ -46,6 +46,8 @@ interface PdfEditorPage {
   templates?: TemplateDB[];
   certificateId?: string;
   isEdit?: boolean;
+  onSave?: (blob: Blob) => void;
+  defaultPdfUrl?: string;
 }
 
 export function PdfEditorPage({
@@ -53,6 +55,8 @@ export function PdfEditorPage({
   templates,
   certificateId,
   isEdit,
+  onSave,
+  defaultPdfUrl,
 }: PdfEditorPage): JSX.Element {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -205,6 +209,18 @@ export function PdfEditorPage({
     }
   };
 
+  useEffect(() => {
+    if (!defaultPdfUrl) return;
+    startTransition(async () => {
+      const response = await fetch(defaultPdfUrl);
+      if (!response.ok) return;
+      const blob = await response.blob();
+      setPdfFile(
+        new File([blob], 'leave-form.pdf', { type: 'application/pdf' }),
+      );
+    });
+  }, [defaultPdfUrl]);
+
   const handleSave = async () => {
     if (!pdfFile) {
       alert('Please load a PDF first.');
@@ -264,13 +280,11 @@ export function PdfEditorPage({
 
           case 'checkbox':
             if (field.checked) {
-              const checkX = pdfX + scaledYTopDown / 4;
-              const checkY = pdfY + scaledHeight / 4;
-
+              const padding = 2;
               drawCheckmark(page, {
-                x: checkX - 38,
-                y: checkY,
-                size: 12,
+                x: pdfX + padding,
+                y: pdfY + padding,
+                size: Math.min(scaledWidth, scaledHeight) - padding * 2,
               });
             }
             break;
@@ -334,6 +348,11 @@ export function PdfEditorPage({
 
       // downloadFile(blob, pdfFile.name);
 
+      if (onSave) {
+        onSave(blob);
+        return;
+      }
+
       router.replace(parentPath(pathname));
 
       if (templateData) {
@@ -388,34 +407,43 @@ export function PdfEditorPage({
         {/* Top Bar */}
         <div className="flex flex-shrink-0 items-center justify-end border-b border-gray-300 bg-white px-4 py-3">
           <div className="space-x-2">
-            <Button
-              variant="outline"
-              onClick={() => toggleOpen?.(true, 'upload-existing', null, null)}
-            >
-              <UploadCloud /> Upload existing pdf
-            </Button>
-            {isEdit && (
-              <Button onClick={handleSave}>
-                <Pencil /> Update PDF
+            {onSave ? (
+              <Button onClick={handleSave} disabled={!pdfFile}>
+                <Plus /> Submit Leave
               </Button>
-            )}
-            <input
-              ref={uploadPdfRef}
-              onChange={onFileChange}
-              type="file"
-              accept="application/pdf"
-              hidden
-            />
-
-            {!!certificateId && (
-              <Button
-                variant="outline"
-                onClick={handleSave}
-                disabled={!pdfFile || fields.length === 0}
-              >
-                <Plus />
-                Approve Request
-              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    toggleOpen?.(true, 'upload-existing', null, null)
+                  }
+                >
+                  <UploadCloud /> Upload existing pdf
+                </Button>
+                {isEdit && (
+                  <Button onClick={handleSave}>
+                    <Pencil /> Update PDF
+                  </Button>
+                )}
+                <input
+                  ref={uploadPdfRef}
+                  onChange={onFileChange}
+                  type="file"
+                  accept="application/pdf"
+                  hidden
+                />
+                {!!certificateId && (
+                  <Button
+                    variant="outline"
+                    onClick={handleSave}
+                    disabled={!pdfFile || fields.length === 0}
+                  >
+                    <Plus />
+                    Approve Request
+                  </Button>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -443,7 +471,7 @@ export function PdfEditorPage({
                     onLoadSuccess={onDocumentLoadSuccess}
                     onLoadError={(error) => onError(error.message)}
                   >
-                    {Array.from(new Array(numPages), (el, index) => (
+                    {Array.from(new Array(numPages), (_, index) => (
                       <PdfPageDroppable
                         key={`page_${index + 1}`}
                         pageNumber={index + 1}

@@ -80,7 +80,7 @@ export function UploadExistingDialog(): JSX.Element {
     startTransition(async () => {
       resetVariable();
 
-      if (isEdit) {
+      if (isEditMode) {
         await updateTemplate(
           templateData?.id as string,
           name,
@@ -108,7 +108,8 @@ export function UploadExistingDialog(): JSX.Element {
 
   const isOpenDialog = open && type === 'upload-existing';
 
-  const isEdit = templateData ? 'Update File' : 'Save File';
+  const isEditMode = !!templateData;
+  const buttonLabel = templateData ? 'Update File' : 'Save File';
 
   return (
     <Dialog
@@ -167,7 +168,7 @@ export function UploadExistingDialog(): JSX.Element {
               disabled={isPending || !pdfFile || !name}
               isLoading={isPending}
             >
-              <Plus /> {isEdit}
+              <Plus /> {buttonLabel}
             </CustomButton>
           </DialogClose>
         </DialogFooter>

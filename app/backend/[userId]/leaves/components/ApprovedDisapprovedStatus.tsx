@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { CustomButton } from '@/components/custom/CustomButton';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { FileText } from 'lucide-react';
 
 export function ApproveDisapproveDialog(): JSX.Element {
   const [isPending, startTransition] = useTransition();
@@ -82,6 +83,18 @@ export function ApproveDisapproveDialog(): JSX.Element {
         </DialogHeader>
 
         <p className="text-muted-foreground text-sm">{description}</p>
+
+        {data?.document && (
+          <a
+            href={data.document}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary flex items-center gap-2 text-sm underline-offset-4 hover:underline"
+          >
+            <FileText className="h-4 w-4" />
+            View Leave Application Document
+          </a>
+        )}
 
         <div className="space-y-2">
           <Label className="text-sm font-medium">

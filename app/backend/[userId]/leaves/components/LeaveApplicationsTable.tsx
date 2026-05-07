@@ -20,6 +20,7 @@ import {
   Pencil,
   Trash,
   CheckCircle,
+  FileText,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -173,6 +174,26 @@ export function LeaveApplicationsTable({
                 {comment}
               </div>
             </TooltipComponent>
+          );
+        },
+      },
+      {
+        accessorKey: 'document',
+        header: 'Document',
+        cell: function ({ row }) {
+          const doc = row.original.document;
+          if (!doc)
+            return <span className="text-muted-foreground text-xs">—</span>;
+          return (
+            <a
+              href={doc}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary flex items-center gap-1 text-sm underline-offset-4 hover:underline"
+            >
+              <FileText className="h-4 w-4" />
+              View
+            </a>
           );
         },
       },

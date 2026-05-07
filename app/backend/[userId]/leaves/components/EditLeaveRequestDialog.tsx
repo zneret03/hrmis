@@ -93,10 +93,11 @@ export function EditFileLeaveDialog({
       remarks,
       start_date: new Date(startDate as Date).toISOString(),
       end_date: new Date(endDate as Date).toISOString(),
+      document: data?.document ?? null,
     };
 
     startTransition(async () => {
-      await editLeaveRequest(newData as typeof newData, data?.id as string);
+      await editLeaveRequest(newData, data?.id as string);
       resetVariables();
     });
   };
