@@ -73,11 +73,7 @@ export function FileLeaveDetailsDialog({
   const uploadDocument = async (): Promise<string | null> => {
     if (!pdfBlob) return null;
     const formData = new FormData();
-    formData.append(
-      'file',
-      pdfBlob,
-      `${username ?? userId}-leave-form.pdf`,
-    );
+    formData.append('file', pdfBlob, `${username ?? userId}-leave-form.pdf`);
     formData.append('username', username ?? userId);
     const response = await axiosService.post(
       '/api/protected/leave_application/document',

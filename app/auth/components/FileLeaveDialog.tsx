@@ -60,12 +60,17 @@ interface FileLeaveDialog {
 export function FileLeaveDialog({ category }: FileLeaveDialog): JSX.Element {
   const [isPending, startTransition] = useTransition();
   const [scale, setScale] = useState(1.0);
-  const [pdfFormData, setPdfFormData] = useState<Record<string, string | boolean>>({});
+  const [pdfFormData, setPdfFormData] = useState<
+    Record<string, string | boolean>
+  >({});
 
   const state = useAuth();
   const router = useRouter();
 
-  const categoryData = category.map((item) => ({ id: item.id, name: item.name }));
+  const categoryData = category.map((item) => ({
+    id: item.id,
+    name: item.name,
+  }));
 
   const {
     control,
@@ -253,7 +258,10 @@ export function FileLeaveDialog({ category }: FileLeaveDialog): JSX.Element {
               name="leave_id"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <Select value={value as string} onValueChange={(e) => onChange(e)}>
+                <Select
+                  value={value as string}
+                  onValueChange={(e) => onChange(e)}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Leave Status" />
                   </SelectTrigger>

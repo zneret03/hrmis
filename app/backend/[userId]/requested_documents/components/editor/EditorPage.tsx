@@ -215,7 +215,9 @@ export function PdfEditorPage({
       const response = await fetch(defaultPdfUrl);
       if (!response.ok) return;
       const blob = await response.blob();
-      setPdfFile(new File([blob], 'leave-form.pdf', { type: 'application/pdf' }));
+      setPdfFile(
+        new File([blob], 'leave-form.pdf', { type: 'application/pdf' }),
+      );
     });
   }, [defaultPdfUrl]);
 

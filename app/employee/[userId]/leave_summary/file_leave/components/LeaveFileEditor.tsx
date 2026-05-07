@@ -9,7 +9,9 @@ interface LeaveFileEditorProps {
   category: Pick<LeaveCategories, 'name' | 'id'>[];
 }
 
-export function LeaveFileEditor({ category }: LeaveFileEditorProps): JSX.Element {
+export function LeaveFileEditor({
+  category,
+}: LeaveFileEditorProps): JSX.Element {
   const [showModal, setShowModal] = useState(false);
   const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
 
