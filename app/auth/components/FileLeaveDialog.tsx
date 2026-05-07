@@ -138,9 +138,10 @@ export function FileLeaveDialog({ category }: FileLeaveDialog): JSX.Element {
         remarks,
         start_date: new Date(startDate as Date).toISOString(),
         end_date: new Date(endDate as Date).toISOString(),
+        document: null,
       };
 
-      await addLeaveRequest(newData as typeof newData, credsCount);
+      await addLeaveRequest(newData, credsCount);
       resetVariables();
     });
   };

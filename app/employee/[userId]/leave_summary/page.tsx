@@ -1,10 +1,8 @@
 import { JSX } from 'react';
 import { Container } from '@/components/custom/Container';
 import { getLeaveApplications } from '@/services/leave_applications/leave-applications.services';
-import { getLeaveCategories } from '@/services/leave_categories/leave-categories.services';
 import { Leaves } from './components/Leaves';
 import { EmptyPlaceholder } from '@/components/custom/EmptyPlaceholder';
-import { FileLeaveDialog } from '@/app/auth/components/FileLeaveDialog';
 import { CancelLeaveDialog } from './components/CancelLeaveDialog';
 import { LeavePageHeader } from './components/LeavePageHeader';
 
@@ -15,10 +13,9 @@ export default async function leaveSummary({
 }): Promise<JSX.Element> {
   const { page } = await searchParams;
 
-  const [response, categoryResponse] = await Promise.all([
-    getLeaveApplications(`?page=${page || 1}&perPage=20&sortBy=status`),
-    getLeaveCategories(`?&search=&sortBy=created_at`),
-  ]);
+  const response = await getLeaveApplications(
+    `?page=${page || 1}&perPage=20&sortBy=status`,
+  );
 
   const hasLeaves = (response?.leave_applications?.length ?? 0) > 0;
 
@@ -45,7 +42,6 @@ export default async function leaveSummary({
           )}
         </div>
 
-        <FileLeaveDialog category={categoryResponse?.leave_categories ?? []} />
         <CancelLeaveDialog />
       </>
     </Container>

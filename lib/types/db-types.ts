@@ -335,6 +335,7 @@ export type Database = {
         Row: {
           archived_at: string | null;
           created_at: string | null;
+          document: string | null;
           end_date: string;
           id: string;
           leave_id: string;
@@ -347,6 +348,7 @@ export type Database = {
         Insert: {
           archived_at?: string | null;
           created_at?: string | null;
+          document?: string | null;
           end_date: string;
           id?: string;
           leave_id: string;
@@ -359,6 +361,7 @@ export type Database = {
         Update: {
           archived_at?: string | null;
           created_at?: string | null;
+          document?: string | null;
           end_date?: string;
           id?: string;
           leave_id?: string;
