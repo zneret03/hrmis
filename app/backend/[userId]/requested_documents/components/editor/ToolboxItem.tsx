@@ -2,7 +2,14 @@
 
 import React, { ReactNode } from 'react';
 import { useDraggable } from '@dnd-kit/core';
-import { Pencil, Check, PencilLine, Signature, Image } from 'lucide-react';
+import {
+  Pencil,
+  Check,
+  PencilLine,
+  Signature,
+  Image,
+  QrCode,
+} from 'lucide-react';
 import { FieldType, ToolboxDragData } from '@/lib/types/DraggableTypes';
 
 interface ToolboxItemProps {
@@ -40,6 +47,12 @@ const tooltBoxItems: { [key: string]: ReactNode } = {
     <div className="flex items-center gap-2">
       <Image className="h-4 w-4" />
       <span className="font-medium">Image</span>
+    </div>
+  ),
+  qrcode: (
+    <div className="flex items-center gap-2">
+      <QrCode className="h-4 w-4" />
+      <span className="font-medium">QR Code</span>
     </div>
   ),
 };

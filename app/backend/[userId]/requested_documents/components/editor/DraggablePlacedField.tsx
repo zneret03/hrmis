@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import QRCode from 'qrcode';
 import { useDraggable } from '@dnd-kit/core';
 import { PlacedField, PlacedFieldDragData } from '@/lib/types/DraggableTypes';
 import { NumberSize, Resizable } from 're-resizable';
@@ -24,6 +25,17 @@ export function DraggablePlacedField({
 }: DraggablePlacedFieldProps) {
   const signatureInputRef = React.useRef<HTMLInputElement>(null);
   const image = React.useRef<HTMLInputElement>(null);
+  const qrCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (field.type !== 'qrcode' || !field.value || !qrCanvasRef.current) return;
+    QRCode.toCanvas(qrCanvasRef.current, field.value, {
+      width: Math.max(Math.min(field.width, field.height), 150),
+      margin: 2,
+      errorCorrectionLevel: 'M',
+      color: { dark: '#000000', light: '#ffffff' },
+    }).catch(console.error);
+  }, [field.type, field.value, field.width, field.height]);
 
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: field.id,
@@ -46,9 +58,9 @@ export function DraggablePlacedField({
   };
 
   const onResizeStop = (
-    e: MouseEvent | TouchEvent,
-    direction: Direction,
-    ref: HTMLElement,
+    _e: MouseEvent | TouchEvent,
+    _direction: Direction,
+    _ref: HTMLElement,
     d: NumberSize,
   ) => {
     onUpdate(field.id, {
@@ -170,6 +182,18 @@ export function DraggablePlacedField({
             />
           </>
         );
+
+      case 'qrcode':
+        return (
+          <div className="box-border flex h-full w-full items-center justify-center border border-dashed border-violet-500 bg-violet-50/30">
+            {field.value ? (
+              <canvas ref={qrCanvasRef} className="max-h-full max-w-full" />
+            ) : (
+              <span className="text-xs text-violet-400">QR Code</span>
+            )}
+          </div>
+        );
+
       default:
         return null;
     }

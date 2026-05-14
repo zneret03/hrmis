@@ -5,7 +5,9 @@ import { LeaveCardEntryInsert } from '@/lib/types/leave_card_entries';
 
 export const getLeaveCardEntries = async (params: string) => {
   try {
-    const response = await axiosService.get(`/api/protected/leave_card${params}`);
+    const response = await axiosService.get(
+      `/api/protected/leave_card${params}`,
+    );
     return response.data.data;
   } catch (e) {
     if (axios.isAxiosError(e)) {

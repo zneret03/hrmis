@@ -9,13 +9,6 @@ import {
   DialogTitle,
   DialogClose,
 } from '@/components/ui/dialog';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -24,7 +17,7 @@ import { CustomButton } from '@/components/custom/CustomButton';
 import { useLeaveCardDialog } from '@/services/leave_card/states/leave-card-dialog';
 import { useShallow } from 'zustand/shallow';
 import { useRouter } from 'next/navigation';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useAuth } from '@/services/auth/states/auth-state';
 import {
   addLeaveCardEntry,
@@ -32,23 +25,7 @@ import {
 } from '@/services/leave_card/leave-card.services';
 import { LeaveCardEntryInsert } from '@/lib/types/leave_card_entries';
 
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
 const currentYear = new Date().getFullYear();
-const YEARS = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
 type FormValues = Omit<
   LeaveCardEntryInsert,
@@ -78,7 +55,6 @@ export function LeaveCardEntryDialog({
   const {
     register,
     handleSubmit,
-    control,
     reset,
     formState: { errors },
   } = useForm<FormValues>({
@@ -212,51 +188,39 @@ export function LeaveCardEntryDialog({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <Label className="text-xs">Year *</Label>
-              <Controller
-                name="year"
-                control={control}
-                rules={{ required: 'Required' }}
-                render={({ field }) => (
-                  <Select
-                    value={String(field.value)}
-                    onValueChange={(v) => field.onChange(Number(v))}
-                  >
-                    <SelectTrigger className="h-8 text-sm">
-                      <SelectValue placeholder="Year" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {YEARS.map((y) => (
-                        <SelectItem key={y} value={String(y)}>
-                          {y}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
+              <Input
+                type="number"
+                className="h-8 text-sm"
+                {...register('year', {
+                  required: 'Required',
+                  valueAsNumber: true,
+                  min: { value: 1900, message: 'Invalid year' },
+                  max: {
+                    value: currentYear,
+                    message: 'Cannot exceed current year',
+                  },
+                })}
               />
+              {errors.year && (
+                <p className="text-destructive text-xs">
+                  {errors.year.message}
+                </p>
+              )}
             </div>
 
             <div className="space-y-1">
               <Label className="text-xs">Month *</Label>
-              <Controller
-                name="month"
-                control={control}
-                rules={{ required: 'Required' }}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="h-8 text-sm">
-                      <SelectValue placeholder="Month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {MONTHS.map((m) => (
-                        <SelectItem key={m} value={m}>
-                          {m}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
+              <Input
+                type="text"
+                placeholder="e.g. January"
+                className="h-8 text-sm"
+                {...register('month', { required: 'Required' })}
               />
+              {errors.month && (
+                <p className="text-destructive text-xs">
+                  {errors.month.message}
+                </p>
+              )}
             </div>
           </div>
 

@@ -302,7 +302,7 @@ export const signUp = async (body: SignUp) => {
 
     const { error: creditUser } = await supabase
       .from('leave_credits')
-      .insert({ user_id: data.user.id, credits: 10 });
+      .insert({ user_id: data.user.id, credits: 0 });
 
     if (creditUser) {
       if (body.avatar) {

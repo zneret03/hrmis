@@ -21,6 +21,7 @@ import {
 } from '@dnd-kit/core';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import QRCode from 'qrcode';
 import { useTemplateDialog } from '@/services/template/state/template-state';
 import { Toolbox } from './Toolbox';
 import { PdfPageDroppable } from './PdfPageDroppable';
@@ -48,6 +49,7 @@ interface PdfEditorPage {
   isEdit?: boolean;
   onSave?: (blob: Blob) => void;
   defaultPdfUrl?: string;
+  documentDetails?: string;
 }
 
 export function PdfEditorPage({
@@ -57,6 +59,7 @@ export function PdfEditorPage({
   isEdit,
   onSave,
   defaultPdfUrl,
+  documentDetails,
 }: PdfEditorPage): JSX.Element {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
@@ -203,7 +206,7 @@ export function PdfEditorPage({
         y: Math.max(0, y),
         width: toolboxDragData.width,
         height: toolboxDragData.height,
-        value: '',
+        value: toolboxDragData.type === 'qrcode' ? (documentDetails ?? '') : '',
       };
       setFields((prevFields) => [...prevFields, newField]);
     }
@@ -286,6 +289,34 @@ export function PdfEditorPage({
                 y: pdfY + padding,
                 size: Math.min(scaledWidth, scaledHeight) - padding * 2,
               });
+            }
+            break;
+
+          case 'qrcode':
+            if (field.value) {
+              try {
+                const qrDataUrl = await QRCode.toDataURL(field.value, {
+                  width: 512,
+                  margin: 2,
+                  errorCorrectionLevel: 'M',
+                  color: { dark: '#000000', light: '#ffffff' },
+                });
+                const base64Data = qrDataUrl.split(',')[1];
+                const binaryStr = atob(base64Data);
+                const qrBytes = new Uint8Array(binaryStr.length);
+                for (let i = 0; i < binaryStr.length; i++) {
+                  qrBytes[i] = binaryStr.charCodeAt(i);
+                }
+                const qrImage = await pdfDoc.embedPng(qrBytes);
+                page.drawImage(qrImage, {
+                  x: pdfX,
+                  y: pdfY,
+                  width: scaledWidth,
+                  height: scaledHeight,
+                });
+              } catch (qrErr) {
+                console.error('Failed to embed QR code:', qrErr);
+              }
             }
             break;
 

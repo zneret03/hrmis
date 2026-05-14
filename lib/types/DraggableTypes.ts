@@ -3,7 +3,8 @@ export type FieldType =
   | 'signature'
   | 'checkbox'
   | 'textarea'
-  | 'image';
+  | 'image'
+  | 'qrcode';
 
 export interface PlacedField {
   id: string;

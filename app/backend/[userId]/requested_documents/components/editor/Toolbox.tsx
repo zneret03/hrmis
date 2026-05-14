@@ -19,6 +19,7 @@ export function Toolbox({ templates, callback, isTemplateEditor }: Toolbox) {
         <ToolboxItem type="textarea" width={200} height={80} />
         <ToolboxItem type="signature" width={150} height={50} />
         <ToolboxItem type="image" width={150} height={50} />
+        <ToolboxItem type="qrcode" width={150} height={150} />
       </div>
 
       {!isTemplateEditor && (

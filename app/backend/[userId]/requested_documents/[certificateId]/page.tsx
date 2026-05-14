@@ -5,6 +5,7 @@ import { DocumentEditor } from './components/DocumentEditor';
 import { getTemplates } from '@/services/template/template.service';
 import { UploadExistingDialog } from '../components/editor/UploadExistingDialog';
 import { Container } from '@/components/custom/Container';
+import { createClient } from '@/config';
 
 export default async function EditorPage({
   params,
@@ -18,9 +19,29 @@ export default async function EditorPage({
 
   const pdf = document === 'pdf-editor' ? 'pdf' : 'docx';
 
-  const response = await getTemplates(
-    `?page=${page || 1}&perPage=10&sortBy=created_at&type=${pdf}`,
-  );
+  const supabase = await createClient();
+  const [templatesResponse, certResult] = await Promise.all([
+    getTemplates(`?page=${page || 1}&perPage=10&sortBy=created_at&type=${pdf}`),
+    supabase
+      .from('certificates')
+      .select(
+        'id, title, certificate_type, certificate_status, reason, created_at',
+      )
+      .eq('id', certificateId)
+      .single(),
+  ]);
+
+  const cert = certResult.data;
+  const documentDetails = cert
+    ? JSON.stringify({
+        title: cert.title,
+        certificate_type: cert.certificate_type,
+        certificate_status: cert.certificate_status,
+        reason: cert.reason,
+        id: cert.id,
+        created_at: cert.created_at ?? '',
+      })
+    : '';
 
   return (
     <Container
@@ -31,9 +52,17 @@ export default async function EditorPage({
         <EditorSwitch document={document} />
       </section>
       {document === 'pdf-editor' ? (
-        <PdfEditorPage {...{ templates: response.templates, certificateId }} />
+        <PdfEditorPage
+          {...{
+            templates: templatesResponse.templates,
+            certificateId,
+            documentDetails,
+          }}
+        />
       ) : (
-        <DocumentEditor {...{ templates: response.templates, certificateId }} />
+        <DocumentEditor
+          {...{ templates: templatesResponse.templates, certificateId }}
+        />
       )}
 
       <UploadExistingDialog />

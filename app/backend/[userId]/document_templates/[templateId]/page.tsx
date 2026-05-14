@@ -17,13 +17,22 @@ export default async function EditorPage({
 
   const response = await getTemplate(templateId);
 
+  const documentDetails = JSON.stringify({
+    name: response?.name ?? '',
+    type: response?.type ?? 'pdf',
+    id: response?.id ?? '',
+    created_at: response?.created_at ?? '',
+  });
+
   return (
     <Container
       title="Document Editor"
       description="You can edit a document here"
     >
       {type === 'pdf' ? (
-        <PdfEditorPage {...{ template: response, isEdit: true }} />
+        <PdfEditorPage
+          {...{ template: response, isEdit: true, documentDetails }}
+        />
       ) : (
         <DocumentEditor {...{ serverTemplate: response, isEdit: true }} />
       )}
