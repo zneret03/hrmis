@@ -13,6 +13,17 @@ concurrency:
 
 env:
   NODE_VERSION: '20'
+  # Placeholder values so `next.config.ts` loads in CI. It calls
+  # `new URL(NEXT_IMAGE_PUBLIC_URL)` at config load (shared by lint and build),
+  # which throws if the var is missing. No real Supabase instance is contacted —
+  # every page is dynamic (server-rendered on demand), so nothing is fetched at
+  # build time. Swap these for repository secrets if a build ever needs live data.
+  NEXT_PUBLIC_APP_URL: http://localhost:3000
+  NEXT_IMAGE_PUBLIC_URL: http://localhost:54321/storage/**
+  NEXT_PUBLIC_DESTINATION: /auth/sign-in
+  NEXT_PUBLIC_SUPABASE_URL: http://localhost:54321
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: build-placeholder
+  NEXT_PUBLIC_SUPABASE_SERVICE_SECRET_KEY: build-placeholder
 
 jobs:
   # TypeScript + ESLint (ESLint also enforces Prettier via prettier/prettier).
@@ -56,9 +67,8 @@ jobs:
           path: coverage
           if-no-files-found: ignore
 
-  # Production build. Uses placeholder env so the build never reaches a real
-  # Supabase instance; replace with repository secrets if a page needs live data
-  # at build time.
+  # Production build. Placeholder Supabase env is provided at the workflow level
+  # (see top-level `env:`), so the build never reaches a real instance.
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -71,8 +81,3 @@ jobs:
       - run: yarn install --frozen-lockfile
       - name: Build
         run: yarn build
-        env:
-          NEXT_PUBLIC_APP_URL: http://localhost:3000
-          NEXT_PUBLIC_SUPABASE_URL: http://localhost:54321
-          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: build-placeholder
-          NEXT_PUBLIC_SUPABASE_SERVICE_SECRET_KEY: build-placeholder
