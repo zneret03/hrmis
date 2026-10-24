@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # TypeScript + ESLint (ESLint also enforces Prettier via prettier/prettier).
+  quality:
+    name: Typecheck & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - name: Typecheck
+        run: yarn typecheck
+      - name: Lint
+        run: yarn lint
+
+  # Unit + UI tests (jsdom) and API/integration tests (node), with coverage.
+  test:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - name: Unit & UI tests
+        run: yarn test:unit
+      - name: API integration tests
+        run: yarn test:integration
+      - name: Coverage
+        run: yarn test:coverage
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+          if-no-files-found: ignore
+
+  # Production build. Uses placeholder env so the build never reaches a real
+  # Supabase instance; replace with repository secrets if a page needs live data
+  # at build time.
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - name: Build
+        run: yarn build
+        env:
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+          NEXT_PUBLIC_SUPABASE_URL: http://localhost:54321
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: build-placeholder
+          NEXT_PUBLIC_SUPABASE_SERVICE_SECRET_KEY: build-placeholder

@@ -240,7 +240,7 @@ export function LeaveCardTable({ data, userId }: LeaveCardTableProps) {
             {isAddingRow && (
               <tr className="bg-primary/5 border-b">
                 {/* Year */}
-                <td className="border px-1 py-1 min-w-[64px]">
+                <td className="min-w-[64px] border px-1 py-1">
                   <input
                     type="number"
                     min={1900}
@@ -252,11 +252,11 @@ export function LeaveCardTable({ data, userId }: LeaveCardTableProps) {
                   />
                 </td>
                 {/* Month */}
-                <td className="border px-1 py-1 min-w-[90px]">
+                <td className="min-w-[90px] border px-1 py-1">
                   <select
                     value={draft.month}
                     onChange={(e) => handleChange('month', e.target.value)}
-                    className="w-full bg-transparent px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary rounded-sm border border-transparent focus:border-primary"
+                    className="focus:ring-primary focus:border-primary w-full rounded-sm border border-transparent bg-transparent px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
                   >
                     {MONTHS.map((m) => (
                       <option key={m} value={m}>
@@ -281,7 +281,7 @@ export function LeaveCardTable({ data, userId }: LeaveCardTableProps) {
                 {numCell('balance_sick')}
                 {numCell('maternity_leave')}
                 {/* Remarks */}
-                <td className="border px-1 py-1 min-w-[100px]">
+                <td className="min-w-[100px] border px-1 py-1">
                   <input
                     type="text"
                     value={draft.remarks}
@@ -296,7 +296,7 @@ export function LeaveCardTable({ data, userId }: LeaveCardTableProps) {
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                      className="text-muted-foreground hover:text-destructive h-6 w-6"
                       onClick={handleCancel}
                       disabled={isPending}
                       title="Cancel"
@@ -307,7 +307,7 @@ export function LeaveCardTable({ data, userId }: LeaveCardTableProps) {
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-6 w-6 text-green-600 hover:text-green-700 hover:bg-green-50"
+                        className="h-6 w-6 text-green-600 hover:bg-green-50 hover:text-green-700"
                         onClick={handleSubmit}
                         disabled={isPending}
                         title="Save entry"
