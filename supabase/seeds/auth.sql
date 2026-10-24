@@ -26,7 +26,7 @@ WITH new_user AS (
     'authenticated',
     'authenticated',
     'admin2@example.com',
-    '$2a$10$TrPumvBtf/cO6RnI002QRu5X/I9dWMnH9Ma9Garg0GL/Wbtgkd21i',
+    '$2a$10$TQutGZloa83.p0gmdKX0PO1rplnzkVrM3J9HwVYOXjzmrQVAISDNO',
     '2025-08-12 02:21:51.900286+00',
     NULL,
     jsonb_build_object(
