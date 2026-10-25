@@ -56,6 +56,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       isActive: true,
     },
     {
+      title: 'Attendance Report',
+      url: `/backend/${id}/attendance-report?period=monthly`,
+      icon: Clock,
+      isActive: true,
+    },
+    {
       title: 'Leaves',
       url: `/backend/${id}/leaves?page=1`,
       icon: Plane,

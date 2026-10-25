@@ -62,6 +62,7 @@ export async function updateSession(request: NextRequest) {
     'leaves',
     'user_credits',
     'attendance',
+    'attendance-report',
     'personal_management',
     'document_request',
     'requested_documents',
