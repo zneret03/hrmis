@@ -14,6 +14,7 @@ import {
   Clock,
   BookOpen,
   BadgeCheck,
+  ClipboardList,
 } from 'lucide-react';
 
 export const adminMenus = (id: string): SideMenu[] => {
@@ -70,6 +71,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       title: 'Leave Categories',
       url: `/backend/${id}/leave-categories?page=1`,
       icon: TowerControl,
+      isActive: true,
+    },
+    {
+      title: 'Employee Master List',
+      url: `/backend/${id}/employee-master-list?status=all`,
+      icon: ClipboardList,
       isActive: true,
     },
     {

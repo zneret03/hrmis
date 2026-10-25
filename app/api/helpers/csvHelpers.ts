@@ -34,7 +34,7 @@ export function escapeCSVField(value: unknown): string {
  * Pass `columns` to control order/headers; otherwise the first row's keys are
  * used. Returns an empty string for an empty array with no columns.
  */
-export function toCSV<T extends Record<string, unknown>>(
+export function toCSV<T extends object>(
   rows: T[],
   columns?: CSVColumn<T>[],
 ): string {
