@@ -66,6 +66,7 @@ export async function updateSession(request: NextRequest) {
     'personal_management',
     'document_request',
     'requested_documents',
+    'service-record',
     'awards',
     'nominated_awards',
     'charts',

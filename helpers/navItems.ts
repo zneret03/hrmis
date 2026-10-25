@@ -97,6 +97,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       icon: Users,
       isActive: true,
     },
+    {
+      title: 'Service Record',
+      url: `/backend/${id}/service-record`,
+      icon: FileStack,
+      isActive: true,
+    },
   ];
 };
 
@@ -106,6 +112,12 @@ export const employeeMenus = (id: string): SideMenu[] => {
       title: 'Personal Management',
       url: `/employee/${id}/personal_management`,
       icon: FileStack,
+      isActive: true,
+    },
+    {
+      title: 'Service Record',
+      url: `/employee/${id}/service-record`,
+      icon: BookOpen,
       isActive: true,
     },
     {
