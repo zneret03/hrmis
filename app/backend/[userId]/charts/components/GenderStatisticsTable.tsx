@@ -30,6 +30,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { CategoryActions } from './CategoryActions';
 
 interface Gender {
   gender: string;
@@ -118,6 +119,7 @@ export function GenderStatisticsTable({ gender: data }: GenderTableData) {
       <h1 className="text-3xl font-bold">Gender Statistics</h1>
       <div className="flex items-center py-4">
         <div className="flex items-center gap-2">
+          <CategoryActions category="gender" title="Gender Statistics" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">

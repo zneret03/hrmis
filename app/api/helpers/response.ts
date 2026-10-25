@@ -70,6 +70,17 @@ export function forbiddenResponse<T>(data?: T): NextResponse {
   });
 }
 
+export function csvResponse(csv: string, filename: string): NextResponse {
+  // Prepend a UTF-8 BOM so Excel opens the file with correct encoding.
+  return new NextResponse(`﻿${csv}`, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/csv; charset=utf-8',
+      'Content-Disposition': `attachment; filename="${filename}"`,
+    },
+  });
+}
+
 export function validationErrorNextResponse<T>(data?: T): NextResponse {
   const message = JSON.stringify(data || { message: 'Validation Error' });
 

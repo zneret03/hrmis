@@ -30,6 +30,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { CategoryActions } from './CategoryActions';
 
 interface EmploymentStatus {
   employment_status: string;
@@ -120,6 +121,10 @@ export function EmploymentStatusTable({
       <h1 className="text-3xl font-bold">Employment Status Statistics</h1>
       <div className="flex items-center py-4">
         <div className="flex items-center gap-2">
+          <CategoryActions
+            category="employment"
+            title="Employment Status Statistics"
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
