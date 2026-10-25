@@ -30,6 +30,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { CategoryActions } from './CategoryActions';
 
 interface Age {
   age_brackets: string;
@@ -118,6 +119,7 @@ export function AgeStatisticsTable({ age: data }: AgeTableData) {
       <h1 className="text-3xl font-bold">Age Bracket Statistics</h1>
       <div className="flex items-center py-4">
         <div className="flex items-center gap-2">
+          <CategoryActions category="age" title="Age Bracket Statistics" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">

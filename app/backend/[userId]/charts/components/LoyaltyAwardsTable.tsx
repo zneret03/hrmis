@@ -30,6 +30,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { CategoryActions } from './CategoryActions';
 
 interface LoyaltyAward {
   years_of_service: string;
@@ -118,6 +119,10 @@ export function LoyaltyAwardsTable({
       <h1 className="text-3xl font-bold">Loyalty Award Statistics</h1>
       <div className="flex items-center py-4">
         <div className="flex items-center gap-2">
+          <CategoryActions
+            category="loyalty"
+            title="Loyalty Award Statistics"
+          />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
