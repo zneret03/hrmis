@@ -80,6 +80,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       isActive: true,
     },
     {
+      title: 'Loyalty Threshold',
+      url: `/backend/${id}/loyalty-threshold?page=1`,
+      icon: Medal,
+      isActive: true,
+    },
+    {
       title: 'Employee Master List',
       url: `/backend/${id}/employee-master-list?status=all`,
       icon: ClipboardList,

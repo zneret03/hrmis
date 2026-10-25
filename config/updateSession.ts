@@ -59,6 +59,7 @@ export async function updateSession(request: NextRequest) {
     'employee-master-list',
     'employee-status',
     'leave-categories',
+    'loyalty-threshold',
     'leaves',
     'user_credits',
     'attendance',
