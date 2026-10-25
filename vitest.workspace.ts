@@ -12,6 +12,7 @@ const sharedExclude = [
   '**/.next/**',
   '**/dist/**',
   '**/supabase/**',
+  '**/e2e/**',
 ];
 
 export default defineWorkspace([
