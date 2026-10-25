@@ -13,6 +13,9 @@
     "test:unit": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
     "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report e2e/artifacts/playwright-report",
     "start:db": "yarn supabase start",
     "stop:db": "yarn supabase stop",
     "format": "yarn prettier -w ."
@@ -78,6 +81,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.64.1",
     "@snaplet/copycat": "^6.0.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "10.4.0",
