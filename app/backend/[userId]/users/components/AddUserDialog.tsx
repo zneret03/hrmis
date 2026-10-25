@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useState, useTransition } from 'react';
+import { JSX, useState, useTransition, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -33,11 +33,12 @@ import { signUp } from '@/services/users/users.services';
 import { ImageUpload } from '@/components/custom/ImageUpload';
 import { isEmpty } from 'lodash';
 import {
-  employmentStatus,
   roleTypes,
   civilStatus,
   genderStatus,
 } from '@/app/auth/sign-in/helpers/constants';
+import { getAllEmployeeStatus } from '@/services/employee_status/employee-status.services';
+import { EmployeeStatus } from '@/lib/types/employee_status';
 
 interface AddUserDialog extends UserForm {
   password: string;
@@ -53,6 +54,15 @@ export function AddUserDialog(): JSX.Element {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<string>('');
+  const [statuses, setStatuses] = useState<
+    Pick<EmployeeStatus, 'id' | 'name'>[]
+  >([]);
+
+  useEffect(() => {
+    getAllEmployeeStatus()
+      .then(setStatuses)
+      .catch(() => setStatuses([]));
+  }, []);
 
   const { open, toggleOpen, type } = useUserDialog(
     useShallow((state) => ({
@@ -374,9 +384,9 @@ export function AddUserDialog(): JSX.Element {
                     <SelectValue placeholder="Select employment status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {employmentStatus.map((item, index) => (
-                      <SelectItem key={`${item}-${index}`} value={item}>
-                        {item}
+                    {statuses.map((item) => (
+                      <SelectItem key={item.id} value={item.name}>
+                        {item.name}
                       </SelectItem>
                     ))}
                   </SelectContent>

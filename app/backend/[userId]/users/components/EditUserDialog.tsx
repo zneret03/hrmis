@@ -35,9 +35,10 @@ import { useShallow } from 'zustand/react/shallow';
 import {
   roleTypes,
   civilStatus,
-  employmentStatus,
   genderStatus,
 } from '@/app/auth/sign-in/helpers/constants';
+import { getAllEmployeeStatus } from '@/services/employee_status/employee-status.services';
+import { EmployeeStatus } from '@/lib/types/employee_status';
 import { ImageUpload } from '@/components/custom/ImageUpload';
 import { toPercentage } from '@/helpers/convertToPercent';
 import { isEqual } from 'lodash';
@@ -57,6 +58,15 @@ export function EditUserDialog(): JSX.Element {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isPendingCredits, startCreditTransition] = useTransition();
+  const [statuses, setStatuses] = useState<
+    Pick<EmployeeStatus, 'id' | 'name'>[]
+  >([]);
+
+  useEffect(() => {
+    getAllEmployeeStatus()
+      .then(setStatuses)
+      .catch(() => setStatuses([]));
+  }, []);
 
   const [isUpdateCredits, setUpdateCredits] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
@@ -438,9 +448,9 @@ export function EditUserDialog(): JSX.Element {
                     <SelectValue placeholder="Select employment status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {employmentStatus.map((item, index) => (
-                      <SelectItem key={`${item}-${index}`} value={item}>
-                        {item}
+                    {statuses.map((item) => (
+                      <SelectItem key={item.id} value={item.name}>
+                        {item.name}
                       </SelectItem>
                     ))}
                   </SelectContent>

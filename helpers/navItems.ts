@@ -13,6 +13,7 @@ import {
   ChartSpline,
   Clock,
   BookOpen,
+  BadgeCheck,
 } from 'lucide-react';
 
 export const adminMenus = (id: string): SideMenu[] => {
@@ -69,6 +70,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       title: 'Leave Categories',
       url: `/backend/${id}/leave-categories?page=1`,
       icon: TowerControl,
+      isActive: true,
+    },
+    {
+      title: 'Employee Status',
+      url: `/backend/${id}/employee-status?page=1`,
+      icon: BadgeCheck,
       isActive: true,
     },
     {

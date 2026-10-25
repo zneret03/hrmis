@@ -56,6 +56,7 @@ export async function updateSession(request: NextRequest) {
   const protectedAdminRoutes = [
     'dashboard',
     'users',
+    'employee-status',
     'leave-categories',
     'leaves',
     'user_credits',
