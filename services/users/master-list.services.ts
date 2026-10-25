@@ -10,19 +10,33 @@ export interface MasterListRow {
   email: string;
 }
 
+export interface MasterList {
+  employees: MasterListRow[];
+  count: number;
+  totalPages: number;
+  currentPage: number;
+}
+
 export const getEmployeeMasterList = async (
   status: string,
-): Promise<MasterListRow[]> => {
+  page: number,
+): Promise<MasterList> => {
   try {
     const response = await axiosService.get(
-      `/api/protected/users/master-list?status=${encodeURIComponent(status)}`,
+      `/api/protected/users/master-list?status=${encodeURIComponent(status)}&page=${page}`,
     );
 
-    return response.data.data.employees ?? [];
+    const { data } = response.data;
+    return {
+      employees: data.employees ?? [],
+      count: data.count ?? 0,
+      totalPages: data.totalPages ?? 1,
+      currentPage: data.currentPage ?? 1,
+    };
   } catch (e) {
     if (axios.isAxiosError(e)) {
       throw e.response?.data.error;
     }
-    return [];
+    return { employees: [], count: 0, totalPages: 1, currentPage: 1 };
   }
 };

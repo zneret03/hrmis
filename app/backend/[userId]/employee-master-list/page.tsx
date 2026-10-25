@@ -7,13 +7,14 @@ import { getAllEmployeeStatus } from '@/services/employee_status/employee-status
 export default async function EmployeeMasterListPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; page?: string }>;
 }): Promise<JSX.Element> {
-  const { status } = await searchParams;
+  const { status, page } = await searchParams;
   const activeStatus = status || 'all';
+  const currentPage = Math.max(Number(page) || 1, 1);
 
-  const [employees, statuses] = await Promise.all([
-    getEmployeeMasterList(activeStatus),
+  const [list, statuses] = await Promise.all([
+    getEmployeeMasterList(activeStatus, currentPage),
     getAllEmployeeStatus(),
   ]);
 
@@ -24,9 +25,12 @@ export default async function EmployeeMasterListPage({
     >
       <MasterListTable
         {...{
-          employees: employees || [],
+          employees: list.employees,
           statuses: statuses || [],
           activeStatus,
+          totalPages: list.totalPages,
+          currentPage: list.currentPage,
+          count: list.count,
         }}
       />
     </Container>

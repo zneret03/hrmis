@@ -19,15 +19,19 @@ export interface AttendanceReport {
   start: string;
   end: string;
   rows: AttendanceReportRow[];
+  count: number;
+  totalPages: number;
+  currentPage: number;
 }
 
 export const getAttendanceReport = async (
   period: AttendancePeriod,
   date: string,
+  page: number,
 ): Promise<AttendanceReport> => {
   try {
     const response = await axiosService.get(
-      `/api/protected/attendance/report?period=${period}&date=${date}`,
+      `/api/protected/attendance/report?period=${period}&date=${date}&page=${page}`,
     );
     const { data } = response.data;
     return {
@@ -35,11 +39,22 @@ export const getAttendanceReport = async (
       start: data.start,
       end: data.end,
       rows: data.rows ?? [],
+      count: data.count ?? 0,
+      totalPages: data.totalPages ?? 1,
+      currentPage: data.currentPage ?? 1,
     };
   } catch (e) {
     if (axios.isAxiosError(e)) {
       throw e.response?.data.error;
     }
-    return { period, start: '', end: '', rows: [] };
+    return {
+      period,
+      start: '',
+      end: '',
+      rows: [],
+      count: 0,
+      totalPages: 1,
+      currentPage: 1,
+    };
   }
 };

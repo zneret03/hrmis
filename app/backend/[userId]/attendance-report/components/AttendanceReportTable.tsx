@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { PaginationControls } from '@/components/custom/PaginationControls';
 import {
   type AttendancePeriod,
   type AttendanceReportRow,
@@ -24,6 +25,9 @@ interface AttendanceReportTableProps {
   start: string;
   end: string;
   rows: AttendanceReportRow[];
+  count: number;
+  totalPages: number;
+  currentPage: number;
 }
 
 const PERIODS: { value: AttendancePeriod; label: string }[] = [
@@ -38,6 +42,9 @@ export function AttendanceReportTable({
   start,
   end,
   rows,
+  count,
+  totalPages,
+  currentPage,
 }: AttendanceReportTableProps): JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
@@ -81,7 +88,7 @@ export function AttendanceReportTable({
 
       <div className="text-muted-foreground mb-2 text-sm">
         {start && end ? `${start} to ${end} · ` : ''}
-        {rows.length} record{rows.length === 1 ? '' : 's'}
+        {count} record{count === 1 ? '' : 's'}
       </div>
 
       <div className="rounded-md border">
@@ -138,6 +145,8 @@ export function AttendanceReportTable({
           </TableBody>
         </Table>
       </div>
+
+      <PaginationControls totalPages={totalPages} currentPage={currentPage} />
     </div>
   );
 }

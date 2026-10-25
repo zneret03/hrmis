@@ -29,15 +29,20 @@ export async function GET(req: NextRequest) {
       .eq('id', user.id)
       .single();
 
+    const url = req.nextUrl.searchParams;
+
     // Employees may only see their own records; admins can see all or filter.
-    let targetUserId = req.nextUrl.searchParams.get('userId');
+    let targetUserId = url.get('userId');
     if (me?.role !== 'admin') {
       targetUserId = me?.id ?? '';
     }
 
+    const page = Math.max(Number(url.get('page') || 1), 1);
+    const perPage = Number(url.get('perPage') || 10);
+
     let query = supabase
       .from('service_record')
-      .select(SELECT)
+      .select(SELECT, { count: 'exact' })
       .is('archived_at', null)
       .order('from_date', { ascending: false });
 
@@ -45,12 +50,18 @@ export async function GET(req: NextRequest) {
       query = query.eq('user_id', targetUserId);
     }
 
-    const { data, error } = await query;
+    const from = (page - 1) * perPage;
+    const { data, error, count } = await query.range(from, from + perPage - 1);
     if (error) return badRequestResponse({ error: error.message });
 
     return successResponse({
       message: 'Successfully fetched service records',
-      data: { service_record: data },
+      data: {
+        service_record: data,
+        count: count ?? 0,
+        totalPages: Math.ceil((count ?? 0) / perPage),
+        currentPage: page,
+      },
     });
   } catch (error) {
     const newError = error as Error;

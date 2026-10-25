@@ -8,17 +8,18 @@ const mockedCreateClient = vi.mocked(createClient);
 
 function bioBuilder(result: unknown) {
   const b: Record<string, unknown> = {};
-  b.select = vi.fn(() => b);
-  b.is = vi.fn(() => b);
-  b.order = vi.fn(() => b);
-  b.limit = vi.fn().mockResolvedValue(result);
+  for (const m of ['select', 'is', 'gte', 'lte', 'order']) {
+    b[m] = vi.fn(() => b);
+  }
+  b.range = vi.fn().mockResolvedValue(result);
   return b;
 }
 
 function usersBuilder(result: unknown) {
   const b: Record<string, unknown> = {};
   b.select = vi.fn(() => b);
-  b.is = vi.fn().mockResolvedValue(result);
+  b.is = vi.fn(() => b);
+  b.range = vi.fn().mockResolvedValue(result);
   return b;
 }
 

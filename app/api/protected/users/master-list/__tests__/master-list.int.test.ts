@@ -14,7 +14,7 @@ function usersBuilder(result: unknown) {
   b.is = vi.fn(() => b);
   b.order = vi.fn(() => b);
   b.eq = vi.fn(() => b);
-  b.then = (resolve: (value: unknown) => unknown) => resolve(result);
+  b.range = vi.fn().mockResolvedValue(result);
   return b;
 }
 

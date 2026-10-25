@@ -7,6 +7,7 @@ import {
 } from '../../../helpers/response';
 import { createClient } from '@/config';
 import { toCSV } from '@/app/api/helpers/csvHelpers';
+import { fetchAllRows } from '@/app/api/helpers/paginated-data';
 import { Users } from '@/lib/types/users';
 
 const USER_COLUMNS =
@@ -49,45 +50,61 @@ export async function GET(req: NextRequest) {
     const url = req.nextUrl.searchParams;
     const status = url.get('status') || 'all';
     const format = url.get('format');
+    const page = Math.max(Number(url.get('page') || 1), 1);
+    const perPage = Number(url.get('perPage') || 10);
 
-    let query = supabase
-      .from('users')
-      .select(USER_COLUMNS)
-      .is('archived_at', null)
-      .order('last_name', { ascending: true });
+    // Fresh base query per call — `all` returns every active user, otherwise
+    // filter by status. Used both for the batched export and the paged view.
+    const baseQuery = (withCount = false) => {
+      let query = supabase
+        .from('users')
+        .select(USER_COLUMNS, withCount ? { count: 'exact' } : undefined)
+        .is('archived_at', null)
+        .order('last_name', { ascending: true });
+      if (status && status !== 'all') {
+        query = query.eq('employment_status', status);
+      }
+      return query;
+    };
 
-    // `all` (or empty) returns every active user; otherwise filter by status.
-    if (status && status !== 'all') {
-      query = query.eq('employment_status', status);
-    }
+    const toRow = (user: MasterListUser): MasterListRow => ({
+      employee_id: user.employee_id ?? '',
+      name: [user.last_name, user.first_name, user.middle_name]
+        .filter(Boolean)
+        .join(', '),
+      gender: user.gender ?? '',
+      employment_status: user.employment_status ?? '',
+      position: user.position ?? '',
+      email: user.email ?? '',
+    });
 
-    const { data, error } = await query;
-
-    if (error) {
-      return badRequestResponse({ error: error.message });
-    }
-
-    const rows: MasterListRow[] = ((data ?? []) as MasterListUser[]).map(
-      (user) => ({
-        employee_id: user.employee_id ?? '',
-        name: [user.last_name, user.first_name, user.middle_name]
-          .filter(Boolean)
-          .join(', '),
-        gender: user.gender ?? '',
-        employment_status: user.employment_status ?? '',
-        position: user.position ?? '',
-        email: user.email ?? '',
-      }),
-    );
-
+    // Export: every matching row (batched past the 1000-row cap).
     if (format === 'csv') {
+      const { data, error } = await fetchAllRows<MasterListUser>(baseQuery);
+      if (error) return badRequestResponse({ error: error.message });
       const label = status === 'all' ? 'all' : status.toLowerCase();
-      return csvResponse(toCSV(rows, CSV_COLUMNS), `employees-${label}.csv`);
+      return csvResponse(
+        toCSV(data.map(toRow), CSV_COLUMNS),
+        `employees-${label}.csv`,
+      );
     }
+
+    // View: one page at a time.
+    const from = (page - 1) * perPage;
+    const { data, error, count } = await baseQuery(true).range(
+      from,
+      from + perPage - 1,
+    );
+    if (error) return badRequestResponse({ error: error.message });
 
     return successResponse({
       message: 'Successfully fetched employee master list',
-      data: { employees: rows },
+      data: {
+        employees: ((data ?? []) as MasterListUser[]).map(toRow),
+        count: count ?? 0,
+        totalPages: Math.ceil((count ?? 0) / perPage),
+        currentPage: page,
+      },
     });
   } catch (error) {
     const newError = error as Error;

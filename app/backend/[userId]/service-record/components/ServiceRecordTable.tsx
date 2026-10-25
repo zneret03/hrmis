@@ -18,11 +18,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useShallow } from 'zustand/shallow';
+import { PaginationControls } from '@/components/custom/PaginationControls';
 import { useServiceRecordDialog } from '@/services/service_record/states/service-record-dialog';
 import { ServiceRecordWithUser } from '@/lib/types/service_record';
 
 interface ServiceRecordTableProps {
   records: ServiceRecordWithUser[];
+  totalPages: number;
+  currentPage: number;
 }
 
 const employeeName = (record: ServiceRecordWithUser): string => {
@@ -34,6 +37,8 @@ const employeeName = (record: ServiceRecordWithUser): string => {
 
 export function ServiceRecordTable({
   records,
+  totalPages,
+  currentPage,
 }: ServiceRecordTableProps): JSX.Element {
   const { toggleOpen } = useServiceRecordDialog(
     useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
@@ -135,6 +140,8 @@ export function ServiceRecordTable({
           </TableBody>
         </Table>
       </div>
+
+      <PaginationControls totalPages={totalPages} currentPage={currentPage} />
     </div>
   );
 }

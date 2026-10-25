@@ -13,6 +13,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { PaginationControls } from '@/components/custom/PaginationControls';
 import { MasterListRow } from '@/services/users/master-list.services';
 import { EmployeeStatus } from '@/lib/types/employee_status';
 
@@ -20,12 +21,18 @@ interface MasterListTableProps {
   employees: MasterListRow[];
   statuses: Pick<EmployeeStatus, 'id' | 'name'>[];
   activeStatus: string;
+  totalPages: number;
+  currentPage: number;
+  count: number;
 }
 
 export function MasterListTable({
   employees,
   statuses,
   activeStatus,
+  totalPages,
+  currentPage,
+  count,
 }: MasterListTableProps): JSX.Element {
   const router = useRouter();
   const pathname = usePathname();
@@ -69,7 +76,7 @@ export function MasterListTable({
       </div>
 
       <div className="text-muted-foreground mb-2 text-sm">
-        {employees.length} employee{employees.length === 1 ? '' : 's'}
+        {count} employee{count === 1 ? '' : 's'}
       </div>
 
       <div className="rounded-md border">
@@ -118,6 +125,8 @@ export function MasterListTable({
           </TableBody>
         </Table>
       </div>
+
+      <PaginationControls totalPages={totalPages} currentPage={currentPage} />
     </div>
   );
 }

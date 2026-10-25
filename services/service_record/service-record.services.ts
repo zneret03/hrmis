@@ -15,20 +15,39 @@ export interface ServiceRecordForm {
   remarks?: string | null;
 }
 
-export const getServiceRecords = async (
-  userId?: string,
-): Promise<ServiceRecordWithUser[]> => {
+export interface ServiceRecordList {
+  records: ServiceRecordWithUser[];
+  count: number;
+  totalPages: number;
+  currentPage: number;
+}
+
+export const getServiceRecords = async (params?: {
+  userId?: string;
+  page?: number;
+  perPage?: number;
+}): Promise<ServiceRecordList> => {
   try {
-    const query = userId ? `?userId=${userId}` : '';
+    const qs = new URLSearchParams();
+    if (params?.userId) qs.set('userId', params.userId);
+    qs.set('page', String(params?.page ?? 1));
+    if (params?.perPage) qs.set('perPage', String(params.perPage));
+
     const response = await axiosService.get(
-      `/api/protected/service_record${query}`,
+      `/api/protected/service_record?${qs.toString()}`,
     );
-    return response.data.data.service_record ?? [];
+    const { data } = response.data;
+    return {
+      records: data.service_record ?? [],
+      count: data.count ?? 0,
+      totalPages: data.totalPages ?? 1,
+      currentPage: data.currentPage ?? 1,
+    };
   } catch (e) {
     if (axios.isAxiosError(e)) {
       throw e.response?.data.error;
     }
-    return [];
+    return { records: [], count: 0, totalPages: 1, currentPage: 1 };
   }
 };
 

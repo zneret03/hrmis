@@ -6,9 +6,16 @@ import { DeleteServiceRecordDialog } from './components/DeleteDialog';
 import { getServiceRecords } from '@/services/service_record/service-record.services';
 import { fetchAllUsers } from '@/services/users/users.services';
 
-export default async function ServiceRecordPage(): Promise<JSX.Element> {
-  const [records, usersResponse] = await Promise.all([
-    getServiceRecords(),
+export default async function ServiceRecordPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}): Promise<JSX.Element> {
+  const { page } = await searchParams;
+  const currentPage = Math.max(Number(page) || 1, 1);
+
+  const [list, usersResponse] = await Promise.all([
+    getServiceRecords({ page: currentPage }),
     fetchAllUsers(),
   ]);
 
@@ -23,7 +30,11 @@ export default async function ServiceRecordPage(): Promise<JSX.Element> {
       title="Employee Service Record"
       description="Add, edit, or delete service record entries for employees"
     >
-      <ServiceRecordTable records={records ?? []} />
+      <ServiceRecordTable
+        records={list.records}
+        totalPages={list.totalPages}
+        currentPage={list.currentPage}
+      />
       <ServiceRecordFormDialog users={users} />
       <DeleteServiceRecordDialog />
     </Container>

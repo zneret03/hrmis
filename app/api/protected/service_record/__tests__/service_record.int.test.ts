@@ -20,8 +20,9 @@ function srSelectBuilder(rows: unknown[]) {
   b.is = vi.fn(() => b);
   b.order = vi.fn(() => b);
   b.eq = vi.fn(() => b);
-  b.then = (resolve: (v: unknown) => unknown) =>
-    resolve({ data: rows, error: null });
+  b.range = vi
+    .fn()
+    .mockResolvedValue({ data: rows, error: null, count: rows.length });
   return b;
 }
 

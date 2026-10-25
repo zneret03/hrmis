@@ -7,6 +7,7 @@ import {
 } from '../../../helpers/response';
 import { createClient } from '@/config';
 import { toCSV } from '@/app/api/helpers/csvHelpers';
+import { fetchAllRows } from '@/app/api/helpers/paginated-data';
 import {
   computeDayAttendance,
   getPeriodRange,
@@ -61,20 +62,35 @@ export async function GET(req: NextRequest) {
     const format = url.get('format');
     const { start, end } = getPeriodRange(period as AttendancePeriod, anchor);
 
+    // Coarse raw-timestamp bounds for the period (local = raw - 8h, so a local
+    // day's punches can land on the next UTC day). The exact per-day filter runs
+    // in JS below. Batched so nothing is dropped at the 1000-row cap.
+    const lower = `${start}T00:00:00.000Z`;
+    const upperDate = new Date(`${end}T00:00:00.000Z`);
+    upperDate.setUTCDate(upperDate.getUTCDate() + 2);
+    const upper = upperDate.toISOString();
+
     const [
       { data: biometrics, error: bioError },
       { data: users, error: usersError },
     ] = await Promise.all([
-      supabase
-        .from('biometrics')
-        .select('employee_id, timestamp')
-        .is('archived_at', null)
-        .order('timestamp', { ascending: true })
-        .limit(100000),
-      supabase
-        .from('users')
-        .select('employee_id, first_name, middle_name, last_name')
-        .is('archived_at', null),
+      fetchAllRows<{ employee_id: string | null; timestamp: string }>(() =>
+        supabase
+          .from('biometrics')
+          .select('employee_id, timestamp')
+          .is('archived_at', null)
+          .gte('timestamp', lower)
+          .lte('timestamp', upper)
+          .order('timestamp', { ascending: true }),
+      ),
+      fetchAllRows<
+        Pick<Users, 'employee_id' | 'first_name' | 'middle_name' | 'last_name'>
+      >(() =>
+        supabase
+          .from('users')
+          .select('employee_id, first_name, middle_name, last_name')
+          .is('archived_at', null),
+      ),
     ]);
 
     if (bioError) return badRequestResponse({ error: bioError.message });
@@ -131,6 +147,7 @@ export async function GET(req: NextRequest) {
         : a.date.localeCompare(b.date),
     );
 
+    // Export: the whole period.
     if (format === 'csv') {
       return csvResponse(
         toCSV(rows, CSV_COLUMNS),
@@ -138,9 +155,23 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // View: one page of the aggregated rows.
+    const page = Math.max(Number(url.get('page') || 1), 1);
+    const perPage = Number(url.get('perPage') || 10);
+    const from = (page - 1) * perPage;
+    const paged = rows.slice(from, from + perPage);
+
     return successResponse({
       message: 'Successfully fetched attendance report',
-      data: { period, start, end, rows },
+      data: {
+        period,
+        start,
+        end,
+        rows: paged,
+        count: rows.length,
+        totalPages: Math.ceil(rows.length / perPage),
+        currentPage: page,
+      },
     });
   } catch (error) {
     const newError = error as Error;

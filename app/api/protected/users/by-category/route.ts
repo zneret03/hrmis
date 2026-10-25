@@ -7,6 +7,7 @@ import {
 } from '../../../helpers/response';
 import { createClient } from '@/config';
 import { toCSV } from '@/app/api/helpers/csvHelpers';
+import { fetchAllRows } from '@/app/api/helpers/paginated-data';
 import { differenceInYears } from 'date-fns';
 import { Users } from '@/lib/types/users';
 
@@ -85,11 +86,15 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    const { data, error } = await supabase
-      .from('users')
-      .select(USER_COLUMNS)
-      .is('archived_at', null)
-      .order('last_name', { ascending: true });
+    // Full set (batched past the 1000-row cap) so View and Export match the
+    // chart statistic counts.
+    const { data, error } = await fetchAllRows<CategoryUser>(() =>
+      supabase
+        .from('users')
+        .select(USER_COLUMNS)
+        .is('archived_at', null)
+        .order('last_name', { ascending: true }),
+    );
 
     if (error) {
       return badRequestResponse({ error: error.message });
