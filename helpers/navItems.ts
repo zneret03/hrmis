@@ -72,6 +72,12 @@ export const adminMenus = (id: string): SideMenu[] => {
       isActive: true,
     },
     {
+      title: 'Loyalty Threshold',
+      url: `/backend/${id}/loyalty-threshold?page=1`,
+      icon: Medal,
+      isActive: true,
+    },
+    {
       title: 'Users',
       url: `/backend/${id}/users?page=1`,
       icon: Users,

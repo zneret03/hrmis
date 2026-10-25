@@ -57,6 +57,7 @@ export async function updateSession(request: NextRequest) {
     'dashboard',
     'users',
     'leave-categories',
+    'loyalty-threshold',
     'leaves',
     'user_credits',
     'attendance',
