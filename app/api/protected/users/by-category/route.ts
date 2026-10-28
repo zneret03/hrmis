@@ -21,10 +21,11 @@ const COLUMN_HEADER: Record<Category, string> = {
 };
 
 const USER_COLUMNS =
-  'employee_id, first_name, middle_name, last_name, gender, employment_status, birthdate, date_of_original_appointment';
+  'id, employee_id, first_name, middle_name, last_name, gender, employment_status, birthdate, date_of_original_appointment';
 
 type CategoryUser = Pick<
   Users,
+  | 'id'
   | 'employee_id'
   | 'first_name'
   | 'middle_name'
@@ -50,7 +51,15 @@ function composeName(user: CategoryUser): string {
     .join(', ');
 }
 
-function categoryValue(user: CategoryUser, category: Category): string {
+// One row per employee counted for loyalty: years since they became Permanent
+// (see the get_employee_years_of_service SQL function).
+type YearsOfService = { user_id: string; years_of_service: number };
+
+function categoryValue(
+  user: CategoryUser,
+  category: Category,
+  yearsOfService: Map<string, number>,
+): string {
   switch (category) {
     case 'gender':
       return user.gender ?? '';
@@ -60,15 +69,10 @@ function categoryValue(user: CategoryUser, category: Category): string {
       return user.birthdate
         ? String(differenceInYears(new Date(), new Date(user.birthdate)))
         : '';
-    case 'loyalty':
-      return user.date_of_original_appointment
-        ? String(
-            differenceInYears(
-              new Date(),
-              new Date(user.date_of_original_appointment),
-            ),
-          )
-        : '';
+    case 'loyalty': {
+      const years = yearsOfService.get(user.id);
+      return years === undefined ? '' : String(years);
+    }
   }
 }
 
@@ -100,6 +104,25 @@ export async function GET(req: NextRequest) {
       return badRequestResponse({ error: error.message });
     }
 
+    // Loyalty uses the same years-of-service rule as the chart statistic.
+    const yearsOfService = new Map<string, number>();
+    if (category === 'loyalty') {
+      const { data: years, error: yearsError } =
+        await fetchAllRows<YearsOfService>(() =>
+          supabase
+            .rpc('get_employee_years_of_service')
+            .order('user_id', { ascending: true }),
+        );
+
+      if (yearsError) {
+        return badRequestResponse({ error: yearsError.message });
+      }
+
+      for (const row of years) {
+        yearsOfService.set(row.user_id, row.years_of_service);
+      }
+    }
+
     const header = COLUMN_HEADER[category];
     // Only include users who have the relevant attribute, matching the chart
     // statistics (which count `WHERE <attribute> IS NOT NULL`).
@@ -107,7 +130,7 @@ export async function GET(req: NextRequest) {
       .map((user) => ({
         employee_id: user.employee_id ?? '',
         name: composeName(user),
-        value: categoryValue(user, category),
+        value: categoryValue(user, category, yearsOfService),
       }))
       .filter((row) => row.value !== '');
 

@@ -16,6 +16,13 @@ function usersBuilder(result: unknown) {
   return b;
 }
 
+function rpcBuilder(result: unknown) {
+  const b: Record<string, unknown> = {};
+  b.order = vi.fn(() => b);
+  b.range = vi.fn().mockResolvedValue(result);
+  return b;
+}
+
 const searchReq = (qs: string): NextRequest =>
   ({
     nextUrl: { searchParams: new URLSearchParams(qs) },
@@ -23,6 +30,7 @@ const searchReq = (qs: string): NextRequest =>
 
 const SAMPLE = [
   {
+    id: 'u1',
     employee_id: 'E1',
     first_name: 'Jane',
     middle_name: 'M',
@@ -34,10 +42,25 @@ const SAMPLE = [
   },
 ];
 
-function mockUsers(result: unknown) {
+// Not Permanent (e.g. Elected): absent from get_employee_years_of_service.
+const NOT_PERMANENT = {
+  ...SAMPLE[0],
+  id: 'u2',
+  employee_id: 'E2',
+  first_name: 'Maria',
+  last_name: 'Santos',
+  employment_status: 'Elected',
+};
+
+function mockUsers(result: unknown, yearsResult: unknown = { data: [] }) {
+  const rpc = vi.fn(() =>
+    rpcBuilder({ error: null, ...(yearsResult as object) }),
+  );
   mockedCreateClient.mockResolvedValue({
     from: vi.fn(() => usersBuilder(result)),
+    rpc,
   } as never);
+  return { rpc };
 }
 
 beforeEach(() => vi.clearAllMocks());
@@ -71,14 +94,46 @@ describe('GET /api/protected/users/by-category', () => {
     expect(json.data.employees[0].value).toBe(expected);
   });
 
-  it('computes years of service for loyalty', async () => {
-    mockUsers({ data: SAMPLE, error: null });
+  it('takes loyalty years of service from the Permanent-date RPC', async () => {
+    // Original appointment 2016 but Permanent since 2015 → the RPC's 11 wins.
+    const { rpc } = mockUsers(
+      { data: SAMPLE, error: null },
+      { data: [{ user_id: 'u1', years_of_service: 11 }] },
+    );
     const res = await GET(searchReq('category=loyalty'));
     const json = await res!.json();
-    const expected = String(
-      differenceInYears(new Date(), new Date('2016-01-01')),
+    expect(rpc).toHaveBeenCalledWith('get_employee_years_of_service');
+    expect(json.data.header).toBe('Years of Service');
+    expect(json.data.employees).toEqual([
+      { employee_id: 'E1', name: 'Doe, Jane, M', value: '11' },
+    ]);
+  });
+
+  it('excludes employees who are not Permanent from loyalty', async () => {
+    mockUsers(
+      { data: [SAMPLE[0], NOT_PERMANENT], error: null },
+      { data: [{ user_id: 'u1', years_of_service: 10 }] },
     );
-    expect(json.data.employees[0].value).toBe(expected);
+    const res = await GET(searchReq('category=loyalty'));
+    const json = await res!.json();
+    expect(
+      json.data.employees.map((e: { employee_id: string }) => e.employee_id),
+    ).toEqual(['E1']);
+  });
+
+  it('returns 400 when the years-of-service RPC fails', async () => {
+    mockUsers(
+      { data: SAMPLE, error: null },
+      { data: null, error: { message: 'rpc failed' } },
+    );
+    const res = await GET(searchReq('category=loyalty'));
+    expect(res?.status).toBe(400);
+  });
+
+  it('does not call the years-of-service RPC for other categories', async () => {
+    const { rpc } = mockUsers({ data: SAMPLE, error: null });
+    await GET(searchReq('category=gender'));
+    expect(rpc).not.toHaveBeenCalled();
   });
 
   it('exports CSV with the category header', async () => {
