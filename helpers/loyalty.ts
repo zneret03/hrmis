@@ -1,7 +1,10 @@
 // Loyalty award logic — the TypeScript mirror of the get_loyalty_award_statistics
 // SQL function (see the loyalty_exact_year_thresholds migration). Awards are
 // granted only in the exact milestone year; the default thresholds match the
-// seeded employee_loyalty_threshold table.
+// seeded employee_loyalty_threshold table. Years of service themselves count
+// from the date the employee became Permanent and come from the
+// get_employee_years_of_service SQL function (loyalty_years_from_permanent_date
+// migration).
 export const LOYALTY_THRESHOLDS = [5, 10, 15, 20, 25, 30, 35, 40];
 
 export const NOT_ELIGIBLE_LABEL = 'Not eligible this year';

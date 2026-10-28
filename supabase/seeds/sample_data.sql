@@ -55,13 +55,17 @@ VALUES
   ('140-9',  '2026-01-14T16:00:00Z', 1), ('140-9',  '2026-01-14T20:00:00Z', 1),
   ('140-9',  '2026-01-14T21:00:00Z', 1), ('140-9',  '2026-01-15T01:00:00Z', 1);
 
--- Service records.
+-- Service records. Loyalty years of service count from the first Permanent
+-- entry: 140-9 was appointed 2011 as Casual but is Permanent only since
+-- 2016-03-01, so loyalty counts from 2016 (not 2011).
 INSERT INTO public.service_record (
   user_id, position, status, salary, station, from_date, to_date, remarks
 )
 VALUES
   ('e0000000-0000-0000-0000-000000000001', 'Clerk I',                'Permanent', '25000', 'Main Office', '2016-05-01', '2020-12-31', 'Promoted'),
   ('e0000000-0000-0000-0000-000000000001', 'Administrative Officer', 'Permanent', '38000', 'Main Office', '2021-01-01', NULL,         'Current'),
-  ('e0000000-0000-0000-0000-000000000004', 'Councilor',              'Elected',   '45000', 'City Hall',   '2019-06-30', '2022-06-30', 'First term');
+  ('e0000000-0000-0000-0000-000000000004', 'Councilor',              'Elected',   '45000', 'City Hall',   '2019-06-30', '2022-06-30', 'First term'),
+  ('e0000000-0000-0000-0000-000000000005', 'Accounting Clerk',       'Casual',    '18000', 'Accounting',  '2011-03-01', '2016-02-29', 'Converted to permanent'),
+  ('e0000000-0000-0000-0000-000000000005', 'Accountant',             'Permanent', '32000', 'Accounting',  '2016-03-01', NULL,         'Current');
 
 COMMIT;

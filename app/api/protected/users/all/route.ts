@@ -12,7 +12,7 @@ export async function GET() {
     const { data, error } = await supabase
       .from('users')
       .select(
-        'id, employee_id, username, email, role, avatar, created_at, updated_at, archived_at',
+        'id, employee_id, username, first_name, last_name, email, role, avatar, created_at, updated_at, archived_at',
       );
 
     if (error) {

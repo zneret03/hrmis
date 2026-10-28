@@ -1,7 +1,10 @@
 import { JSX } from 'react';
 import { createClient } from '@/config';
 import { Container } from '@/components/custom/Container';
-import { EmployeeLeaveCardList } from './components/EmployeeLeaveCardList';
+import {
+  EmployeePickerList,
+  PickerEmployee,
+} from '@/app/components/EmployeePickerList';
 
 type EmployeeRow = {
   user_id: string | null;
@@ -26,14 +29,25 @@ export default async function LeaveCardPage(): Promise<JSX.Element> {
     .order('created_at', { ascending: true });
 
   const raw = (employees ?? []) as unknown as EmployeeRow[];
-  const list = raw.filter((e) => e.users?.role === 'employee');
+  const list: PickerEmployee[] = raw.flatMap(({ users }) =>
+    users?.role === 'employee'
+      ? [
+          {
+            id: users.id,
+            name: users.username,
+            email: users.email,
+            employee_id: users.employee_id,
+          },
+        ]
+      : [],
+  );
 
   return (
     <Container
       title="Personnel Leave Card"
       description="Select an employee to view or encode their leave card."
     >
-      <EmployeeLeaveCardList employees={list} />
+      <EmployeePickerList employees={list} />
     </Container>
   );
 }

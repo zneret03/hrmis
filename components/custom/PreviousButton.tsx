@@ -7,12 +7,12 @@ import { Button } from '../ui/button';
 
 export function PreviousButton(): JSX.Element {
   const router = useRouter();
-
   const pathname = usePathname();
-  const splitPath = pathname.split('/');
-  const userId = splitPath.splice(2, 2)[0];
 
-  const onPreviousPage = (): void => router.push(`/users/${userId}/businesses`);
+  // Go up one level, e.g. /backend/{id}/leave-card/{employeeId} → …/leave-card.
+  const parentPath = pathname.split('/').slice(0, -1).join('/') || '/';
+
+  const onPreviousPage = (): void => router.push(parentPath);
 
   return (
     <Button

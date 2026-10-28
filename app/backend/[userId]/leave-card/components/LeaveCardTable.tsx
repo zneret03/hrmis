@@ -1,21 +1,22 @@
 'use client';
 
 import * as React from 'react';
-import { Button } from '@/components/ui/button';
-import { Plus, MoreHorizontal, Pencil, Trash, Check, X } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useLeaveCardDialog } from '@/services/leave_card/states/leave-card-dialog';
-import { useShallow } from 'zustand/shallow';
-import { LeaveCardEntry } from '@/lib/types/leave_card_entries';
-import { addLeaveCardEntry } from '@/services/leave_card/leave-card.services';
-import { useAuth } from '@/services/auth/states/auth-state';
-import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { InlineRowActions } from '@/components/custom/InlineRowActions';
+import { cn } from '@/lib/utils';
+import { useInlineRowEditor } from '@/hooks/use-inline-row-editor';
+import { LeaveCardEntry } from '@/lib/types/leave_card_entries';
+import {
+  addLeaveCardEntry,
+  deleteLeaveCardEntry,
+  updateLeaveCardEntry,
+} from '@/services/leave_card/leave-card.services';
+import { useAuth } from '@/services/auth/states/auth-state';
+import { isValidLeaveCardYear, leaveCardYearError } from '@/helpers/leaveCard';
+import { withCurrentOption } from '@/helpers/withCurrentOption';
 
 interface LeaveCardTableProps {
   data: LeaveCardEntry[];
@@ -39,47 +40,82 @@ const MONTHS = [
 
 const currentYear = new Date().getFullYear();
 
-type DraftRow = {
-  year: string;
-  month: string;
-  earned_vacation: string;
-  earned_sick: string;
-  enjoyed_vacation: string;
-  enjoyed_sick: string;
-  tardy_count: string;
-  undertime_hours: string;
-  undertime_minutes: string;
-  undertime_days_equiv: string;
-  total_spent_vacation: string;
-  total_spent_sick: string;
-  lwop_vacation: string;
-  lwop_sick: string;
-  balance_vacation: string;
-  balance_sick: string;
-  maternity_leave: string;
-  remarks: string;
+// Numeric ledger columns, in table order.
+const NUMBER_FIELDS = [
+  'earned_vacation',
+  'earned_sick',
+  'enjoyed_vacation',
+  'enjoyed_sick',
+  'tardy_count',
+  'undertime_hours',
+  'undertime_minutes',
+  'undertime_days_equiv',
+  'total_spent_vacation',
+  'total_spent_sick',
+  'lwop_vacation',
+  'lwop_sick',
+  'balance_vacation',
+  'balance_sick',
+  'maternity_leave',
+] as const;
+
+type NumberField = (typeof NUMBER_FIELDS)[number];
+
+// Accessible names for the inline inputs (the headers are two-level).
+const NUMBER_FIELD_LABELS: Record<NumberField, string> = {
+  earned_vacation: 'Leave earned, vacation',
+  earned_sick: 'Leave earned, sick',
+  enjoyed_vacation: 'Leave enjoyed, vacation',
+  enjoyed_sick: 'Leave enjoyed, sick',
+  tardy_count: 'Tardy count',
+  undertime_hours: 'Undertime hours',
+  undertime_minutes: 'Undertime minutes',
+  undertime_days_equiv: 'Undertime in days',
+  total_spent_vacation: 'Total leave spent, vacation',
+  total_spent_sick: 'Total leave spent, sick',
+  lwop_vacation: 'Leave without pay, vacation',
+  lwop_sick: 'Leave without pay, sick',
+  balance_vacation: 'Balance, vacation',
+  balance_sick: 'Balance, sick',
+  maternity_leave: 'Maternity leave',
 };
+
+type DraftRow = { year: string; month: string; remarks: string } & Record<
+  NumberField,
+  string
+>;
+
+function mapNumberFields<T>(
+  fn: (field: NumberField) => T,
+): Record<NumberField, T> {
+  return Object.fromEntries(
+    NUMBER_FIELDS.map((field) => [field, fn(field)]),
+  ) as Record<NumberField, T>;
+}
 
 const emptyDraft = (): DraftRow => ({
   year: String(currentYear),
   month: 'January',
-  earned_vacation: '0',
-  earned_sick: '0',
-  enjoyed_vacation: '0',
-  enjoyed_sick: '0',
-  tardy_count: '0',
-  undertime_hours: '0',
-  undertime_minutes: '0',
-  undertime_days_equiv: '0',
-  total_spent_vacation: '0',
-  total_spent_sick: '0',
-  lwop_vacation: '0',
-  lwop_sick: '0',
-  balance_vacation: '0',
-  balance_sick: '0',
-  maternity_leave: '0',
   remarks: '',
+  ...mapNumberFields(() => '0'),
 });
+
+const toDraft = (entry: LeaveCardEntry): DraftRow => ({
+  year: String(entry.year),
+  month: entry.month,
+  remarks: entry.remarks ?? '',
+  ...mapNumberFields((field) => String(entry[field] ?? 0)),
+});
+
+const toPayload = (draft: DraftRow) => ({
+  year: Number(draft.year),
+  month: draft.month,
+  remarks: draft.remarks || null,
+  ...mapNumberFields((field) => Number(draft[field]) || 0),
+  tardy_count: Math.trunc(Number(draft.tardy_count)) || 0,
+});
+
+const COLUMN_COUNT = 19;
 
 const th = 'border px-2 py-1 font-semibold text-center align-middle';
 const thSub = 'border px-2 py-1 font-medium text-center text-muted-foreground';
@@ -91,82 +127,134 @@ export function LeaveCardTable({ data, userId }: LeaveCardTableProps) {
   const router = useRouter();
   const { id: encodedBy } = useAuth();
   const [isPending, startTransition] = useTransition();
+  const editor = useInlineRowEditor(emptyDraft);
+  const { mode, draft, isDirty } = editor;
 
-  const { toggleOpen } = useLeaveCardDialog(
-    useShallow((state) => ({ toggleOpen: state.toggleOpenDialog })),
-  );
+  const isYearInvalid = !isValidLeaveCardYear(draft.year);
+  const canSave = !isYearInvalid;
 
-  const [isAddingRow, setIsAddingRow] = React.useState(false);
-  const [draft, setDraft] = React.useState<DraftRow>(emptyDraft);
-  const [isDirty, setIsDirty] = React.useState(false);
-
-  const handleAddEntry = () => {
-    setDraft(emptyDraft());
-    setIsDirty(false);
-    setIsAddingRow(true);
-  };
-
-  const handleCancel = () => {
-    setIsAddingRow(false);
-    setDraft(emptyDraft());
-    setIsDirty(false);
-  };
-
-  const handleChange = (field: keyof DraftRow, value: string) => {
-    if (!isDirty) setIsDirty(true);
-    setDraft((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = () => {
+  // Runs a save/delete, then leaves edit mode and reloads the server data.
+  const run = (action: () => Promise<void>) => {
     startTransition(async () => {
-      await addLeaveCardEntry({
-        user_id: userId,
-        encoded_by: encodedBy ?? null,
-        leave_application_id: null,
-        year: Number(draft.year) || currentYear,
-        month: draft.month,
-        earned_vacation: Number(draft.earned_vacation) || 0,
-        earned_sick: Number(draft.earned_sick) || 0,
-        enjoyed_vacation: Number(draft.enjoyed_vacation) || 0,
-        enjoyed_sick: Number(draft.enjoyed_sick) || 0,
-        tardy_count: Math.trunc(Number(draft.tardy_count)) || 0,
-        undertime_hours: Number(draft.undertime_hours) || 0,
-        undertime_minutes: Number(draft.undertime_minutes) || 0,
-        undertime_days_equiv: Number(draft.undertime_days_equiv) || 0,
-        total_spent_vacation: Number(draft.total_spent_vacation) || 0,
-        total_spent_sick: Number(draft.total_spent_sick) || 0,
-        lwop_vacation: Number(draft.lwop_vacation) || 0,
-        lwop_sick: Number(draft.lwop_sick) || 0,
-        balance_vacation: Number(draft.balance_vacation) || 0,
-        balance_sick: Number(draft.balance_sick) || 0,
-        maternity_leave: Number(draft.maternity_leave) || 0,
-        remarks: draft.remarks || null,
-      });
-
-      setIsAddingRow(false);
-      setDraft(emptyDraft());
-      setIsDirty(false);
+      try {
+        await action();
+      } catch {
+        // The service already toasted the error; keep the row to fix it.
+        return;
+      }
+      editor.reset();
       router.refresh();
     });
   };
 
-  const numCell = (field: keyof DraftRow, step = 'any') => (
-    <td className="border px-1 py-1">
-      <input
-        type="number"
-        min={0}
-        step={step}
-        value={draft[field]}
-        onChange={(e) => handleChange(field, e.target.value)}
-        className={cellInput}
-      />
-    </td>
+  const handleSave = () => {
+    if (!canSave || (mode.kind !== 'add' && mode.kind !== 'edit')) return;
+
+    const fields = { ...toPayload(draft), encoded_by: encodedBy ?? null };
+
+    run(() =>
+      mode.kind === 'edit'
+        ? updateLeaveCardEntry(mode.id, fields)
+        : addLeaveCardEntry({
+            ...fields,
+            user_id: userId,
+            leave_application_id: null,
+          }),
+    );
+  };
+
+  const handleDraftKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') editor.reset();
+    if (e.key === 'Enter' && isDirty) handleSave();
+  };
+
+  // Editable cells shared by the add row and the row being edited.
+  const draftRow = (key: string, monthOptions: string[]) => (
+    <React.Fragment key={key}>
+      <tr className="bg-primary/5 border-b" onKeyDown={handleDraftKeyDown}>
+        {/* Year */}
+        <td className="min-w-[64px] border px-1 py-1">
+          <input
+            type="number"
+            min={1900}
+            max={currentYear}
+            value={draft.year}
+            onChange={(e) => editor.setField('year', e.target.value)}
+            aria-label="Year"
+            aria-invalid={isYearInvalid}
+            className={cn(cellInput, isYearInvalid && 'border-destructive')}
+            autoFocus
+          />
+        </td>
+        {/* Month */}
+        <td className="min-w-[90px] border px-1 py-1">
+          <select
+            value={draft.month}
+            onChange={(e) => editor.setField('month', e.target.value)}
+            aria-label="Month"
+            className="focus:ring-primary focus:border-primary w-full rounded-sm border border-transparent bg-transparent px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
+          >
+            {monthOptions.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </select>
+        </td>
+        {NUMBER_FIELDS.map((field) => (
+          <td key={field} className="border px-1 py-1">
+            <input
+              type="number"
+              min={0}
+              step={field === 'tardy_count' ? '1' : 'any'}
+              value={draft[field]}
+              onChange={(e) => editor.setField(field, e.target.value)}
+              aria-label={NUMBER_FIELD_LABELS[field]}
+              className={cellInput}
+            />
+          </td>
+        ))}
+        {/* Remarks */}
+        <td className="min-w-[100px] border px-1 py-1">
+          <input
+            type="text"
+            value={draft.remarks}
+            onChange={(e) => editor.setField('remarks', e.target.value)}
+            placeholder="Optional..."
+            aria-label="Remarks"
+            className={cellInput}
+          />
+        </td>
+        {/* Actions */}
+        <td className="border px-1 py-1">
+          <InlineRowActions
+            state="editing"
+            isPending={isPending}
+            isDirty={isDirty}
+            canSave={canSave}
+            onSave={handleSave}
+            onCancel={editor.reset}
+          />
+        </td>
+      </tr>
+
+      {isYearInvalid && (
+        <tr>
+          <td
+            colSpan={COLUMN_COUNT}
+            className="text-destructive border px-2 py-1 text-xs"
+          >
+            {leaveCardYearError()}
+          </td>
+        </tr>
+      )}
+    </React.Fragment>
   );
 
   return (
     <div className="w-full space-y-4">
       <div className="flex justify-end">
-        <Button onClick={handleAddEntry} disabled={isAddingRow}>
+        <Button onClick={editor.startAdd} disabled={!editor.isIdle}>
           <Plus className="mr-2 h-4 w-4" />
           Add Entry
         </Button>
@@ -237,156 +325,66 @@ export function LeaveCardTable({ data, userId }: LeaveCardTableProps) {
             </tr>
           </thead>
           <tbody>
-            {isAddingRow && (
-              <tr className="bg-primary/5 border-b">
-                {/* Year */}
-                <td className="min-w-[64px] border px-1 py-1">
-                  <input
-                    type="number"
-                    min={1900}
-                    max={currentYear + 5}
-                    value={draft.year}
-                    onChange={(e) => handleChange('year', e.target.value)}
-                    className={cellInput}
-                    autoFocus
-                  />
-                </td>
-                {/* Month */}
-                <td className="min-w-[90px] border px-1 py-1">
-                  <select
-                    value={draft.month}
-                    onChange={(e) => handleChange('month', e.target.value)}
-                    className="focus:ring-primary focus:border-primary w-full rounded-sm border border-transparent bg-transparent px-1 py-0.5 text-xs focus:ring-1 focus:outline-none"
-                  >
-                    {MONTHS.map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                {numCell('earned_vacation')}
-                {numCell('earned_sick')}
-                {numCell('enjoyed_vacation')}
-                {numCell('enjoyed_sick')}
-                {numCell('tardy_count', '1')}
-                {numCell('undertime_hours')}
-                {numCell('undertime_minutes')}
-                {numCell('undertime_days_equiv')}
-                {numCell('total_spent_vacation')}
-                {numCell('total_spent_sick')}
-                {numCell('lwop_vacation')}
-                {numCell('lwop_sick')}
-                {numCell('balance_vacation')}
-                {numCell('balance_sick')}
-                {numCell('maternity_leave')}
-                {/* Remarks */}
-                <td className="min-w-[100px] border px-1 py-1">
-                  <input
-                    type="text"
-                    value={draft.remarks}
-                    onChange={(e) => handleChange('remarks', e.target.value)}
-                    placeholder="Optional..."
-                    className={cellInput}
-                  />
-                </td>
-                {/* Actions */}
-                <td className="border px-1 py-1">
-                  <div className="flex items-center justify-center gap-1">
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="text-muted-foreground hover:text-destructive h-6 w-6"
-                      onClick={handleCancel}
-                      disabled={isPending}
-                      title="Cancel"
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </Button>
-                    {isDirty && (
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="h-6 w-6 text-green-600 hover:bg-green-50 hover:text-green-700"
-                        onClick={handleSubmit}
-                        disabled={isPending}
-                        title="Save entry"
-                      >
-                        <Check className="h-3.5 w-3.5" />
-                      </Button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            )}
+            {mode.kind === 'add' && draftRow('new', MONTHS)}
 
-            {data.length ? (
-              data.map((entry) => (
+            {data.map((entry) => {
+              if (editor.isEditing(entry.id)) {
+                return draftRow(
+                  entry.id,
+                  withCurrentOption(MONTHS, entry.month),
+                );
+              }
+
+              const isDeleting = editor.isDeleting(entry.id);
+
+              return (
                 <tr
                   key={entry.id}
-                  className="hover:bg-muted/30 border-b transition-colors"
+                  className={cn(
+                    'hover:bg-muted/30 border-b transition-colors',
+                    isDeleting && 'bg-destructive/5',
+                  )}
+                  onKeyDown={(e) => e.key === 'Escape' && editor.reset()}
                 >
                   <td className="border px-3 py-1 font-medium">{entry.year}</td>
                   <td className="border px-3 py-1 whitespace-nowrap">
                     {entry.month}
                   </td>
-                  <td className={td}>{entry.earned_vacation ?? 0}</td>
-                  <td className={td}>{entry.earned_sick ?? 0}</td>
-                  <td className={td}>{entry.enjoyed_vacation ?? 0}</td>
-                  <td className={td}>{entry.enjoyed_sick ?? 0}</td>
-                  <td className={td}>{entry.tardy_count ?? 0}</td>
-                  <td className={td}>{entry.undertime_hours ?? 0}</td>
-                  <td className={td}>{entry.undertime_minutes ?? 0}</td>
-                  <td className={td}>{entry.undertime_days_equiv ?? 0}</td>
-                  <td className={td}>{entry.total_spent_vacation ?? 0}</td>
-                  <td className={td}>{entry.total_spent_sick ?? 0}</td>
-                  <td className={td}>{entry.lwop_vacation ?? 0}</td>
-                  <td className={td}>{entry.lwop_sick ?? 0}</td>
-                  <td className={`${td} font-semibold`}>
-                    {entry.balance_vacation ?? 0}
-                  </td>
-                  <td className={`${td} font-semibold`}>
-                    {entry.balance_sick ?? 0}
-                  </td>
-                  <td className={td}>{entry.maternity_leave ?? 0}</td>
+                  {NUMBER_FIELDS.map((field) => (
+                    <td
+                      key={field}
+                      className={cn(
+                        td,
+                        field.startsWith('balance_') && 'font-semibold',
+                      )}
+                    >
+                      {entry[field] ?? 0}
+                    </td>
+                  ))}
                   <td className="text-muted-foreground max-w-[140px] truncate border px-2 py-1">
                     {entry.remarks || '—'}
                   </td>
                   <td className="border px-2 py-1 text-center">
-                    <DropdownMenu modal={false}>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-7 w-7 p-0">
-                          <span className="sr-only">Open menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onClick={() =>
-                            toggleOpen?.(true, 'edit', { ...entry })
-                          }
-                        >
-                          <Pencil className="mr-2 h-4 w-4" />
-                          Edit Entry
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="text-destructive focus:text-destructive"
-                          onClick={() =>
-                            toggleOpen?.(true, 'delete', { ...entry })
-                          }
-                        >
-                          <Trash className="mr-2 h-4 w-4" />
-                          Delete Entry
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <InlineRowActions
+                      state={isDeleting ? 'confirm-delete' : 'view'}
+                      isPending={isPending}
+                      disabled={!editor.isIdle}
+                      onEdit={() => editor.startEdit(entry.id, toDraft(entry))}
+                      onDelete={() => editor.startDelete(entry.id)}
+                      onConfirmDelete={() =>
+                        run(() => deleteLeaveCardEntry(entry.id))
+                      }
+                      onCancel={editor.reset}
+                    />
                   </td>
                 </tr>
-              ))
-            ) : (
+              );
+            })}
+
+            {!data.length && mode.kind !== 'add' && (
               <tr>
                 <td
-                  colSpan={19}
+                  colSpan={COLUMN_COUNT}
                   className="text-muted-foreground h-24 text-center"
                 >
                   No entries yet. Click &quot;Add Entry&quot; to encode data.

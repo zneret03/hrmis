@@ -9,24 +9,22 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ChevronRight, Search } from 'lucide-react';
 import { avatarName } from '@/helpers/avatarName';
 
-interface Employee {
-  user_id: string | null;
-  users: {
-    id: string;
-    username: string | null;
-    email: string;
-    employee_id: string | null;
-    role: string;
-  } | null;
+export interface PickerEmployee {
+  id: string;
+  name: string | null;
+  email: string;
+  employee_id: string | null;
 }
 
-interface EmployeeLeaveCardListProps {
-  employees: Employee[];
+interface EmployeePickerListProps {
+  employees: PickerEmployee[];
 }
 
-export function EmployeeLeaveCardList({
+// Searchable employee card grid; selecting a card opens `<current path>/<id>`.
+// Shared by the Personnel Leave Card and Employee Service Record pages.
+export function EmployeePickerList({
   employees,
-}: EmployeeLeaveCardListProps): JSX.Element {
+}: EmployeePickerListProps): JSX.Element {
   const [search, setSearch] = useState('');
   const router = useRouter();
   const pathname = usePathname();
@@ -34,9 +32,9 @@ export function EmployeeLeaveCardList({
   const filtered = employees.filter((e) => {
     const q = search.toLowerCase();
     return (
-      e.users?.username?.toLowerCase().includes(q) ||
-      e.users?.email?.toLowerCase().includes(q) ||
-      e.users?.employee_id?.toLowerCase().includes(q)
+      e.name?.toLowerCase().includes(q) ||
+      e.email?.toLowerCase().includes(q) ||
+      e.employee_id?.toLowerCase().includes(q)
     );
   });
 
@@ -64,28 +62,28 @@ export function EmployeeLeaveCardList({
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((emp) => (
             <Card
-              key={emp.user_id}
+              key={emp.id}
               className="cursor-pointer transition-shadow hover:shadow-md"
-              onClick={() => handleSelect(emp.users?.id as string)}
+              onClick={() => handleSelect(emp.id)}
             >
               <CardContent className="flex items-center gap-3 py-4">
                 <Avatar>
-                  <AvatarImage src="" alt={emp.users?.email} />
+                  <AvatarImage src="" alt={emp.email} />
                   <AvatarFallback className="bg-blue-400 font-semibold text-white capitalize">
-                    {avatarName(emp.users?.email ?? '')}
+                    {avatarName(emp.email ?? '')}
                   </AvatarFallback>
                 </Avatar>
 
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium capitalize">
-                    {emp.users?.username ?? '—'}
+                    {emp.name ?? '—'}
                   </p>
                   <p className="text-muted-foreground truncate text-xs">
-                    {emp.users?.email}
+                    {emp.email}
                   </p>
-                  {emp.users?.employee_id && (
+                  {emp.employee_id && (
                     <Badge variant="outline" className="mt-1 text-xs">
-                      ID: {emp.users.employee_id}
+                      ID: {emp.employee_id}
                     </Badge>
                   )}
                 </div>
