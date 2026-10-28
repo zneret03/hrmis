@@ -1,5 +1,10 @@
-import { generalErrorResponse, successResponse } from '../../helpers/response';
+import {
+  badRequestResponse,
+  generalErrorResponse,
+  successResponse,
+} from '../../helpers/response';
 import { createClient } from '@/config';
+import { DATE_RANGE_ERROR, isValidDateRange } from '@/helpers/serviceRecord';
 
 interface ServiceRecordInput {
   user_id?: string;
@@ -24,6 +29,10 @@ const pickFields = (data: ServiceRecordInput) => ({
 });
 
 export const addServiceRecord = async (data: ServiceRecordInput) => {
+  if (!isValidDateRange(data.from_date, data.to_date)) {
+    return badRequestResponse({ error: DATE_RANGE_ERROR });
+  }
+
   try {
     const supabase = await createClient();
 
@@ -46,13 +55,17 @@ export const editServiceRecord = async (
   data: ServiceRecordInput & { archived_at?: string | Date },
   id: string,
 ) => {
+  const isArchive = data.archived_at !== undefined;
+  if (!isArchive && !isValidDateRange(data.from_date, data.to_date)) {
+    return badRequestResponse({ error: DATE_RANGE_ERROR });
+  }
+
   try {
     const supabase = await createClient();
 
-    const payload =
-      data.archived_at !== undefined
-        ? { archived_at: data.archived_at }
-        : pickFields(data);
+    const payload = isArchive
+      ? { archived_at: data.archived_at }
+      : pickFields(data);
 
     const { error } = await supabase
       .from('service_record')

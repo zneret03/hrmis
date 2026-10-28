@@ -2,8 +2,6 @@ import { JSX } from 'react';
 import { createClient } from '@/config';
 import { Container } from '@/components/custom/Container';
 import { LeaveCardTable } from '../components/LeaveCardTable';
-import { LeaveCardEntryDialog } from '../components/LeaveCardEntryDialog';
-import { DeleteLeaveCardEntryDialog } from '../components/DeleteLeaveCardEntryDialog';
 import { PreviousButton } from '@/components/custom/PreviousButton';
 import { Badge } from '@/components/ui/badge';
 
@@ -55,9 +53,6 @@ export default async function EmployeeLeaveCardPage({
         </div>
 
         <LeaveCardTable data={entries} userId={employeeId} />
-
-        <LeaveCardEntryDialog targetUserId={employeeId} />
-        <DeleteLeaveCardEntryDialog />
       </>
     </Container>
   );

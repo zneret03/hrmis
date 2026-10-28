@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { NextRequest } from 'next/server';
 import { GET, POST } from '@/app/api/protected/service_record/route';
+import { PUT } from '@/app/api/protected/service_record/[id]/route';
 import { createClient } from '@/config';
 
 vi.mock('@/config', () => ({ createClient: vi.fn() }));
@@ -30,6 +31,13 @@ const srInsertBuilder = () => ({
   insert: vi.fn().mockResolvedValue({ error: null }),
 });
 
+function srUpdateBuilder() {
+  const b: Record<string, unknown> = {};
+  b.update = vi.fn(() => b);
+  b.eq = vi.fn().mockResolvedValue({ error: null });
+  return b;
+}
+
 function setup(role: string, userId: string, sr: unknown) {
   const users = usersRoleBuilder(role, userId);
   mockedCreateClient.mockResolvedValue({
@@ -43,6 +51,8 @@ function setup(role: string, userId: string, sr: unknown) {
 
 const jsonReq = (body: unknown): NextRequest =>
   ({ json: async () => body }) as unknown as NextRequest;
+
+const idParams = (id: string) => ({ params: Promise.resolve({ id }) });
 
 const searchReq = (qs: string): NextRequest =>
   ({
@@ -97,5 +107,75 @@ describe('service_record API', () => {
     setup('employee', 'emp-1', sr);
     await GET(searchReq('userId=someone-else'));
     expect(sr.eq).toHaveBeenCalledWith('user_id', 'emp-1');
+  });
+
+  it('GET lets an admin scope to one employee via ?userId', async () => {
+    const sr = srSelectBuilder([{ id: 'r1' }]);
+    setup('admin', 'admin-1', sr);
+    await GET(searchReq('userId=emp-1&perPage=1000'));
+    expect(sr.eq).toHaveBeenCalledWith('user_id', 'emp-1');
+  });
+
+  it('POST add rejects a From date after the To date with 400', async () => {
+    const sr = srInsertBuilder();
+    setup('admin', 'admin-1', sr);
+    const res = await POST(
+      jsonReq({
+        type: 'add-service-record',
+        user_id: 'emp-1',
+        position: 'Clerk',
+        from_date: '2021-01-01',
+        to_date: '2020-12-31',
+      }),
+    );
+    expect(res?.status).toBe(400);
+    expect(sr.insert).not.toHaveBeenCalled();
+  });
+
+  it('PUT edit rejects a From date after the To date with 400', async () => {
+    const sr = srUpdateBuilder();
+    setup('admin', 'admin-1', sr);
+    const res = await PUT(
+      jsonReq({
+        type: 'edit-service-record',
+        position: 'Clerk',
+        from_date: '2021-01-01',
+        to_date: '2020-12-31',
+      }),
+      idParams('r1'),
+    );
+    expect(res?.status).toBe(400);
+    expect(sr.update).not.toHaveBeenCalled();
+  });
+
+  it('PUT edit updates the dates of an entry', async () => {
+    const sr = srUpdateBuilder();
+    setup('admin', 'admin-1', sr);
+    const res = await PUT(
+      jsonReq({
+        type: 'edit-service-record',
+        position: 'Clerk',
+        from_date: '2016-05-01',
+        to_date: '2020-12-31',
+      }),
+      idParams('r1'),
+    );
+    expect(res?.status).toBe(200);
+    expect(sr.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        from_date: '2016-05-01',
+        to_date: '2020-12-31',
+      }),
+    );
+    expect(sr.eq).toHaveBeenCalledWith('id', 'r1');
+  });
+
+  it('PUT is forbidden for non-admins', async () => {
+    setup('employee', 'emp-1', srUpdateBuilder());
+    const res = await PUT(
+      jsonReq({ type: 'edit-service-record', position: 'Clerk' }),
+      idParams('r1'),
+    );
+    expect(res?.status).toBe(403);
   });
 });

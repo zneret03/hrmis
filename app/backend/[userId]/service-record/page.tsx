@@ -1,42 +1,45 @@
 import { JSX } from 'react';
 import { Container } from '@/components/custom/Container';
-import { ServiceRecordTable } from './components/ServiceRecordTable';
-import { ServiceRecordFormDialog } from './components/ServiceRecordFormDialog';
-import { DeleteServiceRecordDialog } from './components/DeleteDialog';
-import { getServiceRecords } from '@/services/service_record/service-record.services';
+import {
+  EmployeePickerList,
+  PickerEmployee,
+} from '@/app/components/EmployeePickerList';
 import { fetchAllUsers } from '@/services/users/users.services';
+import { employeeName } from '@/helpers/employeeName';
+import { Users } from '@/lib/types/users';
 
-export default async function ServiceRecordPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ page?: string }>;
-}): Promise<JSX.Element> {
-  const { page } = await searchParams;
-  const currentPage = Math.max(Number(page) || 1, 1);
+type EmployeeRow = Pick<
+  Users,
+  | 'id'
+  | 'username'
+  | 'first_name'
+  | 'last_name'
+  | 'email'
+  | 'employee_id'
+  | 'role'
+  | 'archived_at'
+>;
 
-  const [list, usersResponse] = await Promise.all([
-    getServiceRecords({ page: currentPage }),
-    fetchAllUsers(),
-  ]);
+export default async function ServiceRecordPage(): Promise<JSX.Element> {
+  const usersResponse = await fetchAllUsers();
+  const users = (usersResponse?.users ?? []) as EmployeeRow[];
 
-  const users = (usersResponse?.users ?? []) as {
-    id: string;
-    employee_id: string | null;
-    email: string;
-  }[];
+  const list: PickerEmployee[] = users
+    .filter((user) => user.role === 'employee' && !user.archived_at)
+    .map((user) => ({
+      id: user.id,
+      name: employeeName(user),
+      email: user.email,
+      employee_id: user.employee_id,
+    }))
+    .sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
 
   return (
     <Container
       title="Employee Service Record"
-      description="Add, edit, or delete service record entries for employees"
+      description="Select an employee to view or encode their service record."
     >
-      <ServiceRecordTable
-        records={list.records}
-        totalPages={list.totalPages}
-        currentPage={list.currentPage}
-      />
-      <ServiceRecordFormDialog users={users} />
-      <DeleteServiceRecordDialog />
+      <EmployeePickerList employees={list} />
     </Container>
   );
 }
